@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | CD Los Almendros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .bg-almendros {
+        background-color: #006633;
+      }
+      .text-almendros {
+        color: #006633;
+      }
+    </style>
+  </head>
+  <body class="bg-[#0b0e14] h-screen flex overflow-hidden">
+    <div class="hidden lg:block lg:w-3/5 relative">
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-transparent to-[#0b0e14] z-10"
+      ></div>
+      <img
+        src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=1920"
+        class="w-full h-full object-cover"
+        alt="CD Los Almendros Team"
+      />
+    </div>
+
+    <div
+      class="w-full lg:w-2/5 flex flex-col justify-center px-8 md:px-16 lg:px-20 bg-[#0b0e14] text-white"
+    >
+      <div class="mb-10 text-center lg:text-left">
+        <div
+          class="w-16 h-16 bg-white rounded-full mx-auto lg:mx-0 mb-6 flex items-center justify-center font-black text-2xl text-almendros shadow-xl"
+        >
+          AL
+        </div>
+        <h2 class="text-3xl font-black uppercase italic tracking-tighter">
+          CD LOS ALMENDROS
+        </h2>
+        <p class="text-gray-400 mt-2 text-sm">
+          Ingresa tu correo para acceder o crear tu cuenta del club.
+        </p>
+      </div>
+
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <input
+            type="email"
+            id="userEmail"
+            required
+            class="w-full p-4 bg-gray-800 border border-gray-700 rounded-lg focus:border-white outline-none transition text-white"
+            placeholder="Dirección de correo electrónico*"
+          />
+        </div>
+
+        <button
+          type="submit"
+          id="btnAceptar"
+          class="w-full bg-white text-black font-black py-4 rounded-lg hover:bg-gray-200 transition-all uppercase tracking-widest text-sm"
+        >
+          Aceptar y Continuar
+        </button>
+      </form>
+
+      <div class="relative flex py-8 items-center">
+        <div class="flex-grow border-t border-gray-700"></div>
+        <span class="flex-shrink mx-4 text-gray-500 font-bold text-xs uppercase"
+          >O</span
+        >
+        <div class="flex-grow border-t border-gray-700"></div>
+      </div>
+
+      <div class="space-y-3">
+        <button
+          onclick="loginSocial('google')"
+          class="w-full flex items-center justify-center space-x-3 p-4 bg-white text-black rounded-lg font-bold hover:bg-gray-200 transition"
+        >
+          <img
+            src="https://www.svgrepo.com/show/475656/google-color.svg"
+            class="w-5"
+            alt="Google"
+          />
+          <span>Continuar con Google</span>
+        </button>
+
+        <button
+          onclick="loginSocial('facebook')"
+          class="w-full flex items-center justify-center space-x-3 p-4 bg-[#1877F2] text-white rounded-lg font-bold hover:bg-[#166fe5] transition shadow-lg"
+        >
+          <i class="fa-brands fa-facebook text-xl"></i>
+          <span>Continuar con Facebook</span>
+        </button>
+      </div>
+
+      <p class="mt-8 text-[10px] text-gray-500 text-center leading-relaxed">
+        Este sitio está protegido por GRAF y se aplican las políticas de
+        seguridad de Supabase.
+      </p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script>
+      // 1. CONFIGURACIÓN MAESTRA (¡Ahora sí con la llave correcta!)
+      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
+
+      // Inicializamos el cliente
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      // 2. Lógica de Social Login (Google / Facebook)
+      async function loginSocial(provider) {
+        console.log("🚀 Iniciando conexión con:", provider);
+
+        const { error } = await _supabase.auth.signInWithOAuth({
+          provider: provider,
+          options: {
+            queryParams: {
+              prompt: "select_account", // Esto obliga a Google a preguntarte qué cuenta usar
+              access_type: "offline",
+            },
+            // IMPORTANTE: Asegúrate de que esta URL sea la correcta de tu index
+            redirectTo: window.location.origin + "/index.html",
+          },
+        });
+
+        if (error) {
+          console.error("Error de conexión:", error.message);
+          alert("Error con " + provider + ": " + error.message);
+        }
+      }
+
+      // 3. Lógica de Magic Link (Email)
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const email = document.getElementById("userEmail").value;
+          const btn = document.getElementById("btnAceptar");
+
+          btn.disabled = true;
+          btn.innerText = "ENVIANDO ENLACE...";
+
+          const { error } = await _supabase.auth.signInWithOtp({
+            email: email,
+            options: {
+              emailRedirectTo: window.location.origin + "/index.html",
+            },
+          });
+
+          if (error) {
+            alert("Error: " + error.message);
+            btn.disabled = false;
+            btn.innerText = "Aceptar y Continuar";
+          } else {
+            alert("¡Enlace enviado! Revisa tu correo electrónico para entrar.");
+            btn.innerText = "REVISA TU CORREO";
+          }
+        });
+    </script>
+  </body>
+</html>

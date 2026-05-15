@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Partidos | CD Los Almendros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+      .hidden {
+        display: none;
+      }
+      /* Eliminamos el filtro invertido para que los iconos de fecha/hora se vean negros en fondo blanco */
+      input[type="date"]::-webkit-calendar-picker-indicator,
+      input[type="time"]::-webkit-calendar-picker-indicator {
+        filter: none;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 text-gray-900 min-h-screen">
+    <nav
+      class="bg-[#004d26] p-4 flex justify-between items-center shadow-xl sticky top-0 z-50"
+    >
+      <a
+        href="admin.html"
+        class="text-[10px] font-black uppercase tracking-widest text-white/70 hover:text-white transition"
+      >
+        <i class="fa-solid fa-arrow-left mr-2"></i> Panel Principal
+      </a>
+      <div class="font-black italic text-sm text-white">
+        GESTIÓN DE COMPETICIÓN
+      </div>
+    </nav>
+
+    <main class="container mx-auto p-6 max-w-6xl">
+      <header class="mb-10">
+        <h2
+          class="text-4xl font-black uppercase italic tracking-tighter text-[#004d26]"
+        >
+          Centro de Mando
+        </h2>
+        <p
+          class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mt-2"
+        >
+          Control total de partidos programados y transmisiones en vivo.
+        </p>
+      </header>
+
+      <div
+        class="bg-white rounded-[2.5rem] border border-gray-200 overflow-hidden shadow-2xl"
+      >
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-gray-50 border-b border-gray-100">
+                <th
+                  class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-400"
+                >
+                  Logística
+                </th>
+                <th
+                  class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-400"
+                >
+                  Partido
+                </th>
+                <th
+                  class="p-6 text-[10px] font-black uppercase tracking-widest text-gray-400"
+                >
+                  Estado
+                </th>
+                <th
+                  class="p-6 text-[10px] font-black uppercase tracking-widest text-center text-gray-400"
+                >
+                  Acciones
+                </th>
+              </tr>
+            </thead>
+            <tbody id="tabla-partidos" class="divide-y divide-gray-50"></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <div
+      id="modal-editar"
+      class="fixed inset-0 z-[200] hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-white w-full max-w-2xl rounded-[2.5rem] border border-gray-100 shadow-2xl overflow-hidden"
+      >
+        <div
+          class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50"
+        >
+          <h3
+            class="font-black uppercase italic text-sm tracking-tighter text-[#004d26]"
+          >
+            Ajustar Detalles del Encuentro
+          </h3>
+          <button
+            onclick="cerrarModalEditar()"
+            class="text-gray-400 hover:text-red-500 transition"
+          >
+            <i class="fa-solid fa-xmark text-xl"></i>
+          </button>
+        </div>
+
+        <form id="form-editar" class="p-8 space-y-6">
+          <input type="hidden" id="edit-id" />
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-[10px] font-black text-gray-400 uppercase mb-2 ml-2"
+                >Fecha</label
+              >
+              <input
+                type="date"
+                id="edit-fecha"
+                class="w-full bg-gray-50 border border-gray-200 p-4 rounded-2xl text-xs font-bold text-gray-800 outline-none focus:border-[#004d26] transition shadow-sm"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-[10px] font-black text-gray-400 uppercase mb-2 ml-2"
+                >Hora</label
+              >
+              <input
+                type="time"
+                id="edit-hora"
+                class="w-full bg-gray-50 border border-gray-200 p-4 rounded-2xl text-xs font-bold text-gray-800 outline-none focus:border-[#004d26] transition shadow-sm"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-[10px] font-black text-gray-400 uppercase mb-2 ml-2"
+                >Estado</label
+              >
+              <select
+                id="edit-estado"
+                class="w-full bg-gray-50 border border-gray-200 p-4 rounded-2xl text-xs font-bold text-gray-800 outline-none focus:border-[#004d26] transition shadow-sm"
+              >
+                <option value="Programado">✅ Programado</option>
+                <option value="Por confirmar">⏳ Por confirmar</option>
+                <option value="Suspendido">🚫 Suspendido</option>
+                <option value="Postergado">🔃 Postergado</option>
+                <option value="EN JUEGO">🔴 EN JUEGO</option>
+              </select>
+            </div>
+            <div>
+              <label
+                class="block text-[10px] font-black text-gray-400 uppercase mb-2 ml-2"
+                >Ubicación</label
+              >
+              <input
+                type="text"
+                id="edit-ubicacion"
+                class="w-full bg-gray-50 border border-gray-200 p-4 rounded-2xl text-xs font-bold text-gray-800 outline-none focus:border-[#004d26] uppercase transition shadow-sm"
+              />
+            </div>
+          </div>
+
+          <div class="flex gap-4 pt-4">
+            <button
+              type="submit"
+              class="flex-1 bg-yellow-500 hover:bg-yellow-400 py-4 rounded-2xl text-black font-black uppercase text-[10px] tracking-widest transition shadow-lg shadow-yellow-500/20"
+            >
+              Guardar Cambios
+            </button>
+            <button
+              type="button"
+              onclick="eliminarPartido()"
+              class="bg-red-50 hover:bg-red-500 text-red-500 hover:text-white px-6 rounded-2xl transition border border-red-100"
+            >
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
+
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      async function cargarPartidosGestion() {
+        const { data, error } = await _supabase
+          .from("calendario")
+          .select("*")
+          .order("fecha", { ascending: true });
+        if (error) return console.error(error);
+
+        const tbody = document.getElementById("tabla-partidos");
+        tbody.innerHTML = data
+          .map(
+            (p) => `
+            <tr class="hover:bg-gray-50 transition-colors">
+                <td class="p-6">
+                    <p class="text-xs font-black uppercase text-gray-800">${p.fecha}</p>
+                    <p class="text-[10px] text-gray-500 font-bold uppercase">${p.hora || "TBD"} | ${p.ubicacion}</p>
+                </td>
+                <td class="p-6">
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs font-black text-[#004d26] italic">ALMENDROS</span>
+                        <span class="text-[10px] font-bold text-gray-300">VS</span>
+                        <span class="text-xs font-black uppercase text-gray-700">${p.rival}</span>
+                    </div>
+                    <p class="text-[9px] text-gray-400 font-bold uppercase mt-1">${p.competicion}</p>
+                </td>
+                <td class="p-6">
+                    <span class="px-3 py-1 rounded-full text-[8px] font-black uppercase ${p.estado === "EN JUEGO" ? "bg-red-500 text-white animate-pulse" : "bg-gray-100 text-gray-500"}">
+                        ${p.estado}
+                    </span>
+                </td>
+                <td class="p-6">
+                    <div class="flex justify-center gap-2">
+                        <button onclick="prepararEdicion('${p.id}')" class="bg-gray-50 hover:bg-gray-100 p-3 rounded-xl border border-gray-100 transition group">
+                            <i class="fa-solid fa-gear text-gray-400 group-hover:text-yellow-600"></i>
+                        </button>
+                        <a href="mando-en-vivo.html?id=${p.id}" class="bg-red-50 hover:bg-red-500 p-3 rounded-xl text-red-500 hover:text-white transition border border-red-100" title="Transmitir">
+                            <i class="fa-solid fa-tower-broadcast"></i>
+                        </a>
+                        <button onclick="finalizarPartido(${p.id}, this)" class="bg-[#004d26] hover:bg-green-700 p-3 rounded-xl text-[10px] font-black uppercase text-white transition shadow-lg shadow-green-900/10">
+                            <i class="fa-solid fa-check-double mr-1"></i> Finalizar
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `,
+          )
+          .join("");
+      }
+
+      async function prepararEdicion(id) {
+        const { data: p } = await _supabase
+          .from("calendario")
+          .select("*")
+          .eq("id", id)
+          .single();
+        if (p) {
+          document.getElementById("edit-id").value = p.id;
+          document.getElementById("edit-fecha").value = p.fecha;
+          document.getElementById("edit-hora").value = p.hora
+            ? p.hora.substring(0, 5)
+            : "";
+          document.getElementById("edit-estado").value = p.estado;
+          document.getElementById("edit-ubicacion").value = p.ubicacion;
+          document.getElementById("modal-editar").classList.remove("hidden");
+        }
+      }
+
+      function cerrarModalEditar() {
+        document.getElementById("modal-editar").classList.add("hidden");
+      }
+
+      document
+        .getElementById("form-editar")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const id = document.getElementById("edit-id").value;
+          const btn = e.target.querySelector('button[type="submit"]');
+          btn.innerText = "GUARDANDO...";
+
+          const nuevosDatos = {
+            fecha: document.getElementById("edit-fecha").value,
+            hora: document.getElementById("edit-hora").value,
+            estado: document.getElementById("edit-estado").value,
+            ubicacion: document
+              .getElementById("edit-ubicacion")
+              .value.toUpperCase(),
+          };
+
+          const { error } = await _supabase
+            .from("calendario")
+            .update(nuevosDatos)
+            .eq("id", id);
+          if (!error) {
+            alert("✅ DATOS ACTUALIZADOS");
+            location.reload();
+          } else {
+            alert("Error: " + error.message);
+            btn.innerText = "Guardar Cambios";
+          }
+        });
+
+      async function eliminarPartido() {
+        const id = document.getElementById("edit-id").value;
+        if (
+          !confirm("⚠️ ¿PRESIDENTE, ESTÁ SEGURO? Se borrará permanentemente.")
+        )
+          return;
+        const { error } = await _supabase
+          .from("calendario")
+          .delete()
+          .eq("id", id);
+        if (!error) {
+          alert("🗑️ ELIMINADO");
+          location.reload();
+        }
+      }
+
+      async function finalizarPartido(id, btn) {
+        if (!confirm("¿Desea cerrar esta acta oficialmente?")) return;
+        btn.disabled = true;
+        const originalContent = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i>';
+
+        const { data: p } = await _supabase
+          .from("calendario")
+          .select("*")
+          .eq("id", id)
+          .single();
+        if (!p) return;
+
+        const { error: errInsert } = await _supabase.from("partidos").insert([
+          {
+            fecha: p.fecha,
+            hora: p.hora,
+            rival: p.rival,
+            rival_escudo: p.rival_escudo,
+            ubicacion: p.ubicacion,
+            jornada: p.jornada,
+            competicion: p.competicion,
+            goles_almendros: p.goles_almendros || 0,
+            goles_rival: p.goles_rival || 0,
+            incidencias: p.incidencias || "SIN INCIDENCIAS",
+          },
+        ]);
+
+        if (!errInsert) {
+          await _supabase.from("calendario").delete().eq("id", id);
+          alert("✅ Acta cerrada con éxito.");
+          cargarPartidosGestion();
+        } else {
+          alert("Error al archivar: " + errInsert.message);
+          btn.disabled = false;
+          btn.innerHTML = originalContent;
+        }
+      }
+
+      cargarPartidosGestion();
+    </script>
+  </body>
+</html>

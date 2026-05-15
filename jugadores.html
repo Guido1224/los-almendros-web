@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Plantel Oficial | CD Los Almendros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;700;900&display=swap");
+
+      html,
+      body {
+        max-width: 100vw;
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+        font-family: "Public Sans", sans-serif;
+      }
+
+      /* Estética de Navegación */
+      .sub-nav-gradient {
+        background: linear-gradient(
+          to right,
+          #004d26 0%,
+          #004d26 40%,
+          #ffffff 100%
+        );
+      }
+
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* EFECTO HOVER EN FOTOS (VUELVE A LA VIDA) */
+      .jugador-card:hover .hover-stats {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .hover-stats {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.4s ease;
+      }
+
+      /* Drawer de Biografía */
+      .drawer-open {
+        transform: translateX(0);
+      }
+      .drawer-closed {
+        transform: translateX(100%);
+      }
+
+      /* Estilos Premium Modal */
+      .numero-gigante-bg {
+        font-size: clamp(12rem, 35vw, 25rem);
+        line-height: 1;
+        position: absolute;
+        top: -2rem;
+        right: -2rem;
+        opacity: 0.07;
+        font-weight: 900;
+        font-style: italic;
+        pointer-events: none;
+        color: #004d26;
+      }
+      /* Marca de agua - Más arriba y más grande */
+      /* 1. Marca de agua: Arriba del todo, sin estorbar */
+      .nombre-watermark {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%) rotate(-1deg);
+        font-size: 18vw;
+        font-weight: 900;
+        color: rgba(255, 255, 255, 0.04);
+        white-space: nowrap;
+        z-index: 0;
+        text-transform: uppercase;
+        font-style: italic;
+        pointer-events: none;
+      }
+
+      /* 2. Foto: Proporción perfecta, sin cortes de cabeza */
+      .foto-perfil-hero {
+        height: auto;
+        max-height: 55vh; /* Bajamos un poco para asegurar que quepa la cabeza */
+        width: auto;
+        max-width: 90%;
+        object-fit: contain;
+        object-position: bottom;
+        z-index: 10;
+        filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.3));
+      }
+
+      /* 3. Ajuste para móvil: Evitar que la foto se coma los datos */
+      @media (max-width: 768px) {
+        .nombre-watermark {
+          font-size: 25vw;
+          top: 5%;
+        }
+        .foto-perfil-hero {
+          max-height: 45vh;
+        } /* Más pequeña en cel para dar espacio */
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <header
+      class="bg-[#004d26] py-3 px-4 md:px-8 text-white flex flex-col md:flex-row justify-between items-center shadow-md sticky top-0 z-[60] gap-4 md:gap-0"
+    >
+      <div
+        class="flex items-center w-full md:w-auto justify-between md:justify-start gap-6"
+      >
+        <a
+          href="index.html"
+          class="flex items-center gap-3 hover:text-yellow-500 transition-colors shrink-0"
+        >
+          <i class="fa-solid fa-arrow-left text-xs"></i>
+          <span
+            class="font-black italic text-[10px] md:text-xs tracking-tighter uppercase"
+            >Inicio</span
+          >
+        </a>
+        <span
+          class="md:hidden font-black italic text-[10px] tracking-tighter uppercase"
+          >CD Los Almendros</span
+        >
+      </div>
+
+      <nav
+        class="flex items-center gap-6 md:gap-10 overflow-x-auto no-scrollbar whitespace-nowrap"
+      >
+        <a
+          href="jugadores.html"
+          class="font-black italic text-[10px] md:text-xs tracking-widest uppercase text-yellow-500 border-b-2 border-yellow-500 pb-1"
+          >Jugadores</a
+        >
+        <a
+          href="calendario.html"
+          class="font-black italic text-[10px] md:text-xs tracking-widest uppercase text-white/60 hover:text-white transition-all pb-1"
+          >Calendario</a
+        >
+        <a
+          href="resultados.html"
+          class="font-black italic text-[10px] md:text-xs tracking-widest uppercase text-white/60 hover:text-white transition-all pb-1"
+          >Resultados</a
+        >
+      </nav>
+
+      <span
+        class="hidden md:block font-black italic text-[10px] md:text-xs tracking-tighter uppercase shrink-0"
+        >CD Los Almendros</span
+      >
+    </header>
+
+    <section class="bg-white container mx-auto px-6 pt-16 pb-4">
+      <h1
+        class="text-5xl md:text-8xl font-black italic uppercase tracking-tighter text-[#004d26] leading-[0.85]"
+      >
+        Jugadores
+      </h1>
+      <p
+        class="text-gray-400 font-bold uppercase text-[9px] md:text-[11px] tracking-[0.3em] mt-4 ml-1 italic"
+      >
+        Plantel Oficial | Temporada 2026
+      </p>
+      <div class="h-1.5 w-full bg-[#004d26] mt-8 rounded-full"></div>
+    </section>
+
+    <main class="container mx-auto px-6 py-12">
+      <div class="relative mb-12">
+        <div
+          class="flex overflow-x-auto no-scrollbar whitespace-nowrap gap-3 px-4 py-2 md:flex-wrap md:justify-center md:px-0"
+        >
+          <button
+            onclick="filtrar('Todos', this)"
+            class="btn-filtro active px-8 py-3 bg-[#004d26] text-white rounded-full font-black uppercase text-[10px] tracking-widest shadow-xl transition-all"
+          >
+            Todos
+          </button>
+          <button
+            onclick="filtrar('Portero', this)"
+            class="btn-filtro px-8 py-3 border-2 border-gray-200 text-gray-400 rounded-full font-black uppercase text-[10px] tracking-widest hover:border-[#004d26] transition-all"
+          >
+            Porteros
+          </button>
+          <button
+            onclick="filtrar('Defensa', this)"
+            class="btn-filtro px-8 py-3 border-2 border-gray-200 text-gray-400 rounded-full font-black uppercase text-[10px] tracking-widest hover:border-[#004d26] transition-all"
+          >
+            Defensas
+          </button>
+          <button
+            onclick="filtrar('Centrocampista', this)"
+            class="btn-filtro px-8 py-3 border-2 border-gray-200 text-gray-400 rounded-full font-black uppercase text-[10px] tracking-widest hover:border-[#004d26] transition-all"
+          >
+            Mediocampistas
+          </button>
+          <button
+            onclick="filtrar('Delantero', this)"
+            class="btn-filtro px-8 py-3 border-2 border-gray-200 text-gray-400 rounded-full font-black uppercase text-[10px] tracking-widest hover:border-[#004d26] transition-all"
+          >
+            Delanteros
+          </button>
+          <button
+            onclick="filtrar('Staff', this)"
+            class="btn-filtro px-8 py-3 border-2 border-gray-200 text-gray-400 rounded-full font-black uppercase text-[10px] tracking-widest hover:border-[#004d26] transition-all"
+          >
+            Cuerpo Técnico
+          </button>
+        </div>
+      </div>
+
+      <div id="contenedor-plantel"></div>
+
+      <section id="seccion-staff" class="mt-32">
+        <h3
+          class="text-4xl font-black italic uppercase text-center mb-16 tracking-tighter border-b-2 border-gray-100 pb-6 text-[#004d26]"
+        >
+          Cuerpo Técnico
+        </h3>
+        <div
+          id="grid-staff"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mb-16"
+        ></div>
+        <div
+          class="max-w-4xl mx-auto overflow-hidden rounded-[2.5rem] border border-gray-200 shadow-2xl bg-white"
+        >
+          <table class="w-full text-left border-collapse">
+            <tbody
+              id="tabla-staff"
+              class="text-[10px] md:text-xs font-bold uppercase"
+            ></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <div
+      id="modal-detalle"
+      class="fixed inset-0 z-[100] bg-white hidden overflow-y-auto"
+    >
+      <div
+        class="bg-[#004d26] p-4 flex justify-between items-center text-white sticky top-0 z-[110]"
+      >
+        <span class="text-xs font-black uppercase tracking-[0.3em]"
+          >Perfil del Jugador</span
+        >
+        <button
+          onclick="cerrarDetalle()"
+          class="text-2xl hover:text-yellow-500 transition"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div id="detalle-content"></div>
+
+      <div
+        id="bio-drawer"
+        class="fixed top-0 right-0 h-full w-full md:w-[500px] bg-white shadow-[-20px_0_60px_rgba(0,0,0,0.2)] z-[140] drawer-closed transition-transform duration-500 ease-in-out overflow-y-auto"
+      >
+        <div class="p-10 md:p-16">
+          <div
+            class="flex justify-between items-center mb-10 border-b-4 border-[#004d26] pb-4"
+          >
+            <h3 class="text-3xl font-black uppercase italic text-[#004d26]">
+              Biografía
+            </h3>
+            <button
+              onclick="toggleBio()"
+              class="text-gray-300 hover:text-red-500 transition text-2xl"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <div
+            id="bio-texto"
+            class="text-gray-600 font-medium leading-relaxed text-justify whitespace-pre-line"
+          ></div>
+        </div>
+      </div>
+      <div
+        id="bio-overlay"
+        onclick="toggleBio()"
+        class="fixed inset-0 bg-black/60 z-[135] hidden backdrop-blur-sm"
+      ></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      let todosLosDatos = [];
+
+      async function cargarDatos() {
+        const { data } = await _supabase
+          .from("jugadores")
+          .select("*")
+          .order("posicion")
+          .order("dorsal");
+        todosLosDatos = data || [];
+        renderizarTodo(todosLosDatos);
+      }
+
+      function renderizarTodo(data) {
+        const contenedor = document.getElementById("contenedor-plantel");
+        const gridStaff = document.getElementById("grid-staff");
+        const tablaStaff = document.getElementById("tabla-staff");
+        const categorias = [
+          { id: "Portero", nombre: "Porteros" },
+          { id: "Defensa", nombre: "Defensas" },
+          { id: "Centrocampista", nombre: "Mediocampistas" },
+          { id: "Delantero", nombre: "Delanteros" },
+        ];
+        const jugadores = data.filter((p) => !p.es_cuerpo_tecnico);
+        const staff = data.filter((p) => p.es_cuerpo_tecnico);
+        contenedor.innerHTML = "";
+
+        categorias.forEach((cat) => {
+          const filtrados = jugadores.filter((j) => j.posicion === cat.id);
+          if (filtrados.length > 0) {
+            contenedor.innerHTML += `
+                    <div class="mb-24">
+                      <h3 class="text-4xl font-black italic uppercase text-center mb-12 tracking-tighter border-b-2 border-gray-100 pb-6 text-[#004d26]">${cat.nombre}</h3>
+                      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+                        ${filtrados
+                          .map(
+                            (j) => `
+                          <div onclick='abrirDetalle(${j.id})' class="jugador-card relative overflow-hidden bg-black aspect-[3/4] rounded-2xl cursor-pointer shadow-2xl group transition-all duration-300">
+                            <span class="absolute top-4 left-6 text-8xl font-black text-white/5 italic select-none transition group-hover:scale-110 duration-700">${j.dorsal}</span>
+                            <img src="${j.foto_url}" class="absolute inset-0 w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 transition duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-[#004d26] via-transparent to-transparent opacity-70"></div>
+
+                            <div class="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-all duration-300 z-20 flex flex-col items-center justify-center text-white hover-stats">
+                              <p class="text-[10px] font-black uppercase text-gray-400">Partidos</p><p class="text-5xl font-black italic text-yellow-500">${j.partidos || 0}</p>
+                              <div class="flex gap-10 mt-4">
+                                <div class="text-center"><p class="text-[9px] font-black uppercase text-gray-500">${j.posicion === "Portero" ? "Paradas" : "Goles"}</p><p class="text-2xl font-black italic">${j.goles_paradas || 0}</p></div>
+                                <div class="text-center"><p class="text-[9px] font-black uppercase text-gray-500">${j.posicion === "Portero" ? "P. Cero" : "Asists"}</p><p class="text-2xl font-black italic">${j.asistencias_ceros || 0}</p></div>
+                              </div>
+                            </div>
+
+                            <div class="absolute bottom-0 left-0 w-full p-8 z-30 transition-all duration-500 group-hover:translate-y-full">
+                              <p class="text-yellow-500 font-black text-4xl italic leading-none">${j.dorsal}</p>
+                              <h3 class="text-2xl font-black uppercase text-white tracking-tighter mt-1">${j.nombre.split(" ").pop()}</h3>
+                              <p class="text-white/40 font-black uppercase text-[8px] tracking-[0.3em] mt-2">${j.posicion}</p>
+                            </div>
+                          </div>`,
+                          )
+                          .join("")}
+                      </div>
+                    </div>`;
+          }
+        });
+
+        // STAFF
+        gridStaff.innerHTML = staff
+          .slice(0, 3)
+          .map(
+            (s) => `
+                <div onclick="abrirDetalle(${s.id})" class="staff-card bg-[#004d26] rounded-[2.5rem] overflow-hidden relative group aspect-square cursor-pointer shadow-xl">
+                  <img src="${s.foto_url}" class="w-full h-full object-cover object-top transition duration-500">
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                  <div class="absolute bottom-0 left-0 w-full p-8 z-20">
+                    <p class="text-yellow-500 font-black text-[10px] uppercase tracking-widest mb-1">${s.posicion}</p>
+                    <h4 class="text-2xl font-black text-white uppercase italic leading-none">${s.nombre}</h4>
+                  </div>
+                </div>`,
+          )
+          .join("");
+
+        tablaStaff.innerHTML = staff
+          .slice(3)
+          .map(
+            (s) => `
+                <tr onclick="abrirDetalle(${s.id})" class="border-b border-gray-50 hover:bg-gray-50 transition cursor-pointer group">
+                  <td class="p-6 text-gray-400 w-1/2 tracking-widest italic group-hover:text-[#004d26]">${s.posicion}</td>
+                  <td class="p-6 text-gray-900 font-black">${s.nombre}</td>
+                  <td class="p-6 text-right"><i class="fa-solid fa-plus text-gray-300 group-hover:text-yellow-500"></i></td>
+                </tr>`,
+          )
+          .join("");
+      }
+
+      function abrirDetalle(id) {
+        const j = todosLosDatos.find((item) => item.id == id);
+        if (!j) return;
+        const m = document.getElementById("modal-detalle");
+        const content = document.getElementById("detalle-content");
+
+        const esPortero = j.posicion === "Portero";
+        const esStaff = j.es_cuerpo_tecnico;
+
+        // Limpieza total y renderizado de sección única
+        content.innerHTML = `
+          <section class="bg-[#004d26] relative overflow-hidden flex flex-col items-center border-b-8 border-yellow-500">
+              
+              <div class="nombre-watermark">${j.nombre.split(" ").pop()}</div>
+              
+              <div class="container mx-auto max-w-7xl px-6 relative z-10 flex flex-col md:flex-row items-center">
+                  
+                  <div class="hidden md:block w-1/2 text-left pt-12">
+                      ${
+                        !esStaff
+                          ? `
+                      <div class="flex gap-8 mb-8">
+                          <div><p class="text-[10px] font-black text-white/40 uppercase tracking-widest">Partidos</p><p class="text-7xl font-black italic text-yellow-500 drop-shadow-lg">${j.partidos || 0}</p></div>
+                          <div><p class="text-[10px] font-black text-white/40 uppercase tracking-widest">${esPortero ? "Paradas" : "Goles"}</p><p class="text-7xl font-black italic text-white drop-shadow-lg">${j.goles_paradas || 0}</p></div>
+                          <div><p class="text-[10px] font-black text-white/40 uppercase tracking-widest">${esPortero ? "P. Cero" : "Asists"}</p><p class="text-7xl font-black italic text-white drop-shadow-lg">${j.asistencias_ceros || 0}</p></div>
+                      </div>
+                      `
+                          : ""
+                      }
+                      
+                      <h2 class="text-7xl lg:text-8xl font-black uppercase italic tracking-tighter leading-[0.8] mb-4 text-white drop-shadow-2xl">${j.nombre}</h2>
+                      <p class="text-yellow-500 font-black uppercase tracking-[0.6em] text-sm">${j.posicion}</p>
+                  </div>
+
+                  <div class="w-full md:w-1/2 flex justify-center items-end pt-12 md:pt-20">
+                      <img src="${j.foto_url}" class="foto-perfil-hero">
+                  </div>
+
+                  <div class="md:hidden w-full bg-[#001a0d]/50 backdrop-blur-md p-8 text-center border-t border-white/10">
+                      <p class="text-yellow-500 font-black uppercase tracking-[0.4em] text-[10px] mb-1">${j.posicion}</p>
+                      <h2 class="text-4xl font-black uppercase italic tracking-tighter text-white mb-6">${j.nombre}</h2>
+                      
+                      ${
+                        !esStaff
+                          ? `
+                      <div class="flex justify-around items-center">
+                          <div><p class="text-[8px] font-black text-white/40 uppercase">Partidos</p><p class="text-3xl font-black italic text-yellow-500">${j.partidos || 0}</p></div>
+                          <div><p class="text-[8px] font-black text-white/40 uppercase">${esPortero ? "Paradas" : "Goles"}</p><p class="text-3xl font-black italic text-white">${j.goles_paradas || 0}</p></div>
+                          <div><p class="text-[8px] font-black text-white/40 uppercase">${esPortero ? "P. Cero" : "Asists"}</p><p class="text-3xl font-black italic text-white">${j.asistencias_ceros || 0}</p></div>
+                      </div>
+                      `
+                          : ""
+                      }
+                  </div>
+              </div>
+          </section>
+
+          <section class="bg-white py-16">
+              <div class="container mx-auto max-w-5xl px-6">
+                  <div class="flex flex-col md:flex-row gap-12 items-start">
+                      <div class="w-full md:w-2/3">
+                          <h3 class="text-2xl md:text-3xl font-black uppercase italic tracking-tighter text-[#004d26] mb-6">
+                            ${j.nombre} ${esStaff ? "lidera con experiencia desde el banquillo." : "destaca por su entrega en el campo."}
+                          </h3>
+                          <p class="text-gray-500 text-lg leading-relaxed mb-8">${j.biografia ? j.biografia.substring(0, 300) + "..." : "Miembro fundamental de la institución..."}</p>
+                         <button onclick="toggleBio(${j.id})" class="font-black text-[#004d26] border-b-2 border-[#004d26] pb-1 uppercase text-xs tracking-widest hover:text-yellow-500 hover:border-yellow-500 transition">Biografía Completa +</button>
+                      </div>
+                      
+                      <div class="w-full md:w-1/3 grid grid-cols-2 gap-6 bg-gray-50 p-8 rounded-3xl border border-gray-100">
+                          <div class="col-span-2 border-b border-gray-200 pb-2 mb-2"><p class="text-[10px] font-black uppercase text-[#004d26]">Datos Personales</p></div>
+                          <div><p class="text-[8px] font-black uppercase text-gray-400">Nacionalidad</p><p class="font-bold text-sm text-gray-900">${j.nacionalidad || "Boliviana"}</p></div>
+                          <div><p class="text-[8px] font-black uppercase text-gray-400">Nacimiento</p><p class="font-bold text-sm text-gray-900">${j.fecha_nacimiento || "---"}</p></div>
+                          
+                          ${
+                            !esStaff
+                              ? `
+                            <div><p class="text-[8px] font-black uppercase text-gray-400">Peso</p><p class="font-bold text-sm text-gray-900">${j.peso || "---"} kg</p></div>
+                            <div><p class="text-[8px] font-black uppercase text-gray-400">Altura</p><p class="font-bold text-sm text-gray-900">${j.altura || "---"} cm</p></div>
+                          `
+                              : ""
+                          }
+                          </div>
+                  </div>
+              </div>
+          </section>
+        `;
+        m.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+      }
+
+      function toggleBio(id) {
+        const drawer = document.getElementById("bio-drawer");
+        const overlay = document.getElementById("bio-overlay");
+        const isClosed = drawer.classList.contains("drawer-closed");
+
+        if (isClosed) {
+          // Buscamos al guerrero o técnico por su ID en los datos cargados
+          const persona = todosLosDatos.find((item) => item.id == id);
+          document.getElementById("bio-texto").innerText = persona
+            ? persona.biografia || "Sin biografía disponible."
+            : "Sin biografía.";
+
+          drawer.classList.replace("drawer-closed", "drawer-open");
+          overlay.classList.remove("hidden");
+        } else {
+          drawer.classList.replace("drawer-open", "drawer-closed");
+          setTimeout(() => overlay.classList.add("hidden"), 500);
+        }
+      }
+      function cerrarDetalle() {
+        document.getElementById("modal-detalle").classList.add("hidden");
+        document.body.style.overflow = "auto";
+      }
+
+      function filtrar(pos, btn) {
+        document.querySelectorAll(".btn-filtro").forEach((b) => {
+          b.classList.replace("bg-[#004d26]", "border-2");
+          b.classList.replace("text-white", "text-gray-400");
+          b.classList.remove("shadow-xl");
+        });
+        btn.classList.replace("border-2", "bg-[#004d26]");
+        btn.classList.replace("text-gray-400", "text-white");
+        btn.classList.add("shadow-xl");
+
+        const s = document.getElementById("seccion-staff");
+        if (pos === "Staff") {
+          renderizarTodo(todosLosDatos);
+          s.classList.remove("hidden");
+          s.scrollIntoView({ behavior: "smooth" });
+          return;
+        }
+        if (pos === "Todos") {
+          renderizarTodo(todosLosDatos);
+          s.classList.remove("hidden");
+        } else {
+          renderizarTodo(
+            todosLosDatos.filter(
+              (p) => !p.es_cuerpo_tecnico && p.posicion === pos,
+            ),
+          );
+          s.classList.add("hidden");
+        }
+      }
+
+      cargarDatos();
+    </script>
+  </body>
+</html>

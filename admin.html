@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel Administrativo | CD Los Almendros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;700;900&display=swap");
+      body {
+        font-family: "Public Sans", sans-serif;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      /* Animación para el menú móvil */
+      #sidebar {
+        transition: transform 0.3s ease-in-out;
+      }
+      .sidebar-open {
+        transform: translateX(0) !important;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 text-gray-900 overflow-x-hidden">
+    <header
+      class="md:hidden bg-[#006633] text-white p-4 flex justify-between items-center shadow-lg sticky top-0 z-[100]"
+    >
+      <div class="flex items-center gap-3">
+        <button onclick="toggleMenu()" class="text-2xl p-2">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <h1 class="text-sm font-black italic uppercase tracking-tighter">
+          Admin Panel
+        </h1>
+      </div>
+      <div
+        class="w-8 h-8 bg-yellow-500 text-[#006633] rounded-full flex items-center justify-center font-black"
+      >
+        P
+      </div>
+    </header>
+
+    <div class="flex h-screen overflow-hidden">
+      <aside
+        id="sidebar"
+        class="fixed inset-y-0 left-0 z-[110] w-64 bg-[#006633] text-white flex flex-col shadow-2xl transform -translate-x-full md:relative md:translate-x-0"
+      >
+        <div class="p-8 text-center border-b border-white/10 relative">
+          <button
+            onclick="toggleMenu()"
+            class="md:hidden absolute top-4 right-4 text-white/50"
+          >
+            <i class="fa-solid fa-xmark text-xl"></i>
+          </button>
+          <h1 class="text-2xl font-black italic tracking-tighter uppercase">
+            Admin Panel
+          </h1>
+          <p class="text-[10px] text-gray-300 uppercase tracking-widest mt-1">
+            CD Los Almendros
+          </p>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto p-4 space-y-2 no-scrollbar">
+          <a
+            href="index.html"
+            class="flex items-center p-3 text-yellow-400 hover:bg-white/10 rounded-xl transition text-xs font-black uppercase italic tracking-widest gap-3"
+          >
+            <i class="fa-solid fa-house-chimney text-lg"></i>
+            <span>Volver al Inicio</span>
+          </a>
+
+          <hr class="border-white/10 my-4" />
+
+          <ul class="space-y-2">
+            <li>
+              <button
+                class="w-full flex items-center p-3 bg-white/10 rounded-xl font-bold text-sm gap-3"
+              >
+                <i class="fa-solid fa-gauge text-lg text-green-400"></i>
+                <span>Resumen</span>
+              </button>
+            </li>
+            <li>
+              <a
+                href="gestion-plantel.html"
+                class="flex items-center p-3 rounded-xl hover:bg-white/10 transition group text-white gap-3"
+              >
+                <i
+                  class="fa-solid fa-users text-lg text-gray-400 group-hover:text-green-500 transition-colors"
+                ></i>
+                <span class="font-bold text-sm">Jugadores</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="partidos-admin.html"
+                class="flex items-center p-3 rounded-xl hover:bg-white/10 transition group text-white gap-3"
+              >
+                <i
+                  class="fa-solid fa-calendar-days text-lg text-gray-400 group-hover:text-green-500 transition-colors"
+                ></i>
+                <span class="font-bold text-sm">Partidos</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="permisos-admin.html"
+                class="flex items-center p-3 rounded-xl hover:bg-white/10 transition group text-white gap-3"
+              >
+                <i
+                  class="fa-solid fa-user-shield text-lg text-gray-400 group-hover:text-green-500 transition-colors"
+                ></i>
+                <span class="font-bold text-sm">Permisos</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="gestionar-noticias.html"
+                class="flex items-center p-3 rounded-xl hover:bg-white/10 transition group text-white gap-3"
+              >
+                <i
+                  class="fa-solid fa-newspaper text-lg text-gray-400 group-hover:text-green-500 transition-colors"
+                ></i>
+                <span class="font-bold text-sm">Noticias</span>
+              </a>
+            </li>
+            <li></li>
+            <li>
+              <a
+                href="admin-historia.html"
+                class="flex items-center p-3 rounded-xl hover:bg-white/10 transition group text-white gap-3"
+              >
+                <i
+                  class="fa-solid fa-book-open text-lg text-gray-400 group-hover:text-green-500 transition-colors"
+                ></i>
+                <span class="font-bold text-sm">Historia</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="clasificacion-admin.html"
+                class="flex items-center p-3 rounded-xl hover:bg-white/10 transition group text-white gap-3"
+              >
+                <i
+                  class="fa-solid fa-ranking-star text-lg text-gray-400 group-hover:text-green-500 transition-colors"
+                ></i>
+                <span class="font-bold text-sm">Clasificación</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="p-6 border-t border-white/10">
+          <button
+            id="btnLogout"
+            class="w-full flex items-center p-3 text-red-300 hover:text-red-500 transition text-sm font-bold gap-3"
+          >
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Cerrar Sesión</span>
+          </button>
+        </div>
+      </aside>
+
+      <div
+        id="sidebar-overlay"
+        onclick="toggleMenu()"
+        class="fixed inset-0 bg-black/50 z-[105] hidden md:hidden backdrop-blur-sm"
+      ></div>
+
+      <main class="flex-1 overflow-y-auto bg-gray-50 p-6 md:p-12">
+        <header
+          class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6"
+        >
+          <div>
+            <h2
+              class="text-3xl md:text-5xl font-black text-gray-800 uppercase italic tracking-tighter leading-none"
+            >
+              BIENVENIDO, ADMINISTRADOR
+            </h2>
+            <p class="text-gray-500 text-sm font-medium mt-2">
+              ¿Qué desea gestionar hoy?
+            </p>
+          </div>
+          <div
+            class="hidden md:flex items-center space-x-4 bg-white p-2 px-4 rounded-2xl shadow-sm border border-gray-100"
+          >
+            <div class="text-right">
+              <p class="text-[10px] font-black uppercase text-green-600">
+                En Línea
+              </p>
+              <p class="text-[9px] font-bold text-gray-400 uppercase">
+                Presidente CDLA
+              </p>
+            </div>
+            <div
+              class="w-10 h-10 bg-[#006633] text-white rounded-full flex items-center justify-center font-bold shadow-lg"
+            >
+              P
+            </div>
+          </div>
+        </header>
+
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        >
+          <div
+            class="bg-white p-8 rounded-[2.5rem] border-t-4 border-blue-600 shadow-xl hover:scale-[1.03] transition-all group"
+          >
+            <div
+              class="text-blue-600 text-4xl mb-4 group-hover:scale-110 transition-transform"
+            >
+              <i class="fa-solid fa-pen-nib"></i>
+            </div>
+            <h3 class="font-black text-xl uppercase italic tracking-tighter">
+              Redactar Noticia
+            </h3>
+            <p class="text-gray-400 text-xs mt-2 mb-6 font-bold">
+              Crea artículos, crónicas o comunicados
+            </p>
+            <a
+              href="admin-noticias.html"
+              class="bg-blue-600 text-white text-[10px] font-black uppercase px-6 py-3 rounded-xl hover:bg-blue-700 transition block text-center shadow-lg shadow-blue-600/20"
+              >Acceder →</a
+            >
+          </div>
+
+          <div
+            class="bg-white p-8 rounded-[2.5rem] border-t-4 border-[#004d26] shadow-xl hover:scale-[1.03] transition-all group"
+          >
+            <div
+              class="text-[#004d26] text-4xl mb-4 group-hover:scale-110 transition-transform"
+            >
+              <i class="fa-solid fa-user-plus"></i>
+            </div>
+            <h3 class="font-black text-xl uppercase italic tracking-tighter">
+              Nuevo Jugador
+            </h3>
+            <p class="text-gray-400 text-xs mt-2 mb-6 font-bold">
+              Registrar a un nuevo jugador en el plantel oficial del club.
+            </p>
+            <a
+              href="jugadores-admin.html"
+              class="bg-[#004d26] text-white text-[10px] font-black uppercase px-6 py-3 rounded-xl hover:bg-green-800 transition block text-center shadow-lg shadow-green-600/20"
+              >Acceder →</a
+            >
+          </div>
+
+          <div
+            class="bg-white p-8 rounded-[2.5rem] border-t-4 border-black shadow-xl hover:scale-[1.03] transition-all group"
+          >
+            <div
+              class="text-black text-4xl mb-4 group-hover:scale-110 transition-transform"
+            >
+              <i class="fa-solid fa-chart-simple"></i>
+            </div>
+            <h3 class="font-black text-xl uppercase italic tracking-tighter">
+              Cargar Resultado
+            </h3>
+            <p class="text-gray-400 text-xs mt-2 mb-6 font-bold">
+              Actualizar el marcador y las incidencias del último partido.
+            </p>
+            <a
+              href="cargar-resultado.html"
+              class="bg-black text-white text-[10px] font-black uppercase px-6 py-3 rounded-xl hover:bg-gray-800 transition block text-center shadow-lg"
+              >Acceder →</a
+            >
+          </div>
+
+          <div
+            class="bg-white p-8 rounded-[2.5rem] border-t-4 border-yellow-500 shadow-xl hover:scale-[1.03] transition-all group"
+          >
+            <div
+              class="text-yellow-500 text-4xl mb-4 group-hover:scale-110 transition-transform"
+            >
+              <i class="fa-solid fa-calendar-day"></i>
+            </div>
+            <h3 class="font-black text-xl uppercase italic tracking-tighter">
+              Programar Fecha
+            </h3>
+            <p class="text-gray-400 text-xs mt-2 mb-6 font-bold">
+              Gestionar próximos partidos y el temporizador en vivo.
+            </p>
+            <a
+              href="calendario-admin.html"
+              class="bg-yellow-500 text-white text-[10px] font-black uppercase px-6 py-3 rounded-xl hover:bg-yellow-600 transition block text-center shadow-lg shadow-yellow-500/30"
+              >Acceder →</a
+            >
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      // --- LÓGICA DE MENÚ MÓVIL ---
+      function toggleMenu() {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("sidebar-overlay");
+        sidebar.classList.toggle("sidebar-open");
+        overlay.classList.toggle("hidden");
+      }
+
+      async function protegerRuta() {
+        const {
+          data: { session },
+        } = await _supabase.auth.getSession();
+        if (!session) {
+          window.location.href = "login.html";
+          return;
+        }
+        const { data: profile } = await _supabase
+          .from("usuarios")
+          .select("rol")
+          .eq("id", session.user.id)
+          .maybeSingle();
+        if (!profile || profile.rol !== "admin") {
+          window.location.href = "index.html";
+        }
+      }
+
+      document
+        .getElementById("btnLogout")
+        .addEventListener("click", async () => {
+          await _supabase.auth.signOut();
+          window.location.href = "index.html";
+        });
+
+      protegerRuta();
+    </script>
+  </body>
+</html>

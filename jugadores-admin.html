@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nuevo Fichaje | CD Los Almendros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #004d26;
+        border-radius: 10px;
+      }
+      .hidden-field {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gray-100 text-gray-900 min-h-screen flex flex-col font-sans overflow-x-hidden"
+  >
+    <nav
+      class="bg-[#004d26] p-4 flex justify-between items-center shadow-xl sticky top-0 z-50"
+    >
+      <a
+        href="admin.html"
+        class="text-[10px] font-black uppercase text-white/70 hover:text-white transition"
+      >
+        <i class="fa-solid fa-arrow-left mr-2"></i> Volver al Panel
+      </a>
+      <h1
+        class="font-black italic uppercase tracking-widest text-xs md:text-sm text-white"
+      >
+        Departamento de Fichajes
+      </h1>
+    </nav>
+
+    <main
+      class="flex-grow container mx-auto px-4 py-8 flex items-center justify-center"
+    >
+      <div
+        class="w-full max-w-4xl bg-white p-8 md:p-12 rounded-[3rem] border border-gray-200 shadow-2xl relative overflow-hidden"
+      >
+        <i
+          class="fa-solid fa-file-contract absolute -top-10 -right-10 text-9xl text-gray-100 -rotate-12"
+        ></i>
+
+        <div class="text-center mb-10 relative z-10">
+          <h2
+            class="text-4xl md:text-5xl font-black uppercase italic tracking-tighter text-[#004d26]"
+          >
+            Inscribir Miembro
+          </h2>
+          <p
+            class="text-yellow-600 text-[10px] md:text-xs font-bold uppercase tracking-[0.3em] mt-2"
+          >
+            Expediente Oficial Temporada 2026
+          </p>
+        </div>
+
+        <form id="jugadorForm" class="relative z-10 space-y-6">
+          <div
+            class="bg-gray-50 p-6 rounded-3xl border border-gray-100 grid grid-cols-1 md:grid-cols-3 gap-6"
+          >
+            <div class="md:col-span-3">
+              <label
+                class="block text-[10px] font-black text-gray-500 uppercase mb-2 ml-2"
+              >
+                Fotografía Oficial <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="file"
+                id="foto"
+                accept="image/*"
+                required
+                class="w-full bg-white border border-gray-200 p-3 rounded-2xl text-xs text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-[10px] file:font-black file:uppercase file:bg-[#004d26] file:text-white cursor-pointer shadow-sm"
+              />
+            </div>
+
+            <div class="md:col-span-2">
+              <label
+                class="block text-[10px] font-black text-gray-500 uppercase mb-2 ml-2"
+              >
+                Nombre Completo <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="nombre"
+                required
+                placeholder="EJ. MAMANI"
+                class="w-full bg-white border border-gray-200 p-4 rounded-2xl text-xs font-bold uppercase outline-none focus:border-[#004d26] transition-colors shadow-sm text-gray-800"
+              />
+            </div>
+
+            <div id="contenedor-dorsal">
+              <label
+                class="block text-[10px] font-black text-gray-500 uppercase mb-2 ml-2"
+              >
+                Dorsal (N°) <span class="text-red-500">*</span>
+              </label>
+              <input
+                type="number"
+                id="dorsal"
+                min="1"
+                max="99"
+                placeholder="10"
+                class="w-full bg-white border border-gray-200 p-4 rounded-2xl text-xs font-bold outline-none focus:border-[#004d26] transition-colors shadow-sm text-gray-800"
+              />
+            </div>
+          </div>
+
+          <div
+            class="bg-gray-50 p-6 rounded-3xl border border-gray-100 grid grid-cols-1 md:grid-cols-4 gap-6"
+          >
+            <div
+              class="md:col-span-4 bg-yellow-50 p-4 rounded-2xl border border-yellow-100 flex items-center justify-between mb-2 shadow-sm"
+            >
+              <div>
+                <p class="text-[10px] font-black uppercase text-yellow-700">
+                  ¿Es Cuerpo Técnico?
+                </p>
+                <p class="text-[8px] text-yellow-600/80 uppercase font-bold">
+                  Entrenadores, Médicos o Delegados
+                </p>
+              </div>
+              <input
+                type="checkbox"
+                id="es_cuerpo_tecnico"
+                class="w-6 h-6 accent-[#004d26] cursor-pointer"
+              />
+            </div>
+
+            <div class="md:col-span-2">
+              <label
+                id="label-posicion"
+                class="block text-[10px] font-black text-gray-500 uppercase mb-2 ml-2"
+                >Posición *</label
+              >
+              <select
+                id="posicion"
+                required
+                class="w-full bg-white border border-gray-200 p-4 rounded-2xl text-xs font-bold uppercase outline-none focus:border-[#004d26] transition-colors shadow-sm text-gray-800"
+              ></select>
+            </div>
+
+            <div class="md:col-span-2">
+              <label
+                class="block text-[10px] font-black text-gray-500 uppercase mb-2 ml-2"
+                >Nacionalidad</label
+              >
+              <input
+                type="text"
+                id="nacionalidad"
+                placeholder="EJ. RIBERALTA, BOLIVIA"
+                class="w-full bg-white border border-gray-200 p-4 rounded-2xl text-xs font-bold uppercase outline-none focus:border-[#004d26] transition-colors shadow-sm text-gray-800"
+              />
+            </div>
+
+            <div class="md:col-span-2">
+              <label
+                class="block text-[10px] font-black text-gray-500 uppercase mb-2 ml-2"
+                >Fecha de Nacimiento</label
+              >
+              <input
+                type="date"
+                id="fecha_nacimiento"
+                class="w-full bg-white border border-gray-200 p-4 rounded-2xl text-xs font-bold text-gray-700 outline-none focus:border-[#004d26] transition-colors shadow-sm"
+              />
+            </div>
+
+            <div
+              id="contenedor-fisico"
+              class="md:col-span-2 grid grid-cols-2 gap-4"
+            >
+              <div>
+                <label
+                  class="block text-[10px] font-black text-gray-500 uppercase mb-2 ml-2"
+                  >Altura</label
+                >
+                <input
+                  type="text"
+                  id="altura"
+                  placeholder="180cm"
+                  class="w-full bg-white border border-gray-200 p-4 rounded-2xl text-xs font-bold uppercase outline-none focus:border-[#004d26] transition-colors shadow-sm text-gray-800"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-[10px] font-black text-gray-500 uppercase mb-2 ml-2"
+                  >Peso</label
+                >
+                <input
+                  type="text"
+                  id="peso"
+                  placeholder="75kg"
+                  class="w-full bg-white border border-gray-200 p-4 rounded-2xl text-xs font-bold uppercase outline-none focus:border-[#004d26] transition-colors shadow-sm text-gray-800"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="bg-gray-50 p-6 rounded-3xl border border-gray-100 shadow-sm"
+          >
+            <label
+              class="block text-[10px] font-black text-gray-500 uppercase mb-2 ml-2"
+              >Biografía y Trayectoria</label
+            >
+            <textarea
+              id="biografia"
+              rows="5"
+              placeholder="Escriba la historia del miembro..."
+              class="w-full bg-white border border-gray-200 p-4 rounded-2xl text-xs font-bold outline-none focus:border-[#004d26] transition-colors custom-scrollbar leading-relaxed text-gray-800 shadow-sm"
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            id="btnGuardar"
+            class="w-full bg-[#004d26] hover:bg-[#003d1e] text-white py-5 rounded-[2rem] font-black uppercase text-xs tracking-[0.3em] transition-all shadow-xl active:scale-95 flex justify-center items-center gap-3"
+          >
+            <i class="fa-solid fa-file-signature"></i> Firmar Contrato
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      const rolesJugador = [
+        "Portero",
+        "Defensa",
+        "Centrocampista",
+        "Delantero",
+      ];
+      const rolesStaff = [
+        "Director Técnico",
+        "Asistente Técnico",
+        "Preparador Físico",
+        "Médico",
+        "Delegado",
+      ];
+
+      const chkStaff = document.getElementById("es_cuerpo_tecnico");
+      const selectPos = document.getElementById("posicion");
+      const labelPos = document.getElementById("label-posicion");
+      const contDorsal = document.getElementById("contenedor-dorsal");
+      const inputDorsal = document.getElementById("dorsal");
+      const contFisico = document.getElementById("contenedor-fisico");
+
+      function actualizarFormulario() {
+        const esStaff = chkStaff.checked;
+        selectPos.innerHTML = "";
+        const lista = esStaff ? rolesStaff : rolesJugador;
+        lista.forEach((rol) => {
+          let opt = document.createElement("option");
+          opt.value = rol;
+          opt.textContent = rol.toUpperCase();
+          selectPos.appendChild(opt);
+        });
+
+        if (esStaff) {
+          labelPos.textContent = "Cargo en el Staff *";
+          contDorsal.classList.add("hidden-field");
+          contFisico.classList.add("hidden-field");
+          inputDorsal.required = false;
+          inputDorsal.value = 0;
+        } else {
+          labelPos.textContent = "Posición en el Campo *";
+          contDorsal.classList.remove("hidden-field");
+          contFisico.classList.remove("hidden-field");
+          inputDorsal.required = true;
+          inputDorsal.value = "";
+        }
+      }
+
+      chkStaff.addEventListener("change", actualizarFormulario);
+      window.onload = actualizarFormulario;
+
+      document
+        .getElementById("jugadorForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("btnGuardar");
+          btn.disabled = true;
+          btn.innerHTML =
+            '<i class="fa-solid fa-circle-notch fa-spin"></i> PROCESANDO...';
+
+          try {
+            const file = document.getElementById("foto").files[0];
+            let publicUrl = "";
+
+            if (file) {
+              const fileName = `ficha_${Date.now()}.${file.name.split(".").pop()}`;
+              await _supabase.storage.from("jugadores").upload(fileName, file);
+              const { data } = _supabase.storage
+                .from("jugadores")
+                .getPublicUrl(fileName);
+              publicUrl = data.publicUrl;
+            }
+
+            const datos = {
+              nombre: document.getElementById("nombre").value.toUpperCase(),
+              dorsal: chkStaff.checked ? 0 : parseInt(inputDorsal.value) || 0,
+              posicion: selectPos.value,
+              es_cuerpo_tecnico: chkStaff.checked,
+              nacionalidad:
+                document.getElementById("nacionalidad").value.toUpperCase() ||
+                null,
+              fecha_nacimiento:
+                document.getElementById("fecha_nacimiento").value || null,
+              altura: chkStaff.checked
+                ? null
+                : document.getElementById("altura").value.toUpperCase() || null,
+              peso: chkStaff.checked
+                ? null
+                : document.getElementById("peso").value.toUpperCase() || null,
+              biografia: document.getElementById("biografia").value || null,
+              foto_url: publicUrl,
+              partidos: 0,
+              goles_paradas: 0,
+              asistencias_ceros: 0,
+              creado_en: new Date().toISOString(),
+            };
+
+            const { error } = await _supabase.from("jugadores").insert([datos]);
+            if (error) throw error;
+
+            alert("✅ ¡FICHAJE COMPLETADO!");
+            e.target.reset();
+            btn.disabled = false;
+            btn.innerHTML =
+              '<i class="fa-solid fa-file-signature"></i> Firmar Contrato';
+            actualizarFormulario();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          } catch (error) {
+            alert("❌ Error: " + error.message);
+            btn.disabled = false;
+            btn.innerHTML =
+              '<i class="fa-solid fa-file-signature"></i> Firmar Contrato';
+          }
+        });
+    </script>
+  </body>
+</html>

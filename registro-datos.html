@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro de Socio | CD Los Almendros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </head>
+  <body
+    class="bg-[#0b0e14] text-white flex items-center justify-center min-h-screen p-6"
+  >
+    <div
+      class="max-w-md w-full bg-white rounded-3xl p-8 text-gray-900 shadow-2xl"
+    >
+      <div class="text-center mb-8">
+        <div
+          class="w-16 h-16 bg-[#004d26] rounded-full mx-auto mb-4 flex items-center justify-center font-black text-xl text-white shadow-lg"
+        >
+          AL
+        </div>
+        <h2
+          class="text-2xl font-black uppercase italic tracking-tighter text-[#004d26]"
+        >
+          Completa tu Perfil
+        </h2>
+        <p
+          class="text-gray-400 text-[10px] font-black uppercase mt-2 tracking-widest"
+        >
+          CD Los Almendros | Oficial
+        </p>
+      </div>
+
+      <form id="registroForm" class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <input
+            type="text"
+            id="nombre"
+            placeholder="Nombre"
+            required
+            class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-[#004d26] outline-none text-sm font-bold"
+          />
+          <input
+            type="text"
+            id="apellido"
+            placeholder="Apellido"
+            required
+            class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-[#004d26] outline-none text-sm font-bold"
+          />
+        </div>
+
+        <label class="block text-[9px] font-black uppercase text-gray-400 ml-2"
+          >Fecha de Nacimiento</label
+        >
+        <input
+          type="date"
+          id="fecha_nacimiento"
+          required
+          class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-[#004d26] outline-none text-sm font-bold"
+        />
+
+        <select
+          id="sexo"
+          required
+          class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-[#004d26] outline-none text-sm font-bold appearance-none"
+        >
+          <option value="" disabled selected>Género</option>
+          <option value="Masculino">Masculino</option>
+          <option value="Femenino">Femenino</option>
+        </select>
+
+        <select
+          id="pais"
+          required
+          class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-[#004d26] outline-none text-sm font-bold appearance-none"
+        >
+          <option value="" disabled selected>País</option>
+          <option value="Bolivia">Bolivia</option>
+          <option value="Brasil">Brasil</option>
+          <option value="Argentina">Argentina</option>
+        </select>
+
+        <button
+          type="submit"
+          id="btnFinalizar"
+          class="w-full bg-[#004d26] text-white font-black py-5 rounded-2xl hover:bg-green-800 transition-all uppercase tracking-widest text-xs shadow-xl mt-4"
+        >
+          Finalizar Registro
+        </button>
+      </form>
+    </div>
+
+    <script>
+      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      const btnFinalizar = document.getElementById("btnFinalizar");
+      const registroForm = document.getElementById("registroForm");
+
+      // 1. Verificamos sesión al cargar
+      async function checkAuth() {
+        const {
+          data: { session },
+        } = await _supabase.auth.getSession();
+        if (!session) {
+          alert("Sesión no encontrada. Por favor inicia sesión de nuevo.");
+          window.location.href = "login.html";
+        }
+      }
+      checkAuth();
+
+      // 2. Motor de guardado
+      registroForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        btnFinalizar.innerText = "SINCRONIZANDO CON EL CLUB...";
+        btnFinalizar.disabled = true;
+
+        const {
+          data: { session },
+        } = await _supabase.auth.getSession();
+
+        const datosSocio = {
+          id: session.user.id,
+          nombre: document.getElementById("nombre").value,
+          apellido: document.getElementById("apellido").value,
+          email: session.user.email,
+          fecha_nacimiento: document.getElementById("fecha_nacimiento").value,
+          sexo: document.getElementById("sexo").value,
+          pais: document.getElementById("pais").value,
+          rol: "socio",
+        };
+
+        const { error } = await _supabase.from("usuarios").insert([datosSocio]);
+
+        if (error) {
+          console.error("Error:", error.message);
+          alert("Error al guardar: " + error.message);
+          btnFinalizar.innerText = "REINTENTAR REGISTRO";
+          btnFinalizar.disabled = false;
+        } else {
+          alert("¡Bienvenido oficialmente, " + datosSocio.nombre + "!");
+          window.location.href = "index.html";
+        }
+      });
+    </script>
+  </body>
+</html>

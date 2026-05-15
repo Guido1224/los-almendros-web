@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perfil Socio | CD Los Almendros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+      .active-section {
+        display: block !important;
+        animation: slideUp 0.4s ease-out;
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      /* Ocultar secciones por defecto */
+      #main-content > div:not(#default-view) {
+        display: none;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 font-sans antialiased text-gray-900">
+    <nav
+      class="bg-white border-b border-gray-200 py-4 px-6 flex justify-between items-center sticky top-0 z-50"
+    >
+      <a
+        href="index.html"
+        class="flex items-center text-[#004d26] font-black uppercase text-[10px] tracking-widest hover:opacity-70 transition"
+      >
+        <i class="fa-solid fa-chevron-left mr-2"></i> Volver a la web
+      </a>
+      <div class="font-black text-[#004d26] italic text-sm">
+        CD LOS ALMENDROS
+      </div>
+    </nav>
+
+    <div
+      class="container mx-auto max-w-6xl p-4 md:p-8 grid grid-cols-1 lg:grid-cols-3 gap-8"
+    >
+      <div class="lg:col-span-1 space-y-6">
+        <div
+          class="bg-white rounded-3xl p-8 shadow-sm text-center border border-gray-100"
+        >
+          <div
+            id="user-initial"
+            class="w-24 h-24 bg-[#004d26] text-white rounded-full mx-auto mb-4 flex items-center justify-center text-3xl font-black border-4 border-gray-50 shadow-lg"
+          >
+            --
+          </div>
+          <h2
+            id="display-name"
+            class="text-xl font-black uppercase tracking-tighter text-gray-800"
+          >
+            Cargando...
+          </h2>
+          <span
+            class="inline-block mt-2 px-6 py-1 bg-[#1a3a5a] text-white text-[10px] font-black rounded-full uppercase tracking-widest"
+            >SOCIO</span
+          >
+        </div>
+
+        <div
+          class="bg-white rounded-3xl shadow-sm overflow-hidden border border-gray-100"
+        >
+          <div
+            class="p-5 border-b border-gray-50 bg-gray-50/50 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400"
+          >
+            Ajustes
+          </div>
+          <button
+            onclick="switchSection('personal')"
+            class="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition border-b border-gray-50 group"
+          >
+            <div class="flex items-center">
+              <i class="fa-solid fa-user-circle mr-4 text-[#004d26]"></i>
+              <span
+                class="text-sm font-bold group-hover:translate-x-1 transition-transform"
+                >Información Personal</span
+              >
+            </div>
+            <i class="fa-solid fa-chevron-right text-xs text-gray-300"></i>
+          </button>
+
+          <div
+            class="p-5 border-b border-gray-50 bg-gray-50/50 text-[10px] font-black uppercase tracking-[0.2em] text-gray-400"
+          >
+            Legal
+          </div>
+          <button
+            onclick="switchSection('privacidad')"
+            class="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition border-b border-gray-50 group"
+          >
+            <div class="flex items-center">
+              <i class="fa-solid fa-shield-halved mr-4 text-[#004d26]"></i>
+              <span
+                class="text-sm font-bold group-hover:translate-x-1 transition-transform"
+                >Política de Privacidad</span
+              >
+            </div>
+            <i class="fa-solid fa-chevron-right text-xs text-gray-300"></i>
+          </button>
+          <button
+            onclick="switchSection('terminos')"
+            class="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition border-b border-gray-50 group"
+          >
+            <div class="flex items-center">
+              <i class="fa-solid fa-file-contract mr-4 text-[#004d26]"></i>
+              <span
+                class="text-sm font-bold group-hover:translate-x-1 transition-transform"
+                >Términos Legales</span
+              >
+            </div>
+            <i class="fa-solid fa-chevron-right text-xs text-gray-300"></i>
+          </button>
+
+          <button
+            onclick="cerrarSesion()"
+            class="w-full flex items-center p-5 text-red-500 hover:bg-red-50 transition font-black uppercase text-xs"
+          >
+            <i class="fa-solid fa-arrow-right-from-bracket mr-4"></i> Cerrar
+            Sesión
+          </button>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2" id="main-content">
+        <div
+          id="default-view"
+          class="h-full min-h-[500px] bg-white rounded-3xl flex flex-col items-center justify-center p-12 text-center border border-gray-100"
+        >
+          <div class="opacity-10 mb-6">
+            <i class="fa-solid fa-shield-heart text-9xl text-[#004d26]"></i>
+          </div>
+          <h3
+            class="text-2xl font-black text-gray-200 uppercase italic tracking-tighter"
+          >
+            CD Los Almendros
+          </h3>
+          <p
+            class="text-gray-300 text-xs mt-2 uppercase font-bold tracking-widest"
+          >
+            Selecciona una opción para gestionar tu cuenta
+          </p>
+        </div>
+
+        <div
+          id="section-personal"
+          class="bg-white rounded-3xl p-8 shadow-sm border border-gray-100"
+        >
+          <div class="flex justify-between items-center mb-8 border-b pb-4">
+            <h3
+              class="text-xl font-black uppercase italic tracking-tighter text-[#004d26]"
+            >
+              Información Personal
+            </h3>
+            <button onclick="closeSections()" class="lg:hidden text-gray-400">
+              <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+          </div>
+
+          <form id="profile-form" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label
+                  class="block text-[10px] font-black uppercase text-gray-400 mb-2"
+                  >* Nombre</label
+                >
+                <input
+                  type="text"
+                  id="edit-nombre"
+                  required
+                  class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-[#004d26] outline-none font-bold"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-[10px] font-black uppercase text-gray-400 mb-2"
+                  >* Apellidos</label
+                >
+                <input
+                  type="text"
+                  id="edit-apellido"
+                  required
+                  class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl focus:border-[#004d26] outline-none font-bold"
+                />
+              </div>
+            </div>
+            <div>
+              <label
+                class="block text-[10px] font-black uppercase text-gray-400 mb-2"
+                >* País</label
+              >
+              <select
+                id="edit-pais"
+                class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none font-bold"
+              >
+                <option value="Bolivia">Bolivia</option>
+                <option value="Brasil">Brasil</option>
+              </select>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label
+                  class="block text-[10px] font-black uppercase text-gray-400 mb-2"
+                  >* Fecha Nacimiento</label
+                >
+                <input
+                  type="date"
+                  id="edit-fecha"
+                  required
+                  class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none font-bold"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-[10px] font-black uppercase text-gray-400 mb-2"
+                  >* Género</label
+                >
+                <select
+                  id="edit-genero"
+                  class="w-full p-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none font-bold"
+                >
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                </select>
+              </div>
+            </div>
+            <button
+              type="submit"
+              id="btn-save"
+              class="w-full bg-gray-200 text-gray-500 font-black py-4 rounded-2xl hover:bg-[#004d26] hover:text-white transition-all uppercase tracking-[0.2em] text-xs shadow-md"
+            >
+              Guardar Cambios
+            </button>
+          </form>
+
+          <div class="mt-12 pt-8 border-t border-red-50 text-center">
+            <button
+              onclick="eliminarCuenta()"
+              class="text-red-400 hover:text-red-600 font-bold text-[10px] uppercase tracking-widest underline"
+            >
+              Eliminar mi cuenta permanentemente
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="section-privacidad"
+          class="bg-white rounded-3xl p-8 border border-gray-100"
+        >
+          <div
+            class="flex justify-between items-center mb-8 border-b pb-4 text-[#004d26]"
+          >
+            <h3 class="text-xl font-black uppercase italic tracking-tighter">
+              Política de Privacidad
+            </h3>
+            <button onclick="closeSections()" class="lg:hidden text-gray-400">
+              <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+          </div>
+          <p class="text-gray-500 text-sm font-medium">
+            Tus datos personales son utilizados exclusivamente para la gestión
+            de tu carnet de socio.
+          </p>
+        </div>
+
+        <div
+          id="section-terminos"
+          class="bg-white rounded-3xl p-8 border border-gray-100"
+        >
+          <div
+            class="flex justify-between items-center mb-8 border-b pb-4 text-[#004d26]"
+          >
+            <h3 class="text-xl font-black uppercase italic tracking-tighter">
+              Términos Legales
+            </h3>
+            <button onclick="closeSections()" class="lg:hidden text-gray-400">
+              <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+          </div>
+          <p class="text-gray-500 text-sm font-medium">
+            Al ser socio, aceptas el reglamento interno del club CD Los
+            Almendros.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      // LÓGICA DE INTERCAMBIO DE SECCIONES (CORREGIDA)
+      function switchSection(id) {
+        // 1. Ocultamos la vista del escudo (default)
+        document.getElementById("default-view").style.display = "none";
+
+        // 2. Buscamos todas las secciones de contenido
+        const sections = document.querySelectorAll(
+          "#main-content > div:not(#default-view)",
+        );
+
+        sections.forEach((s) => {
+          s.style.display = "none"; // Forzamos el ocultado
+          s.classList.remove("active-section"); // ¡CLAVE! Quitamos el !important del anterior
+        });
+
+        // 3. Mostramos solo la que pediste
+        const target = document.getElementById("section-" + id);
+        if (target) {
+          target.style.display = "block";
+          target.classList.add("active-section");
+
+          // 4. Si es móvil, hacemos scroll suave para que no se pierda
+          if (window.innerWidth < 1024) {
+            target.scrollIntoView({ behavior: "smooth" });
+          }
+        }
+      }
+
+      function closeSections() {
+        // Limpiamos todo y volvemos al escudo inicial
+        const sections = document.querySelectorAll(
+          "#main-content > div:not(#default-view)",
+        );
+        sections.forEach((s) => {
+          s.style.display = "none";
+          s.classList.remove("active-section");
+        });
+
+        // Volvemos a mostrar la vista con el escudo
+        const defaultView = document.getElementById("default-view");
+        defaultView.style.display = "flex";
+      }
+
+      async function cargarDatos() {
+        const {
+          data: { session },
+        } = await _supabase.auth.getSession();
+        if (!session) {
+          window.location.href = "login.html";
+          return;
+        }
+        const { data: profile } = await _supabase
+          .from("usuarios")
+          .select("*")
+          .eq("id", session.user.id)
+          .single();
+
+        if (profile) {
+          document.getElementById("display-name").innerText =
+            `${profile.nombre} ${profile.apellido}`;
+          document.getElementById("user-initial").innerText = profile.nombre
+            .charAt(0)
+            .toUpperCase();
+          document.getElementById("edit-nombre").value = profile.nombre || "";
+          document.getElementById("edit-apellido").value =
+            profile.apellido || "";
+          document.getElementById("edit-pais").value =
+            profile.pais || "Bolivia";
+          document.getElementById("edit-genero").value =
+            profile.sexo || "Masculino";
+          if (profile.fecha_nacimiento)
+            document.getElementById("edit-fecha").value =
+              profile.fecha_nacimiento;
+        }
+      }
+
+      // INTEGRACIÓN DEL GUARDADO PROFESIONAL
+      document
+        .getElementById("profile-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("btn-save");
+          btn.innerText = "GUARDANDO...";
+          btn.disabled = true;
+
+          const {
+            data: { session },
+          } = await _supabase.auth.getSession();
+
+          const nuevosDatos = {
+            nombre: document.getElementById("edit-nombre").value,
+            apellido: document.getElementById("edit-apellido").value,
+            pais: document.getElementById("edit-pais").value,
+            sexo: document.getElementById("edit-genero").value,
+            fecha_nacimiento: document.getElementById("edit-fecha").value,
+          };
+
+          const { data, error } = await _supabase
+            .from("usuarios")
+            .update(nuevosDatos)
+            .eq("id", session.user.id)
+            .select();
+
+          if (error) {
+            alert("No se pudo guardar: " + error.message);
+            btn.innerText = "GUARDAR CAMBIOS";
+            btn.disabled = false;
+          } else {
+            alert("¡Perfil actualizado con éxito!");
+            window.location.reload();
+          }
+        });
+
+      async function eliminarCuenta() {
+        if (confirm("¿Estás 100% seguro? Perderás todos tus datos de socio.")) {
+          const {
+            data: { session },
+          } = await _supabase.auth.getSession();
+          await _supabase.from("usuarios").delete().eq("id", session.user.id);
+          await _supabase.auth.signOut();
+          window.location.href = "index.html";
+        }
+      }
+
+      async function cerrarSesion() {
+        await _supabase.auth.signOut();
+        window.location.href = "index.html";
+      }
+
+      cargarDatos();
+    </script>
+  </body>
+</html>

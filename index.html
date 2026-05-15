@@ -1,0 +1,1095 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CD Los Almendros | Oficial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <style>
+      html,
+      body {
+        max-width: 100%;
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.4s ease-out forwards;
+      }
+      .text-shadow-lg {
+        text-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+      }
+      .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+
+      /* === ESTILOS GUERREROS (DESLIZABLE PC Y MÓVIL) === */
+      .guerrero-item {
+        flex: 0 0 280px;
+        scroll-snap-align: center;
+      }
+      @media (min-width: 768px) {
+        .guerrero-item {
+          flex: 0 0 320px;
+        }
+      }
+
+      .jugador-card img {
+        transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .jugador-card:hover img {
+        transform: scale(1.1);
+      }
+
+      .jugador-stats-panel {
+        transition: all 0.4s ease;
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      .jugador-card:hover .jugador-stats-panel {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .jugador-info-base {
+        transition: all 0.3s ease;
+      }
+      .jugador-card:hover .jugador-info-base {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      /* Logos de Patrocinadores - Ajuste de Ingeniería GRAF */
+      /* --- AJUSTE DE PRECISIÓN PARA LOGOS --- */
+      .sponsor-item {
+        /* Por defecto: Blancos, elegantes y bien visibles */
+        filter: brightness(0) invert(1);
+        opacity: 0.7; /* Subimos de 0.5 a 0.7 para que no sea tan opaco al inicio */
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        max-height: 55px; /* Un poco más grandes para que luzcan */
+        width: auto;
+        object-fit: contain;
+      }
+
+      .sponsor-item:hover {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+      img[alt="Acai Life"] {
+        filter: grayscale(1); /* Solo le quitamos el color, no lo invertimos */
+      }
+
+      img[alt="Acai Life"]:hover {
+        filter: none; /* Color original en hover */
+      }
+      /* Buscamos el logo de Yamaha por su atributo ALT y le damos un trato especial */
+      img[alt="Yamaha"]:hover {
+        filter: brightness(0) invert(1)
+          drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+      }
+      .sponsor-item:hover {
+        filter: none; /* Esto activa el color original para los que tienen color */
+      }
+
+      /* Si Yamaha sigue poniéndose negro, añade esta clase específica abajo */
+      .force-white:hover {
+        filter: brightness(0) invert(1) !important;
+      }
+    </style>
+  </head>
+
+  <div
+    id="loader-graf"
+    class="fixed inset-0 bg-[#004d26] z-[9999] flex flex-col items-center justify-center transition-opacity duration-500"
+  >
+    <div class="relative">
+      <div
+        class="w-24 h-24 bg-white rounded-full flex items-center justify-center font-black text-3xl text-[#004d26] shadow-[0_0_50px_rgba(255,255,255,0.2)] animate-pulse"
+      >
+        AL
+      </div>
+      <div
+        class="absolute -inset-2 border-4 border-t-white border-white/10 rounded-full animate-spin"
+      ></div>
+    </div>
+    <p
+      class="mt-8 text-white font-bold tracking-[0.3em] uppercase text-[10px] italic animate-bounce"
+    >
+      Verificando Credenciales...
+    </p>
+  </div>
+
+  <body class="bg-gray-100 text-gray-900 overflow-x-hidden">
+    <nav
+      class="bg-green-900 text-white sticky top-0 z-[100] shadow-2xl border-b border-gold/20"
+    >
+      <div
+        class="container mx-auto flex justify-between items-center px-4 py-3"
+      >
+        <div class="flex-shrink-0">
+          <h1
+            class="text-base md:text-xl font-black tracking-tighter text-white uppercase italic"
+          >
+            CD LOS ALMENDROS
+          </h1>
+        </div>
+        <ul
+          class="hidden lg:flex items-center space-x-8 text-sm font-bold uppercase tracking-widest"
+        >
+          <li>
+            <a
+              href="index.html"
+              class="hover:text-yellow-500 transition text-yellow-500"
+              >Inicio</a
+            >
+          </li>
+          <li class="relative group py-4">
+            <button
+              class="flex items-center hover:text-yellow-500 transition uppercase"
+            >
+              Primer Equipo
+              <i class="fa-solid fa-chevron-down ml-2 text-[10px]"></i>
+            </button>
+            <ul
+              class="absolute top-full left-0 w-48 bg-white text-green-900 shadow-2xl rounded-b-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-t-4 border-yellow-500"
+            >
+              <li>
+                <a
+                  href="jugadores.html"
+                  class="block px-6 py-3 hover:bg-gray-100 transition border-b border-gray-100"
+                  >Jugadores</a
+                >
+              </li>
+              <li>
+                <a
+                  href="calendario.html"
+                  class="block px-6 py-3 hover:bg-gray-100 transition border-b border-gray-100"
+                  >Calendario</a
+                >
+              </li>
+              <li>
+                <a
+                  href="resultados.html"
+                  class="block px-6 py-3 hover:bg-gray-100 transition"
+                  >Resultados</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li class="relative group py-4">
+            <button
+              class="flex items-center hover:text-yellow-500 transition uppercase"
+            >
+              Club <i class="fa-solid fa-chevron-down ml-2 text-[10px]"></i>
+            </button>
+            <ul
+              class="absolute top-full left-0 w-48 bg-white text-green-900 shadow-2xl rounded-b-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border-t-4 border-yellow-500"
+            >
+              <li>
+                <a
+                  href="todas-las-noticias.html"
+                  class="block px-6 py-3 hover:bg-gray-100 transition border-b border-gray-100"
+                  >Noticias</a
+                >
+              </li>
+              <li>
+                <a
+                  href="historia.html"
+                  class="block px-6 py-3 hover:bg-gray-100 transition"
+                  >Historia</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li class="hover:text-yellow-500 transition cursor-pointer">
+            Socios
+          </li>
+        </ul>
+        <div class="flex items-center space-x-2 md:space-x-4">
+          <div id="auth-section" class="min-w-[120px] flex justify-end"></div>
+          <button
+            id="mobile-menu-btn"
+            class="lg:hidden text-xl md:text-2xl p-2 focus:outline-none hover:text-yellow-500 transition"
+          >
+            <i class="fa-solid fa-bars"></i>
+          </button>
+        </div>
+      </div>
+
+      <div
+        id="mobile-menu"
+        class="hidden fixed inset-0 bg-white z-[200] overflow-y-auto"
+      >
+        <div
+          class="bg-green-900 p-4 flex justify-between items-center text-white"
+        >
+          <h1 class="text-sm font-black italic uppercase">CD LOS ALMENDROS</h1>
+          <button id="close-menu-btn" class="text-2xl p-2 text-yellow-500">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <ul
+          class="flex flex-col text-gray-900 font-black uppercase italic tracking-tighter"
+        >
+          <li class="border-b border-gray-100">
+            <a href="index.html" class="block px-6 py-5 hover:bg-gray-50"
+              >Inicio</a
+            >
+          </li>
+          <li class="border-b border-gray-100">
+            <button
+              onclick="toggleSubmenu('sub-equipo')"
+              class="w-full flex justify-between items-center px-6 py-5 hover:bg-gray-50 uppercase font-black italic"
+            >
+              Primer Equipo
+              <i
+                id="icon-equipo"
+                class="fa-solid fa-chevron-down text-[10px] text-gray-400"
+              ></i>
+            </button>
+            <ul
+              id="sub-equipo"
+              class="hidden bg-gray-50 text-xs font-bold italic tracking-normal"
+            >
+              <li>
+                <a
+                  href="jugadores.html"
+                  class="block px-10 py-4 border-b border-white hover:text-green-700"
+                  >Jugadores</a
+                >
+              </li>
+              <li>
+                <a
+                  href="calendario.html"
+                  class="block px-10 py-4 border-b border-white hover:text-green-700"
+                  >Calendario</a
+                >
+              </li>
+              <li>
+                <a
+                  href="resultados.html"
+                  class="block px-10 py-4 hover:text-green-700"
+                  >Resultados</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li class="border-b border-gray-100">
+            <button
+              onclick="toggleSubmenu('sub-club')"
+              class="w-full flex justify-between items-center px-6 py-5 hover:bg-gray-50 uppercase font-black italic"
+            >
+              Club
+              <i
+                id="icon-club"
+                class="fa-solid fa-chevron-down text-[10px] text-gray-400"
+              ></i>
+            </button>
+            <ul
+              id="sub-club"
+              class="hidden bg-gray-50 text-xs font-bold italic tracking-normal"
+            >
+              <li>
+                <a
+                  href="todas-las-noticias.html"
+                  class="block px-10 py-4 border-b border-white hover:text-green-700"
+                  >Noticias</a
+                >
+              </li>
+              <li>
+                <a
+                  href="historia.html"
+                  class="block px-10 py-4 border-b border-white hover:text-green-700"
+                  >Historia</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li class="border-b border-gray-100">
+            <a href="#" class="block px-6 py-5 hover:bg-gray-50">Socios</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <header
+      class="relative w-full h-[70vh] md:h-[80vh] bg-[#0b0e14] border-b-2 border-yellow-500 shadow-2xl overflow-hidden group"
+    >
+      <img
+        id="hero-img"
+        src=""
+        class="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-1000 group-hover:scale-105"
+      />
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent z-10"
+      ></div>
+      <div
+        class="relative z-20 h-full flex flex-col justify-end items-center pb-12 px-6 text-center"
+        data-aos="fade-up"
+      >
+        <a
+          id="hero-link-titulo"
+          href="#"
+          class="inline-block mb-3 max-w-2xl md:max-w-3xl hover:opacity-80 transition-opacity"
+        >
+          <h2
+            id="hero-titulo"
+            class="text-2xl md:text-4xl lg:text-5xl font-black uppercase italic leading-none tracking-tighter text-white border-b-[4px] border-white pb-2 px-4 text-shadow-lg"
+          >
+            CARGANDO NOTICIA...
+          </h2>
+        </a>
+        <div
+          class="flex items-center gap-3 text-yellow-500 font-black uppercase text-[9px] md:text-[10px] tracking-[0.2em]"
+        >
+          <span id="hero-tag" class="flex items-center gap-1"
+            ><span class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span>
+            CARGANDO</span
+          >
+          <span id="hero-tiempo" class="text-gray-400 font-bold">• --:--</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="py-10 md:py-16 bg-white">
+      <div class="container mx-auto px-4 md:px-6">
+        <div
+          class="flex justify-between items-end mb-6 border-b border-gray-100 pb-4"
+        >
+          <div>
+            <h3
+              class="text-3xl md:text-4xl font-black uppercase italic tracking-tighter text-gray-900 leading-none"
+            >
+              Actualidad
+            </h3>
+            <p
+              class="text-[9px] md:text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mt-1"
+            >
+              Últimas novedades
+            </p>
+          </div>
+          <a
+            href="todas-las-noticias.html"
+            class="text-[9px] md:text-[10px] font-black uppercase tracking-widest text-green-700 hover:text-yellow-500 transition"
+            >Ver todas +</a
+          >
+        </div>
+        <div
+          id="grid-actualidad"
+          class="flex flex-col gap-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8"
+        ></div>
+      </div>
+    </section>
+
+    <section
+      class="py-16 bg-gray-50 border-t border-b border-gray-100 overflow-hidden"
+    >
+      <div class="container mx-auto px-4 md:px-6">
+        <header class="mb-10 flex justify-between items-end">
+          <div>
+            <h3
+              class="text-3xl md:text-4xl font-black italic uppercase tracking-tighter text-[#004d26] leading-none"
+            >
+              Nuestros Guerreros
+            </h3>
+            <p
+              class="text-gray-400 font-bold uppercase text-[9px] md:text-[10px] tracking-[0.4em] mt-2"
+            >
+              Plantel Oficial • Temporada 2026
+            </p>
+          </div>
+          <div class="hidden md:flex gap-2">
+            <button
+              onclick="
+                document
+                  .getElementById('grid-guerreros')
+                  .scrollBy({ left: -320, behavior: 'smooth' })
+              "
+              class="w-10 h-10 rounded-full border-2 border-gray-200 text-gray-400 hover:border-[#004d26] hover:text-[#004d26] transition-all"
+            >
+              <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <button
+              onclick="
+                document
+                  .getElementById('grid-guerreros')
+                  .scrollBy({ left: 320, behavior: 'smooth' })
+              "
+              class="w-10 h-10 rounded-full border-2 border-gray-200 text-gray-400 hover:border-[#004d26] hover:text-[#004d26] transition-all"
+            >
+              <i class="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+        </header>
+
+        <div
+          id="grid-guerreros"
+          class="flex overflow-x-auto gap-5 md:gap-8 no-scrollbar snap-x snap-mandatory pb-8 scroll-smooth"
+        >
+          <div class="col-span-full flex justify-center py-20 w-full">
+            <div
+              class="animate-spin rounded-full h-8 w-8 border-b-2 border-[#004d26]"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="resultados" class="py-12 bg-white border-b border-gray-100">
+      <div class="container mx-auto px-4">
+        <h3 class="text-3xl font-bold text-center mb-10 uppercase italic">
+          Último Resultado
+        </h3>
+        <div
+          class="max-w-xl mx-auto bg-gray-900 text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden"
+        >
+          <div class="absolute top-0 right-0 p-4 opacity-10">
+            <i class="fa-solid fa-trophy text-6xl text-yellow-500"></i>
+          </div>
+          <div
+            class="flex justify-between items-center text-center relative z-10"
+          >
+            <div class="flex-1">
+              <p class="text-xs font-black text-green-500 uppercase mb-2">
+                Almendros
+              </p>
+              <span id="score-almendros" class="text-6xl font-black italic"
+                >--</span
+              >
+            </div>
+            <div class="px-4 text-yellow-500 font-black italic text-xl">VS</div>
+            <div class="flex-1">
+              <p
+                id="nombre-rival"
+                class="text-xs font-black text-gray-400 uppercase mb-2 italic"
+              >
+                Rival
+              </p>
+              <span
+                id="score-rival"
+                class="text-6xl font-black italic text-red-500"
+                >--</span
+              >
+            </div>
+          </div>
+          <div class="mt-6 text-center">
+            <p
+              id="fecha-marcador"
+              class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.3em]"
+            >
+              Cargando marcador...
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 bg-gray-50 overflow-hidden">
+      <div class="container mx-auto px-4">
+        <div
+          class="flex flex-col md:flex-row justify-between items-end mb-8 gap-6"
+        >
+          <div>
+            <h3
+              class="text-3xl font-black uppercase italic tracking-tighter text-gray-800"
+            >
+              Próximos Partidos
+            </h3>
+            <p
+              class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.3em]"
+            >
+              No te pierdas la acción
+            </p>
+          </div>
+          <div
+            id="countdown-container"
+            class="bg-black text-white p-4 rounded-2xl shadow-2xl flex items-center gap-4 hidden"
+          >
+            <span
+              class="text-[9px] font-black uppercase italic text-green-500 leading-none"
+              >Próximo<br />Partido</span
+            >
+            <div class="flex gap-3 text-center">
+              <div>
+                <p id="days" class="text-2xl font-black">00</p>
+                <p class="text-[7px] uppercase opacity-50">Días</p>
+              </div>
+              <div class="text-xl font-bold opacity-20">:</div>
+              <div>
+                <p id="hours" class="text-2xl font-black">00</p>
+                <p class="text-[7px] uppercase opacity-50">Hrs</p>
+              </div>
+              <div class="text-xl font-bold opacity-20">:</div>
+              <div>
+                <p id="mins" class="text-2xl font-black">00</p>
+                <p class="text-[7px] uppercase opacity-50">Min</p>
+              </div>
+              <div class="text-xl font-bold opacity-20">:</div>
+              <div>
+                <p id="secs" class="text-2xl font-black text-green-500">00</p>
+                <p class="text-[7px] uppercase opacity-50">Seg</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          id="proximos-grid"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
+          <div
+            class="relative group rounded-3xl overflow-hidden h-full min-h-[300px] shadow-lg"
+          >
+            <img
+              src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&q=80&w=800"
+              class="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-110"
+            />
+            <div
+              class="absolute inset-0 bg-gradient-to-t from-[#004d26] via-[#004d26]/40 to-transparent flex flex-col justify-end p-8"
+            >
+              <h4
+                class="text-white font-black text-2xl uppercase italic leading-none mb-4"
+              >
+                Calendario<br />Completo
+              </h4>
+              <a
+                href="calendario.html"
+                class="text-white/80 font-bold text-xs uppercase tracking-widest hover:text-white transition flex items-center"
+                >Ver todo el calendario
+                <i class="fa-solid fa-arrow-right ml-2"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-[#0b0e14] py-20 border-t border-white/5">
+      <div class="container mx-auto px-6">
+        <div class="text-center mb-12">
+          <p
+            class="text-white/40 font-bold uppercase text-[11px] tracking-[0.4em] mb-10"
+          >
+            Principales patrocinadores del Club
+          </p>
+
+          <div
+            id="sponsors-grid"
+            class="flex flex-wrap justify-center items-center gap-16 md:gap-24"
+          >
+            <a
+              href="https://www.yamaha-motor.com.bo"
+              target="_blank"
+              class="block"
+            >
+              <img
+                src="https://oiqxotvntoohugsrutwu.supabase.co/storage/v1/object/public/patrocinadores/Yamaha.png"
+                class="sponsor-item"
+                alt="Yamaha"
+              />
+            </a>
+
+            <a href="#" target="_blank" class="block">
+              <img
+                src="https://oiqxotvntoohugsrutwu.supabase.co/storage/v1/object/public/patrocinadores/Acai.png"
+                class="sponsor-item"
+                alt="Acai Life"
+              />
+            </a>
+
+            <a href="#" target="_blank" class="block">
+              <img
+                src="https://oiqxotvntoohugsrutwu.supabase.co/storage/v1/object/public/patrocinadores/Jvals.png"
+                class="sponsor-item"
+                alt="Jvals Gold"
+              />
+            </a>
+
+            <a href="#" target="_blank" class="block">
+              <img
+                src="https://oiqxotvntoohugsrutwu.supabase.co/storage/v1/object/public/patrocinadores/Jorge.png"
+                class="sponsor-item"
+                alt="Jorgeis"
+              />
+            </a>
+
+            <a href="#" target="_blank" class="block">
+              <img
+                src="https://oiqxotvntoohugsrutwu.supabase.co/storage/v1/object/public/patrocinadores/Fluvi.png"
+                class="sponsor-item"
+                alt="Fluvimotor"
+              />
+            </a>
+          </div>
+        </div>
+
+        <hr class="border-white/5 my-16 max-w-6xl mx-auto" />
+
+        <div class="text-center">
+          <p
+            class="text-white/40 font-bold uppercase text-[10px] tracking-[0.3em] mb-8"
+          >
+            Sigue al club en las redes sociales
+          </p>
+          <div class="flex justify-center gap-12 text-4xl text-white/90">
+            <a
+              href="https://www.facebook.com"
+              target="_blank"
+              class="hover:text-blue-600 transition-all"
+              ><i class="fa-brands fa-facebook"></i
+            ></a>
+            <a
+              href="https://www.instagram.com"
+              target="_blank"
+              class="hover:text-pink-500 transition-all"
+              ><i class="fa-brands fa-instagram"></i
+            ></a>
+            <a
+              href="https://www.tiktok.com"
+              target="_blank"
+              class="hover:text-cyan-400 transition-all"
+              ><i class="fa-brands fa-tiktok"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="bg-black py-8 border-t border-white/5">
+      <div
+        class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-[9px] text-white/20 font-bold uppercase tracking-[0.3em]"
+      >
+        <p>© 2026 CD LOS ALMENDROS - Riberalta, Beni, Bolivia</p>
+        <p>
+          Ingeniería de Sistemas por <span class="text-white/40">GRAF</span>
+        </p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      function calcularTiempoRelativo(fecha) {
+        if (!fecha) return "--";
+        const ahora = new Date();
+        const luego = new Date(fecha);
+        const difSegundos = Math.floor((ahora - luego) / 1000);
+        if (difSegundos < 60) return "AHORA";
+        const difMinutos = Math.floor(difSegundos / 60);
+        if (difMinutos < 60) return `HACE ${difMinutos} MIN`;
+        const difHoras = Math.floor(difMinutos / 60);
+        if (difHoras < 24) return `HACE ${difHoras} H`;
+        const difDias = Math.floor(difHoras / 24);
+        return `HACE ${difDias} DÍAS`;
+      }
+      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      const LOGO_ALMENDROS =
+        "https://oiqxotvntoohugsrutwu.supabase.co/storage/v1/object/public/escudos/logo-almendros.png";
+
+      // ALGORITMO GUERREROS ALEATORIOS
+      function barajarArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      async function cargarGuerrerosSlider() {
+        const { data: jugadores } = await _supabase
+          .from("jugadores")
+          .select("*")
+          .eq("es_cuerpo_tecnico", false);
+        if (jugadores) {
+          const elegidos = barajarArray(jugadores).slice(0, 9);
+          const grid = document.getElementById("grid-guerreros");
+          grid.innerHTML = elegidos
+            .map(
+              (j) => `
+                <div class="guerrero-item snap-center">
+                    <div class="jugador-card relative overflow-hidden bg-black aspect-[3/4] rounded-[2.5rem] cursor-pointer group shadow-2xl">
+                        <img src="${j.foto_url}" class="absolute inset-0 w-full h-full object-cover object-top opacity-80 group-hover:opacity-100 transition-opacity">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-70"></div>
+                        <span class="absolute top-2 right-6 text-7xl md:text-9xl font-black text-white/5 italic select-none">${j.dorsal}</span>
+                        <div class="jugador-stats-panel absolute inset-0 bg-[#004d26]/90 flex flex-col items-center justify-center text-white p-6 z-20">
+                            <p class="text-[8px] font-black uppercase text-gray-400">Partidos</p><p class="text-5xl font-black italic text-yellow-500 tracking-tighter">${j.partidos || 0}</p>
+                            <div class="flex gap-8 mt-6">
+                                <div class="text-center"><p class="text-[8px] font-black uppercase text-gray-500">${j.posicion === "Portero" ? "Paradas" : "Goles"}</p><p class="text-2xl font-black italic">${j.goles_paradas || 0}</p></div>
+                                <div class="text-center"><p class="text-[8px] font-black uppercase text-gray-500">${j.posicion === "Portero" ? "P. Cero" : "Asists"}</p><p class="text-2xl font-black italic">${j.asistencias_ceros || 0}</p></div>
+                            </div>
+                        </div>
+                        <div class="jugador-info-base absolute bottom-0 left-0 w-full p-8 md:p-10 z-10">
+                            <p class="text-yellow-500 font-black text-3xl italic leading-none">${j.dorsal}</p>
+                            <h3 class="text-xl md:text-2xl font-black uppercase text-white tracking-tighter leading-tight mt-1">${j.nombre.split(" ").pop()}</h3>
+                            <p class="text-gray-300 font-black uppercase text-[8px] tracking-[0.3em] mt-2">${j.posicion}</p>
+                        </div>
+                    </div>
+                </div>`,
+            )
+            .join("");
+        }
+      }
+
+      // RESTO DE FUNCIONES RESTAURADAS
+      async function cargarPortadaPrincipal() {
+        const { data: noticia } = await _supabase
+          .from("noticias")
+          .select("*")
+          .eq("es_noticia_principal", true)
+          .order("creado_en", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        if (noticia) {
+          document.getElementById("hero-img").src =
+            noticia.imagen_principal_url;
+          document.getElementById("hero-titulo").innerText = noticia.titulo;
+          document.getElementById("hero-tag").innerHTML =
+            `<span class="w-1.5 h-1.5 bg-yellow-500 rounded-full"></span> ${noticia.etiqueta}`;
+          document.getElementById("hero-tiempo").innerText =
+            `• ${calcularTiempoRelativo(noticia.creado_en)}`;
+          document.getElementById("hero-link-titulo").href =
+            `noticia.html?id=${noticia.id}`;
+        }
+      }
+      async function cargarActualidad() {
+        const { data: noticias } = await _supabase
+          .from("noticias")
+          .select("*")
+          .order("creado_en", { ascending: false })
+          .limit(6);
+        const grid = document.getElementById("grid-actualidad");
+        grid.innerHTML =
+          noticias
+            ?.map(
+              (n) =>
+                `<a href="noticia.html?id=${n.id}" class="group flex bg-white border-b border-gray-100 last:border-0 md:border-0 md:rounded-2xl md:shadow-sm md:flex-col overflow-hidden hover:shadow-xl transition-all duration-500"><div class="relative w-32 h-24 shrink-0 md:w-full md:h-52 overflow-hidden"><img src="${n.imagen_principal_url}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"></div><div class="p-4 flex-1 flex flex-col justify-between"><div><div class="flex items-center gap-2 text-red-600 font-black uppercase text-[7px] md:text-[8px] tracking-widest mb-1 md:mb-3"><span class="w-1.5 h-1.5 bg-red-600 rounded-full"></span> ${n.etiqueta}</div><h4 class="text-[11px] md:text-xl font-black uppercase italic leading-tight text-gray-900 group-hover:text-green-700 transition-colors line-clamp-2">${n.titulo}</h4></div><p class="text-gray-400 font-bold text-[7px] md:text-[9px] uppercase mt-2"><i class="fa-regular fa-clock mr-1"></i>${calcularTiempoRelativo(n.creado_en)}</p></div></a>`,
+            )
+            .join("") || "";
+      }
+      async function cargarUltimoResultado() {
+        const { data: partido } = await _supabase
+          .from("partidos")
+          .select("*")
+          .order("fecha", { ascending: false })
+          .order("id", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        if (partido) {
+          document.getElementById("score-almendros").innerText =
+            partido.goles_almendros;
+          document.getElementById("score-rival").innerText =
+            partido.goles_rival;
+          document.getElementById("nombre-rival").innerText =
+            partido.rival.toUpperCase();
+          const f = new Date(partido.fecha + "T00:00:00");
+          document.getElementById("fecha-marcador").innerHTML =
+            `<span class="text-green-500 font-black">${partido.competicion.toUpperCase()}</span> | ${f.toLocaleDateString("es-ES", { day: "numeric", month: "long" })}`;
+        }
+      }
+      async function cargarProximos() {
+        const hoy = new Date().toISOString().split("T")[0];
+        const ahora = new Date();
+
+        const { data: proximos } = await _supabase
+          .from("calendario")
+          .select("*")
+          .or(`fecha.gte.${hoy},estado.eq."EN JUEGO"`)
+          .order("fecha", { ascending: true })
+          .limit(5);
+
+        const grid = document.getElementById("proximos-grid");
+        const countdownContainer = document.getElementById(
+          "countdown-container",
+        );
+
+        if (proximos && proximos.length > 0) {
+          grid.innerHTML = "";
+
+          // 1. Render de tarjetas (Igual que el tuyo)
+          proximos.slice(0, 3).forEach((p) => {
+            if (p.estado === "EN JUEGO")
+              grid.insertAdjacentHTML("afterbegin", crearTarjetaVivo(p));
+            else grid.insertAdjacentHTML("beforeend", crearTarjetaProximo(p));
+          });
+
+          // 2. Re-insertar tarjeta fija (Blindado)
+          grid.insertAdjacentHTML(
+            "beforeend",
+            `
+            <div class="relative group rounded-3xl overflow-hidden h-full min-h-[300px] shadow-lg">
+                <img src="https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&q=80&w=800" class="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#004d26] via-[#004d26]/40 to-transparent flex flex-col justify-end p-8">
+                    <h4 class="text-white font-black text-2xl uppercase italic leading-none mb-4">Calendario<br>Completo</h4>
+                    <a href="calendario.html" class="text-white/80 font-bold text-xs uppercase tracking-widest hover:text-white transition flex items-center">Ver todo el calendario <i class="fa-solid fa-arrow-right ml-2"></i></a>
+                </div>
+            </div>`,
+          );
+
+          // 3. LÓGICA DEL CRONÓMETRO (CORREGIDA)
+          const partidoEnVivo = proximos.find((p) => p.estado === "EN JUEGO");
+
+          if (partidoEnVivo) {
+            countdownContainer.classList.remove("hidden");
+            countdownContainer.innerHTML = `
+                <div class="flex items-center gap-4 px-2 py-1 animate-fade-in">
+                    <div class="w-2 h-2 bg-red-600 rounded-full animate-ping"></div>
+                    <span class="text-[10px] font-black uppercase text-white italic tracking-widest">¡PARTIDO EN VIVO AHORA!</span>
+                </div>`;
+          } else {
+            // Buscamos el próximo con un formateo de hora más robusto
+            const proximoReloj = proximos.find((p) => {
+              if (!p.hora) return false;
+              // Forzamos formato HH:mm:ss para evitar errores de parseo
+              const horaLimpia = p.hora.length === 5 ? p.hora + ":00" : p.hora;
+              const pFecha = new Date(`${p.fecha}T${horaLimpia}`);
+              return pFecha > ahora;
+            });
+
+            if (proximoReloj) {
+              countdownContainer.classList.remove("hidden"); // Forzamos visibilidad
+              iniciarCountdown(`${proximoReloj.fecha}T${proximoReloj.hora}`);
+            } else {
+              countdownContainer.classList.add("hidden");
+            }
+          }
+        } else {
+          countdownContainer.classList.add("hidden");
+        }
+      }
+      async function cargarPatrocinadores() {
+        const { data: sponsors } = await _supabase
+          .from("patrocinadores")
+          .select("*")
+          .eq("activo", true);
+
+        const grid = document.getElementById("sponsors-grid");
+        if (sponsors && sponsors.length > 0) {
+          grid.innerHTML = sponsors
+            .map(
+              (s) => `
+                <a href="${s.url}" target="_blank" title="Visitar ${s.nombre}" class="block">
+                    <img src="${s.logo_url}" alt="${s.nombre}" class="sponsor-item">
+                </a>
+            `,
+            )
+            .join("");
+        } else {
+          grid.innerHTML = `<p class="text-white/10 font-bold uppercase text-[9px]">CD Los Almendros • Orgullo Beniano</p>`;
+        }
+      }
+      function crearTarjetaVivo(p) {
+        const logoRival = p.rival_escudo
+          ? `<img src="${p.rival_escudo}" class="w-12 h-12 object-contain mx-auto">`
+          : `<div class="w-12 h-12 bg-gray-100 text-gray-300 rounded-full flex items-center justify-center font-black text-xs italic mx-auto">RV</div>`;
+
+        // --- PROCESAMOS LA INFORMACIÓN (INCIDENCIAS) ---
+        // Si p.incidencias tiene texto, lo limpiamos y sacamos los últimos 3 sucesos
+        let infoHTML = "";
+        if (p.incidencias && p.incidencias.trim() !== "") {
+          const lineas = p.incidencias
+            .split("\n")
+            .filter((l) => l.trim() !== "");
+          infoHTML = lineas
+            .slice(0, 3)
+            .map(
+              (l) => `
+            <p class="text-[8px] font-bold text-gray-700 uppercase tracking-tighter mt-1">● ${l}</p>
+        `,
+            )
+            .join("");
+        } else {
+          infoHTML = `<p class="text-[8px] font-bold text-gray-300 italic uppercase mt-1">Esperando eventos...</p>`;
+        }
+
+        // --- TU CÓDIGO ORIGINAL CON LA NUEVA SECCIÓN AL FINAL ---
+        return `
+        <div class="bg-white md:rounded-[2.5rem] shadow-2xl border-2 border-green-500/20 flex flex-col overflow-hidden h-full relative transition-all duration-500">
+            <div class="absolute top-5 right-5 flex items-center gap-2 bg-red-50 px-3 py-1.5 rounded-full border border-red-100">
+                <div class="w-2 h-2 bg-red-600 rounded-full animate-ping"></div>
+                <span class="text-[8px] font-black text-red-600 uppercase tracking-widest">En Vivo</span>
+            </div>
+            <div class="p-6 text-center bg-gradient-to-b from-green-50/50 to-transparent">
+                <span class="text-[9px] font-black text-green-700 bg-green-100 px-3 py-1 rounded-md uppercase">${p.competicion}</span>
+                <div class="flex items-center justify-around mt-6 gap-2">
+                    <div class="flex-1">
+                        <img src="${LOGO_ALMENDROS}" class="w-12 h-12 object-contain mx-auto mb-2">
+                        <p class="text-[8px] font-black text-gray-400 uppercase">Almendros</p>
+                        <h2 class="text-5xl font-black text-gray-900 mt-1">${p.goles_almendros || 0}</h2>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <span class="text-xs font-black italic text-gray-200">VS</span>
+                        <div class="mt-2 bg-green-600 text-white px-3 py-1 rounded-lg font-black text-[10px] italic animate-pulse shadow-lg">${p.minuto || "PT"}</div>
+                    </div>
+                    <div class="flex-1">
+                        ${logoRival}
+                        <p class="text-[8px] font-black text-gray-400 uppercase">${p.rival}</p>
+                        <h2 class="text-5xl font-black text-red-600 mt-1">${p.goles_rival || 0}</h2>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-dashed border-gray-200 text-left px-2">
+                    <p class="text-[7px] font-black text-gray-400 uppercase mb-1 tracking-widest">Información</p>
+                    <div class="min-h-[40px]">
+                        ${infoHTML}
+                    </div>
+                </div>
+            </div>
+        </div>`;
+      }
+      function crearTarjetaProximo(p) {
+        const f = new Date(p.fecha + "T00:00:00")
+          .toLocaleDateString("es-ES", {
+            weekday: "short",
+            day: "numeric",
+            month: "short",
+          })
+          .toUpperCase();
+        const logoRival = p.rival_escudo
+          ? `<img src="${p.rival_escudo}" class="w-14 h-14 object-contain mx-auto">`
+          : `<div class="w-14 h-14 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center font-black text-xl italic mx-auto">RV</div>`;
+        return `<div class="bg-white md:rounded-[2.5rem] p-6 shadow-2xl border border-gray-100 min-w-[280px] md:min-w-[350px] snap-center hover:shadow-green-900/5 transition-all duration-300 flex flex-col justify-between"><div class="flex justify-around items-center mb-6 gap-2"><div class="text-center flex-1"><img src="${LOGO_ALMENDROS}" class="w-14 h-14 object-contain mx-auto"><p class="text-[9px] font-black text-[#004d26] uppercase mt-2 tracking-tighter">Almendros</p></div><div class="bg-gray-50 px-2 py-1 rounded-lg border border-gray-100"><span class="text-[10px] font-black italic text-gray-300">VS</span></div><div class="text-center flex-1">${logoRival}<p class="text-[9px] font-black text-gray-900 uppercase mt-2 tracking-tighter">${p.rival}</p></div></div><div class="space-y-3"><div class="flex justify-between items-center"><span class="text-[9px] font-black bg-[#004d26]/10 text-[#004d26] px-2 py-1 rounded-md uppercase">${p.competicion}</span><span class="text-[8px] font-black px-2 py-1 rounded-md bg-yellow-50 text-yellow-600 uppercase tracking-widest">${p.estado}</span></div><div class="border-l-4 border-[#004d26] pl-3 py-1"><h3 class="text-2xl font-black italic uppercase tracking-tighter text-gray-900 leading-none">VS ${p.rival}</h3><p class="text-[11px] font-black text-gray-900 mt-1 uppercase italic tracking-tight">${p.jornada || "Fase Regular"}</p></div></div><div class="mt-5 pt-4 border-t border-gray-100 grid grid-cols-2 gap-2"><div class="flex items-center gap-2 text-[#004d26]"><div class="w-7 h-7 rounded-full bg-green-50 flex items-center justify-center shrink-0"><i class="fa-solid fa-calendar-day text-[10px]"></i></div><span class="text-[10px] font-black uppercase tracking-tighter">${f}</span></div><div class="flex items-center gap-2 text-gray-500 justify-end"><div class="w-7 h-7 rounded-full bg-gray-50 flex items-center justify-center shrink-0"><i class="fa-solid fa-location-dot text-[10px]"></i></div><span class="text-[9px] font-bold uppercase truncate">${p.ubicacion || "TBD"}</span></div></div></div>`;
+      }
+      // --- FUNCIÓN MAESTRA DE TIEMPO REAL ---
+      function activarSincronizacionRealtime() {
+        _supabase
+          .channel("cambios-partidos") // Crea un canal de comunicación
+          .on(
+            "postgres_changes",
+            { event: "UPDATE", schema: "public", table: "calendario" },
+            (payload) => {
+              console.log("Cambio detectado en vivo 📡");
+              cargarProximos(); // Recarga solo la sección de partidos cuando hay un cambio
+            },
+          )
+          .subscribe();
+      }
+      // === MOTOR DEL CRONÓMETRO (ESTO ES LO QUE FALTABA) ===
+      function iniciarCountdown(fecha) {
+        // Limpiamos el formato de fecha para que sea compatible con todos los navegadores
+        const fechaLimpia = fecha.replace(/-/g, "/").replace("T", " ");
+        const target = new Date(fechaLimpia).getTime();
+        const container = document.getElementById("countdown-container");
+
+        if (isNaN(target)) {
+          console.error("⚠️ Fecha inválida recibida en el cronómetro:", fecha);
+          return;
+        }
+
+        // Aseguramos que el contenedor se vea
+        container.classList.remove("hidden");
+
+        // Limpiamos cualquier intervalo previo para que no se duplique la velocidad
+        if (window.timerGraf) clearInterval(window.timerGraf);
+
+        window.timerGraf = setInterval(() => {
+          const ahora = new Date().getTime();
+          const diff = target - ahora;
+
+          // Si el tiempo se agota, el partido ya debería estar por empezar o en vivo
+          if (diff <= 0) {
+            clearInterval(window.timerGraf);
+            container.innerHTML = `
+              <div class="flex items-center gap-2 px-4 py-1">
+                <div class="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
+                <p class="font-black text-green-500 text-[10px] uppercase italic">¡Partido en Vivo!</p>
+              </div>`;
+            return;
+          }
+
+          // Cálculos matemáticos del tiempo restante
+          const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+          const h = Math.floor(
+            (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+          );
+          const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+          const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+          // Inyectamos los números en el HTML (usando los IDs que ya tenés en el index)
+          const daysEl = document.getElementById("days");
+          const hoursEl = document.getElementById("hours");
+          const minsEl = document.getElementById("mins");
+          const secsEl = document.getElementById("secs");
+
+          if (daysEl) daysEl.innerText = d.toString().padStart(2, "0");
+          if (hoursEl) hoursEl.innerText = h.toString().padStart(2, "0");
+          if (minsEl) minsEl.innerText = m.toString().padStart(2, "0");
+          if (secsEl) secsEl.innerText = s.toString().padStart(2, "0");
+        }, 1000);
+      }
+      // Modificamos el window.onload para incluir la suscripción
+      window.addEventListener("load", () => {
+        cargarPortadaPrincipal();
+        cargarActualidad();
+        cargarGuerrerosSlider();
+        cargarUltimoResultado();
+        cargarProximos();
+
+        // ACTIVAMOS EL REALTIME AQUÍ
+        activarSincronizacionRealtime();
+
+        setTimeout(() => {
+          const loader = document.getElementById("loader-graf");
+          if (loader) {
+            loader.style.opacity = "0";
+            setTimeout(() => loader.classList.add("hidden"), 500);
+          }
+        }, 1500);
+      });
+
+      function toggleSubmenu(id) {
+        const submenu = document.getElementById(id);
+        const icon = document.getElementById("icon-" + id.split("-")[1]);
+        if (id === "sub-equipo")
+          document.getElementById("sub-club").classList.add("hidden");
+        else document.getElementById("sub-equipo").classList.add("hidden");
+        submenu.classList.toggle("hidden");
+        icon.style.transform = submenu.classList.contains("hidden")
+          ? "rotate(0deg)"
+          : "rotate(180deg)";
+      }
+      const menuBtn = document.getElementById("mobile-menu-btn");
+      const closeMenuBtn = document.getElementById("close-menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      menuBtn.addEventListener("click", () => {
+        mobileMenu.classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+      });
+      closeMenuBtn.addEventListener("click", () => {
+        mobileMenu.classList.add("hidden");
+        document.body.style.overflow = "auto";
+      });
+    </script>
+    <script src="auth-check.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init({ duration: 1000 });
+    </script>
+  </body>
+</html>

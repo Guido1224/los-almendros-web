@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Plantilla | CD Los Almendros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #004d26;
+        border-radius: 10px;
+      }
+      .hidden-field {
+        display: none !important;
+      }
+
+      /* Evita el desbordamiento horizontal en móviles */
+      body {
+        overflow-x: hidden;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-900 min-h-screen font-sans">
+    <!-- NAVEGACIÓN -->
+    <nav
+      class="bg-[#004d26] p-4 flex flex-col md:flex-row justify-between items-center shadow-2xl sticky top-0 z-50 gap-4"
+    >
+      <a
+        href="admin.html"
+        class="text-[10px] font-black uppercase text-white/70 hover:text-white transition"
+      >
+        <i class="fa-solid fa-arrow-left mr-2"></i> Volver al Panel
+      </a>
+      <h1 class="font-black italic uppercase tracking-widest text-xs">
+        Administración de Plantilla
+      </h1>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+      <!-- HEADER Y BUSCADOR -->
+      <header
+        class="flex flex-col lg:flex-row justify-between items-center gap-6 mb-12"
+      >
+        <div class="text-center lg:text-left">
+          <h2
+            class="text-4xl md:text-5xl font-black uppercase italic tracking-tighter"
+          >
+            Plantilla Oficial
+          </h2>
+          <p
+            class="text-yellow-500 text-[10px] font-bold uppercase tracking-[0.3em]"
+          >
+            Gestión de Fichas y Estadísticas
+          </p>
+        </div>
+
+        <div
+          class="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto"
+        >
+          <!-- BUSCADOR -->
+          <div class="relative w-full sm:w-64">
+            <i
+              class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-xs"
+            ></i>
+            <input
+              type="text"
+              id="buscador"
+              oninput="filtrarPorNombre()"
+              placeholder="BUSCAR JUGADOR..."
+              class="w-full bg-white border border-gray-200 py-3 pl-10 pr-4 rounded-full text-[10px] font-black uppercase outline-none focus:border-[#004d26] transition-all shadow-sm"
+            />
+          </div>
+          <a
+            href="jugadores-admin.html"
+            class="w-full sm:w-auto bg-yellow-500 text-black px-8 py-3 rounded-full font-black uppercase text-[10px] tracking-widest hover:bg-yellow-400 transition text-center shadow-lg shadow-yellow-500/10"
+          >
+            + Nuevo Fichaje
+          </a>
+        </div>
+      </header>
+
+      <!-- SECCIÓN JUGADORES -->
+      <div class="mb-16">
+        <h3
+          class="text-yellow-500 text-xs font-black uppercase italic tracking-[0.2em] mb-8 border-b border-white/5 pb-4"
+        >
+          Jugadores
+        </h3>
+        <div
+          id="grid-jugadores"
+          class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+        >
+          <!-- Tarjetas dinámicas -->
+        </div>
+      </div>
+
+      <!-- SECCIÓN STAFF -->
+      <div class="mb-16">
+        <h3
+          class="text-blue-500 text-xs font-black uppercase italic tracking-[0.2em] mb-8 border-b border-white/5 pb-4"
+        >
+          Cuerpo Técnico
+        </h3>
+        <div
+          id="grid-staff"
+          class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+        >
+          <!-- Tarjetas dinámicas -->
+        </div>
+      </div>
+    </main>
+
+    <!-- MODAL EDITAR COMPLETO (RESPONSIVE) -->
+    <div
+      id="modal-editar"
+      class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 hidden p-4 backdrop-blur-sm"
+    >
+      <div
+        class="bg-white w-full max-w-4xl rounded-[2.5rem] border border-gray-200 shadow-2xl p-6 md:p-10 overflow-y-auto max-h-[90vh] custom-scrollbar"
+      >
+        <div
+          class="flex justify-between items-start mb-8 border-b border-white/5 pb-4"
+        >
+          <h3 class="text-2xl font-black uppercase italic text-yellow-500">
+            Editar Ficha
+          </h3>
+          <button
+            onclick="cerrarModalEditar()"
+            class="text-gray-500 hover:text-white text-2xl"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <form id="form-actualizar" class="space-y-6">
+          <input type="hidden" id="edit-id" />
+          <input type="hidden" id="edit-es-tecnico" />
+
+          <!-- FOTO -->
+          <div
+            class="flex flex-col sm:flex-row items-center gap-6 bg-white/5 p-4 rounded-3xl border border-white/5"
+          >
+            <img
+              id="edit-foto-preview"
+              src=""
+              class="w-20 h-20 rounded-full object-cover border-2 border-green-700"
+            />
+            <div class="flex-grow w-full">
+              <label
+                class="block text-[9px] font-black text-gray-500 uppercase mb-2"
+                >Cambiar Fotografía</label
+              >
+              <input
+                type="file"
+                id="edit-foto"
+                accept="image/*"
+                class="text-[10px] text-gray-400 file:bg-[#004d26] file:text-white file:border-0 file:rounded-full file:px-4 file:py-1 file:mr-4"
+              />
+            </div>
+          </div>
+
+          <!-- DATOS -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-[9px] font-black text-gray-500 uppercase mb-1 ml-2"
+                >Nombre</label
+              >
+              <input
+                type="text"
+                id="edit-nombre"
+                required
+                class="w-full bg-black/40 border border-white/10 p-3 rounded-xl text-xs font-bold uppercase"
+              />
+            </div>
+            <div id="cont-dorsal-edit">
+              <label
+                class="block text-[9px] font-black text-gray-500 uppercase mb-1 ml-2"
+                >Dorsal</label
+              >
+              <input
+                type="number"
+                id="edit-dorsal"
+                class="w-full bg-black/40 border border-white/10 p-3 rounded-xl text-xs font-bold"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-[9px] font-black text-gray-500 uppercase mb-1 ml-2"
+                >Cargo/Posición</label
+              >
+              <select
+                id="edit-posicion"
+                class="w-full bg-black/40 border border-white/10 p-3 rounded-xl text-xs font-bold uppercase"
+              ></select>
+            </div>
+            <div>
+              <label
+                class="block text-[9px] font-black text-gray-500 uppercase mb-1 ml-2"
+                >Nacionalidad</label
+              >
+              <input
+                type="text"
+                id="edit-nacionalidad"
+                class="w-full bg-black/40 border border-white/10 p-3 rounded-xl text-xs font-bold uppercase"
+              />
+            </div>
+          </div>
+
+          <!-- BIO -->
+          <div>
+            <label
+              class="block text-[9px] font-black text-gray-500 uppercase mb-1 ml-2"
+              >Biografía</label
+            >
+            <textarea
+              id="edit-biografia"
+              rows="3"
+              class="w-full bg-black/40 border border-white/10 p-3 rounded-xl text-xs font-bold custom-scrollbar"
+            ></textarea>
+          </div>
+
+          <!-- STATS (OCULTABLES) -->
+          <div
+            id="cont-stats-edit"
+            class="grid grid-cols-3 gap-4 bg-white/5 p-4 rounded-2xl border border-white/5"
+          >
+            <div>
+              <label
+                class="block text-[8px] font-black text-gray-500 uppercase mb-1 text-center"
+                >Partidos</label
+              ><input
+                type="number"
+                id="edit-partidos"
+                class="w-full bg-black/40 p-2 rounded-lg text-center text-xs font-bold"
+              />
+            </div>
+            <div>
+              <label
+                id="lbl-goles"
+                class="block text-[8px] font-black text-gray-500 uppercase mb-1 text-center"
+                >Goles</label
+              ><input
+                type="number"
+                id="edit-goles"
+                class="w-full bg-black/40 p-2 rounded-lg text-center text-xs font-bold"
+              />
+            </div>
+            <div>
+              <label
+                id="lbl-asist"
+                class="block text-[8px] font-black text-gray-500 uppercase mb-1 text-center"
+                >Asist.</label
+              ><input
+                type="number"
+                id="edit-asistencias"
+                class="w-full bg-black/40 p-2 rounded-lg text-center text-xs font-bold"
+              />
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <button
+              type="submit"
+              id="btnActualizar"
+              class="flex-grow bg-[#004d26] py-4 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-green-700 transition active:scale-95 text-white"
+            >
+              Guardar
+            </button>
+            <button
+              type="button"
+              onclick="confirmarBorrado()"
+              class="bg-red-900/20 text-red-500 px-6 rounded-2xl transition"
+            >
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I"; // REEMPLAZA CON TU KEY
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      let todosLosDatos = [];
+      let urlFotoActual = "";
+
+      const rolesJugador = [
+        "Portero",
+        "Defensa",
+        "Centrocampista",
+        "Delantero",
+      ];
+      const rolesStaff = [
+        "Director Técnico",
+        "Asistente Técnico",
+        "Preparador Físico",
+        "Médico",
+        "Delegado",
+      ];
+
+      async function cargarDatos() {
+        const { data, error } = await _supabase
+          .from("jugadores")
+          .select("*")
+          .order("creado_en", { ascending: false });
+        if (error) {
+          console.error("Error cargando:", error);
+          return;
+        }
+        todosLosDatos = data || [];
+        renderizarTarjetas(todosLosDatos);
+      }
+
+      function renderizarTarjetas(data) {
+        const gridJugadores = document.getElementById("grid-jugadores");
+        const gridStaff = document.getElementById("grid-staff");
+
+        const jugadores = data.filter((m) => !m.es_cuerpo_tecnico);
+        const staff = data.filter((m) => m.es_cuerpo_tecnico);
+
+        const cardHtml = (m) => `
+<div class="bg-white p-6 rounded-[2.5rem] border border-gray-100 flex items-center justify-between group hover:border-[#004d26] transition-all shadow-sm">
+
+                <div class="flex items-center gap-5">
+                    <div class="relative">
+                        <img src="${m.foto_url}" class="w-16 h-16 rounded-2xl object-cover object-top border border-white/10">
+                        ${!m.es_cuerpo_tecnico ? `<span class="absolute -top-2 -right-2 bg-yellow-500 text-black text-[10px] font-black px-2 py-0.5 rounded-lg shadow-xl">${m.dorsal}</span>` : ""}
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-black uppercase italic tracking-tighter">${m.nombre}</h4>
+                        <p class="text-[9px] text-gray-500 font-bold uppercase tracking-widest">${m.posicion}</p>
+                    </div>
+                </div>
+                <button onclick="abrirModalEditar(${m.id})" class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-gray-400 hover:bg-yellow-500 hover:text-black transition active:scale-90">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+            </div>
+        `;
+
+        gridJugadores.innerHTML = jugadores.map(cardHtml).join("");
+        gridStaff.innerHTML = staff.map(cardHtml).join("");
+      }
+
+      function filtrarPorNombre() {
+        const busqueda = document
+          .getElementById("buscador")
+          .value.toUpperCase();
+        const filtrados = todosLosDatos.filter((m) =>
+          m.nombre.includes(busqueda),
+        );
+        renderizarTarjetas(filtrados);
+      }
+
+      function abrirModalEditar(id) {
+        const m = todosLosDatos.find((i) => i.id === id);
+        if (!m) return;
+
+        document.getElementById("edit-id").value = m.id;
+        document.getElementById("edit-nombre").value = m.nombre;
+        document.getElementById("edit-es-tecnico").value = m.es_cuerpo_tecnico;
+        document.getElementById("edit-foto-preview").src = m.foto_url;
+        urlFotoActual = m.foto_url;
+
+        const select = document.getElementById("edit-posicion");
+        select.innerHTML = "";
+        const lista = m.es_cuerpo_tecnico ? rolesStaff : rolesJugador;
+        lista.forEach((r) => {
+          let opt = document.createElement("option");
+          opt.value = r;
+          opt.textContent = r.toUpperCase();
+          if (r === m.posicion) opt.selected = true;
+          select.appendChild(opt);
+        });
+
+        if (m.es_cuerpo_tecnico === true || m.es_cuerpo_tecnico === "true") {
+          document
+            .getElementById("cont-dorsal-edit")
+            .classList.add("hidden-field");
+          document
+            .getElementById("cont-stats-edit")
+            .classList.add("hidden-field");
+        } else {
+          document
+            .getElementById("cont-dorsal-edit")
+            .classList.remove("hidden-field");
+          document
+            .getElementById("cont-stats-edit")
+            .classList.remove("hidden-field");
+          document.getElementById("edit-dorsal").value = m.dorsal;
+          document.getElementById("edit-partidos").value = m.partidos;
+          document.getElementById("edit-goles").value = m.goles_paradas;
+          document.getElementById("edit-asistencias").value =
+            m.asistencias_ceros;
+
+          const esP = m.posicion === "Portero";
+          document.getElementById("lbl-goles").textContent = esP
+            ? "Paradas"
+            : "Goles";
+          document.getElementById("lbl-asist").textContent = esP
+            ? "P. a Cero"
+            : "Asistencias";
+        }
+
+        document.getElementById("edit-nacionalidad").value =
+          m.nacionalidad || "";
+        document.getElementById("edit-biografia").value = m.biografia || "";
+        document.getElementById("modal-editar").classList.remove("hidden");
+      }
+
+      document
+        .getElementById("form-actualizar")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("btnActualizar");
+          btn.disabled = true;
+          btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+
+          try {
+            // CONVERTIMOS EL ID A NÚMERO (IMPORTANTE)
+            const idReal = parseInt(document.getElementById("edit-id").value);
+            const esT =
+              document.getElementById("edit-es-tecnico").value === "true";
+            const file = document.getElementById("edit-foto").files[0];
+            let finalUrl = urlFotoActual;
+
+            if (file) {
+              const fileName = `edit_${Date.now()}.${file.name.split(".").pop()}`;
+              await _supabase.storage.from("jugadores").upload(fileName, file);
+              const { data } = _supabase.storage
+                .from("jugadores")
+                .getPublicUrl(fileName);
+              finalUrl = data.publicUrl;
+            }
+
+            const datos = {
+              nombre: document
+                .getElementById("edit-nombre")
+                .value.toUpperCase(),
+              posicion: document.getElementById("edit-posicion").value,
+              foto_url: finalUrl,
+              biografia: document.getElementById("edit-biografia").value,
+              nacionalidad: document
+                .getElementById("edit-nacionalidad")
+                .value.toUpperCase(),
+              dorsal: esT
+                ? 0
+                : parseInt(document.getElementById("edit-dorsal").value),
+              partidos: esT
+                ? 0
+                : parseInt(document.getElementById("edit-partidos").value),
+              goles_paradas: esT
+                ? 0
+                : parseInt(document.getElementById("edit-goles").value),
+              asistencias_ceros: esT
+                ? 0
+                : parseInt(document.getElementById("edit-asistencias").value),
+            };
+
+            const { data: updateData, error: updateError } = await _supabase
+              .from("jugadores")
+              .update(datos)
+              .eq("id", idReal) // Cambiamos match por eq con el id numérico
+              .select();
+
+            if (updateError) throw updateError;
+
+            if (updateData && updateData.length > 0) {
+              alert("✅ FICHA ACTUALIZADA CORRECTAMENTE");
+              cerrarModalEditar();
+              cargarDatos();
+            } else {
+              alert(
+                "⚠️ No se encontró el registro para actualizar. Revisa los permisos.",
+              );
+            }
+          } catch (err) {
+            console.error(err);
+            alert("❌ ERROR: " + err.message);
+          } finally {
+            btn.disabled = false;
+            btn.innerHTML = "Guardar";
+          }
+        });
+
+      async function confirmarBorrado() {
+        const idReal = parseInt(document.getElementById("edit-id").value);
+        if (confirm("¿BORRAR DEFINITIVAMENTE A ESTE MIEMBRO?")) {
+          const { data, error } = await _supabase
+            .from("jugadores")
+            .delete()
+            .eq("id", idReal)
+            .select();
+
+          if (error) {
+            alert("❌ ERROR AL BORRAR: " + error.message);
+          } else if (data && data.length > 0) {
+            alert("🗑️ MIEMBRO ELIMINADO");
+            cerrarModalEditar();
+            cargarDatos();
+          } else {
+            alert("⚠️ No se pudo eliminar. Verifica los permisos de Supabase.");
+          }
+        }
+      }
+
+      function cerrarModalEditar() {
+        document.getElementById("modal-editar").classList.add("hidden");
+      }
+      cargarDatos();
+    </script>
+  </body>
+</html>

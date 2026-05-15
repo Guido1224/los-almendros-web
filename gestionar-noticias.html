@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Prensa | CD Los Almendros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;700;900&display=swap");
+      body {
+        font-family: "Public Sans", sans-serif;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* Estilo del Editor dentro del Modal */
+      #edit-editor-container {
+        height: 300px;
+        background: white;
+        border-bottom-left-radius: 1rem;
+        border-bottom-right-radius: 1rem;
+      }
+      .ql-toolbar {
+        border-top-left-radius: 1rem;
+        border-top-right-radius: 1rem;
+        background: #f8fafc;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 text-gray-900">
+    <header
+      class="bg-[#004d26] py-4 text-center text-white border-b-4 border-yellow-500 shadow-xl relative"
+    >
+      <a
+        href="admin.html"
+        class="absolute left-6 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-white transition flex items-center gap-2"
+      >
+        <i class="fa-solid fa-chevron-left text-[8px]"></i> Panel Admin
+      </a>
+
+      <div class="inline-block">
+        <h1
+          class="text-xl md:text-2xl font-black italic uppercase tracking-tighter leading-none"
+        >
+          Archivo de Prensa
+        </h1>
+        <p
+          class="text-yellow-500 font-bold uppercase text-[7px] tracking-[0.3em]"
+        >
+          Administración de Noticias
+        </p>
+      </div>
+
+      <a
+        href="admin-noticias.html"
+        class="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase tracking-widest text-[#004d26] bg-yellow-500 hover:bg-yellow-400 px-4 py-1.5 rounded-full transition-all flex items-center gap-2 shadow-lg"
+      >
+        <i class="fa-solid fa-plus"></i> Nueva Noticia
+      </a>
+    </header>
+
+    <main class="container mx-auto max-w-6xl px-4 py-10">
+      <div
+        class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4"
+      >
+        <h2
+          class="text-3xl font-black uppercase italic text-[#004d26] tracking-tighter"
+        >
+          Noticias Publicadas
+        </h2>
+        <div class="relative w-full md:w-72">
+          <input
+            type="text"
+            id="buscador"
+            onkeyup="filtrarNoticias()"
+            placeholder="Buscar por título..."
+            class="w-full pl-10 pr-4 py-2.5 rounded-full border border-gray-300 focus:border-[#004d26] outline-none text-sm font-bold shadow-sm"
+          />
+          <i
+            class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
+          ></i>
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100"
+      >
+        <div class="overflow-x-auto no-scrollbar">
+          <table class="w-full text-left">
+            <thead>
+              <tr
+                class="bg-gray-50 border-b border-gray-100 text-[10px] font-black uppercase text-gray-400 tracking-widest"
+              >
+                <th class="px-8 py-5">Imagen</th>
+                <th class="px-8 py-5">Título / Etiqueta</th>
+                <th class="px-8 py-5">Estado</th>
+                <th class="px-8 py-5 text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody
+              id="tabla-noticias-body"
+              class="divide-y divide-gray-50 text-sm"
+            ></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <div
+      id="modal-editar"
+      class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-white w-full max-w-3xl rounded-[3rem] overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
+      >
+        <div
+          class="bg-[#004d26] p-6 text-white flex justify-between items-center border-b-4 border-yellow-500"
+        >
+          <h3 class="font-black uppercase italic tracking-tighter text-lg">
+            Editor de Crónica
+          </h3>
+          <button
+            onclick="cerrarModal()"
+            class="w-10 h-10 rounded-full bg-white/10 hover:bg-red-500 transition-colors flex items-center justify-center"
+          >
+            <i class="fa-solid fa-xmark text-xl"></i>
+          </button>
+        </div>
+
+        <div class="p-8 overflow-y-auto no-scrollbar">
+          <form id="form-editar" class="space-y-6">
+            <input type="hidden" id="edit-id" />
+
+            <div
+              class="flex flex-col md:flex-row gap-6 items-center bg-gray-50 p-4 rounded-2xl border border-gray-200"
+            >
+              <div
+                class="w-32 h-20 rounded-xl overflow-hidden shadow-md shrink-0"
+              >
+                <img
+                  id="edit-preview"
+                  src=""
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <div class="flex-1 w-full">
+                <label
+                  class="text-[10px] font-black uppercase text-gray-400 block mb-1"
+                  >URL de Imagen Principal</label
+                >
+                <input
+                  type="text"
+                  id="edit-imagen"
+                  oninput="actualizarPreview(this.value)"
+                  class="w-full border-b border-gray-300 focus:border-[#004d26] outline-none py-1 text-xs font-bold"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label
+                  class="text-[10px] font-black uppercase text-gray-400 block mb-1"
+                  >Título de la Noticia</label
+                >
+                <input
+                  type="text"
+                  id="edit-titulo"
+                  class="w-full border-b-2 border-gray-200 focus:border-[#004d26] outline-none py-2 font-black text-lg uppercase"
+                />
+              </div>
+              <div>
+                <label
+                  class="text-[10px] font-black uppercase text-gray-400 block mb-1"
+                  >Categoría</label
+                >
+                <input
+                  type="text"
+                  id="edit-etiqueta"
+                  class="w-full border-b-2 border-gray-200 focus:border-[#004d26] outline-none py-2 text-sm font-bold uppercase"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                class="text-[10px] font-black uppercase text-gray-400 block mb-2"
+                >Contenido Detallado</label
+              >
+              <div id="edit-editor-container"></div>
+            </div>
+
+            <button
+              type="submit"
+              id="btn-guardar-cambios"
+              class="w-full bg-[#004d26] text-white font-black uppercase py-5 rounded-full shadow-2xl hover:bg-green-800 transition-all tracking-[0.2em] text-xs"
+            >
+              Sincronizar Cambios Oficiales
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      let todasLasNoticias = [];
+      let editQuill; // Instancia global del editor para el modal
+
+      // INICIALIZAR QUILL PARA EDICIÓN
+      window.onload = () => {
+        editQuill = new Quill("#edit-editor-container", {
+          theme: "snow",
+          modules: {
+            toolbar: [
+              [{ header: [2, 3, false] }],
+              ["bold", "italic", "underline"],
+              [{ list: "ordered" }, { list: "bullet" }],
+              ["image", "link"],
+              ["clean"],
+            ],
+          },
+        });
+        cargarNoticiasAdmin();
+      };
+
+      async function cargarNoticiasAdmin() {
+        const { data } = await _supabase
+          .from("noticias")
+          .select("*")
+          .order("creado_en", { ascending: false });
+        if (data) {
+          todasLasNoticias = data;
+          renderizarTabla(data);
+        }
+      }
+
+      function renderizarTabla(noticias) {
+        const body = document.getElementById("tabla-noticias-body");
+        body.innerHTML = noticias
+          .map(
+            (n) => `
+            <tr class="hover:bg-gray-50/80 transition-colors">
+                <td class="px-8 py-5">
+                    <div class="w-16 h-12 rounded-lg overflow-hidden shadow-md border border-gray-100">
+                        <img src="${n.imagen_principal_url}" class="w-full h-full object-cover">
+                    </div>
+                </td>
+                <td class="px-8 py-5">
+                    <p class="text-[9px] font-black text-[#004d26] uppercase tracking-widest mb-0.5">${n.etiqueta}</p>
+                    <h4 class="text-sm font-black text-gray-800 line-clamp-1 italic uppercase">${n.titulo}</h4>
+                </td>
+                <td class="px-8 py-5">
+                    <span class="text-[9px] font-bold text-gray-400 uppercase italic">
+                        ${n.actualizado_en ? "Editado: " + new Date(n.actualizado_en).toLocaleDateString() : "Creado: " + new Date(n.creado_en).toLocaleDateString()}
+                    </span>
+                </td>
+                <td class="px-8 py-5 text-center">
+                    <div class="flex justify-center gap-3">
+                        <button onclick="abrirEditor(${n.id})" class="w-9 h-9 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center shadow-sm">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button onclick="eliminarNoticia(${n.id})" class="w-9 h-9 rounded-full bg-red-50 text-red-600 hover:bg-red-600 hover:text-white transition-all flex items-center justify-center shadow-sm">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        `,
+          )
+          .join("");
+      }
+
+      function abrirEditor(id) {
+        const n = todasLasNoticias.find((noticia) => noticia.id === id);
+        document.getElementById("edit-id").value = n.id;
+        document.getElementById("edit-titulo").value = n.titulo;
+        document.getElementById("edit-etiqueta").value = n.etiqueta;
+        document.getElementById("edit-imagen").value = n.imagen_principal_url;
+        document.getElementById("edit-preview").src = n.imagen_principal_url;
+
+        // CARGAR EL CONTENIDO HTML EN EL EDITOR QUILL
+        editQuill.root.innerHTML = n.cuerpo || "";
+
+        document.getElementById("modal-editar").classList.remove("hidden");
+      }
+
+      // ESTA ES LA FUNCIÓN QUE CORRIGE EL BOTÓN DE GUARDAR
+      document.getElementById("form-editar").onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById("btn-guardar-cambios");
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> GUARDANDO...`;
+
+        const id = document.getElementById("edit-id").value;
+        const updates = {
+          titulo: document.getElementById("edit-titulo").value.toUpperCase(),
+          etiqueta: document
+            .getElementById("edit-etiqueta")
+            .value.toUpperCase(),
+          cuerpo: editQuill.root.innerHTML, // Obtiene el HTML con subtítulos e imágenes
+          imagen_principal_url: document.getElementById("edit-imagen").value,
+          actualizado_en: new Date().toISOString(),
+        };
+
+        const { error } = await _supabase
+          .from("noticias")
+          .update(updates)
+          .eq("id", id);
+
+        if (!error) {
+          alert("✅ CAMBIOS APLICADOS CORRECTAMENTE");
+          cerrarModal();
+          cargarNoticiasAdmin();
+        } else {
+          alert("❌ Error: " + error.message);
+        }
+
+        btn.disabled = false;
+        btn.innerText = "Sincronizar Cambios Oficiales";
+      };
+
+      function actualizarPreview(url) {
+        document.getElementById("edit-preview").src = url;
+      }
+      function cerrarModal() {
+        document.getElementById("modal-editar").classList.add("hidden");
+      }
+
+      async function eliminarNoticia(id) {
+        if (confirm("¿Eliminar definitivamente esta noticia?")) {
+          await _supabase.from("noticias").delete().eq("id", id);
+          cargarNoticiasAdmin();
+        }
+      }
+
+      function filtrarNoticias() {
+        const query = document.getElementById("buscador").value.toLowerCase();
+        const filtradas = todasLasNoticias.filter((n) =>
+          n.titulo.toLowerCase().includes(query),
+        );
+        renderizarTabla(filtradas);
+      }
+    </script>
+  </body>
+</html>

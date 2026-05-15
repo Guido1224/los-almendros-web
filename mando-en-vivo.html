@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mando Pro Vivo | GRAF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+      .hidden {
+        display: none;
+      }
+      /* Reloj en fondo claro */
+      input[type="date"]::-webkit-calendar-picker-indicator,
+      input[type="time"]::-webkit-calendar-picker-indicator {
+        filter: none;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100 text-gray-900 min-h-screen flex flex-col font-sans">
+    <nav
+      class="p-4 flex justify-between items-center bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50"
+    >
+      <a
+        href="partidos-admin.html"
+        class="text-[10px] font-black uppercase text-gray-400 hover:text-[#004d26] transition"
+      >
+        <i class="fa-solid fa-chevron-left mr-1"></i> Volver
+      </a>
+      <div
+        id="status-sync"
+        class="text-[9px] font-black uppercase text-green-600 flex items-center gap-2"
+      >
+        <div class="w-2 h-2 bg-green-500 rounded-full animate-ping"></div>
+        Sincronizado
+      </div>
+    </nav>
+
+    <main class="flex-grow p-6 flex flex-col max-w-lg mx-auto w-full gap-6">
+      <section
+        class="grid grid-cols-3 items-center bg-white p-6 rounded-[2.5rem] border border-gray-200 shadow-xl relative"
+      >
+        <div class="text-center">
+          <button
+            onclick="cambiarGol('goles_almendros', 1)"
+            class="w-full bg-[#004d26] aspect-square rounded-3xl text-4xl font-black text-white shadow-lg active:scale-95 transition-all mb-2"
+          >
+            +
+          </button>
+          <p class="text-[9px] font-black text-green-700 italic uppercase">
+            Almendros
+          </p>
+          <h1
+            id="marcador-local"
+            class="text-5xl font-black tracking-tighter text-gray-800"
+          >
+            0
+          </h1>
+          <button
+            onclick="anularGol('goles_almendros')"
+            class="mt-2 text-[8px] font-black text-red-500 hover:text-red-700 uppercase tracking-widest transition"
+          >
+            Anular
+          </button>
+        </div>
+
+        <div
+          class="text-center opacity-20 font-black italic text-2xl text-gray-400"
+        >
+          VS
+        </div>
+
+        <div class="text-center">
+          <button
+            onclick="cambiarGol('goles_rival', 1)"
+            class="w-full bg-gray-700 aspect-square rounded-3xl text-4xl font-black text-white shadow-lg active:scale-95 transition-all mb-2"
+          >
+            +
+          </button>
+          <p
+            id="nombre-rival"
+            class="text-[9px] font-black text-gray-500 italic uppercase"
+          >
+            Rival
+          </p>
+          <h1
+            id="marcador-rival"
+            class="text-5xl font-black tracking-tighter text-gray-800"
+          >
+            0
+          </h1>
+          <button
+            onclick="anularGol('goles_rival')"
+            class="mt-2 text-[8px] font-black text-red-500 hover:text-red-700 uppercase tracking-widest transition"
+          >
+            Anular
+          </button>
+        </div>
+      </section>
+
+      <section
+        class="bg-white p-6 rounded-[2.5rem] border border-gray-200 shadow-lg"
+      >
+        <div class="grid grid-cols-4 gap-2 mb-6" id="controles-tiempo">
+          <button
+            id="btn-inicio-pt"
+            onclick="controlReloj('PT', this)"
+            class="bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl text-[8px] font-black transition-all"
+          >
+            🚀 INICIAR
+          </button>
+          <button
+            onclick="pausarReloj('ET')"
+            class="bg-yellow-500 hover:bg-yellow-600 text-white py-3 rounded-xl text-[8px] font-black transition-all"
+          >
+            ET
+          </button>
+          <button
+            onclick="controlReloj('ST', this)"
+            class="bg-gray-100 hover:bg-gray-200 text-gray-600 py-3 rounded-xl text-[8px] font-black transition-all"
+          >
+            2do T.
+          </button>
+          <button
+            onclick="pausarReloj('FIN')"
+            class="bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl text-[8px] font-black transition-all"
+          >
+            FINAL
+          </button>
+        </div>
+
+        <div class="relative">
+          <input
+            type="text"
+            id="minuto-actual"
+            value="0'"
+            readonly
+            class="w-full bg-gray-50 border-2 border-green-600/20 p-6 rounded-2xl text-center font-black text-4xl text-green-700 uppercase tracking-widest outline-none shadow-inner"
+          />
+          <span
+            class="absolute top-2 left-1/2 -translate-x-1/2 text-[7px] font-black text-gray-300 tracking-[0.5em]"
+            >RELOJ OFICIAL</span
+          >
+        </div>
+      </section>
+
+      <section
+        class="space-y-4 opacity-40 pointer-events-none transition-all duration-500"
+        id="seccion-eventos"
+      >
+        <div class="flex gap-2">
+          <button
+            onclick="anadirEvento('⚽ GOL')"
+            class="flex-1 bg-gray-50 hover:bg-gray-100 border border-gray-200 py-4 rounded-2xl text-[9px] font-black uppercase transition-all text-gray-700 italic"
+          >
+            ⚽ Gol
+          </button>
+          <button
+            onclick="anadirEvento('🟨 AMARILLA')"
+            class="flex-1 bg-yellow-50 hover:bg-yellow-100 py-4 rounded-2xl text-[9px] font-black uppercase transition-all border border-yellow-200 text-yellow-700"
+          >
+            🟨 Amarilla
+          </button>
+          <button
+            onclick="anadirEvento('🟥 ROJA')"
+            class="flex-1 bg-red-50 hover:bg-red-100 py-4 rounded-2xl text-[9px] font-black uppercase transition-all border border-red-200 text-red-700"
+          >
+            🟥 Roja
+          </button>
+        </div>
+        <textarea
+          id="incidencias"
+          placeholder="Historial del partido..."
+          class="w-full bg-white border border-gray-200 p-5 rounded-[2rem] text-xs font-bold text-gray-800 h-32 focus:ring-2 focus:ring-[#004d26] outline-none transition-all shadow-sm"
+        ></textarea>
+        <button
+          onclick="actualizarLive()"
+          id="btn-sync"
+          class="w-full bg-[#004d26] hover:bg-[#003d1e] text-white py-6 rounded-[2.5rem] font-black uppercase text-xs tracking-[0.4em] shadow-xl active:scale-95 transition-all"
+        >
+          Sincronizar Todo
+        </button>
+      </section>
+    </main>
+
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const partidoId = urlParams.get("id");
+      const _supabase = supabase.createClient(
+        "https://oiqxotvntoohugsrutwu.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I",
+      );
+
+      let localG = 0,
+        rivalG = 0;
+      let cronometro = null,
+        segundero = 0,
+        fase = "";
+      let partidoIniciado = false;
+
+      async function init() {
+        if (!partidoId) return alert("Falta ID");
+        const { data } = await _supabase
+          .from("calendario")
+          .select("*")
+          .eq("id", parseInt(partidoId))
+          .single();
+        if (data) {
+          localG = data.goles_almendros || 0;
+          rivalG = data.goles_rival || 0;
+          document.getElementById("marcador-local").innerText = localG;
+          document.getElementById("marcador-rival").innerText = rivalG;
+          document.getElementById("nombre-rival").innerText = data.rival;
+          document.getElementById("incidencias").value = data.incidencias || "";
+          if (data.minuto && data.minuto !== "0'") {
+            activarEventos();
+            document.getElementById("minuto-actual").value = data.minuto;
+          }
+        }
+      }
+
+      function activarEventos() {
+        partidoIniciado = true;
+        document
+          .getElementById("seccion-eventos")
+          .classList.remove("opacity-40", "pointer-events-none");
+      }
+      function controlReloj(p, btn) {
+        // Si ya está corriendo y pulsas el mismo botón, no hacemos nada
+        if (fase === p && cronometro) return;
+
+        fase = p;
+        // Si es ST empezamos en 45 minutos (2700 seg), si no en 0
+        segundero = p === "ST" ? 2700 : 0;
+
+        // LIMPIEZA TOTAL de intervalos previos para que no choquen
+        if (cronometro) {
+          clearInterval(cronometro);
+          cronometro = null;
+        }
+
+        activarEventos();
+
+        if (btn) {
+          btn.classList.add("bg-green-600", "text-white");
+          if (p === "PT") btn.innerHTML = "⚽ 1er T.";
+        }
+
+        // EL RELOJ: Ahora es independiente del guardado en la BD
+        cronometro = setInterval(() => {
+          segundero++;
+          const minAnterior = document.getElementById("minuto-actual").value;
+          const nuevoMin = Math.floor(segundero / 60);
+          const textoMinuto = `${fase} ${nuevoMin}'`;
+
+          // Solo actualizamos el DOM si el texto cambió
+          if (document.getElementById("minuto-actual").value !== textoMinuto) {
+            document.getElementById("minuto-actual").value = textoMinuto;
+            // Sincronizamos con la BD de forma asíncrona (sin bloquear el reloj)
+            actualizarLive();
+          }
+        }, 1000);
+
+        anadirEvento(
+          p === "PT" ? "🏁 INICIO DEL PARTIDO" : "🏁 INICIO 2DO TIEMPO",
+        );
+      }
+
+      function pausarReloj(estado) {
+        if (cronometro) clearInterval(cronometro);
+        const txt = estado === "ET" ? "ENTRETIEMPO" : "FINALIZADO";
+        document.getElementById("minuto-actual").value = txt;
+        actualizarLive();
+      }
+
+      function anadirEvento(tipo) {
+        const min = document.getElementById("minuto-actual").value;
+        const text = document.getElementById("incidencias");
+        text.value = `${min} - ${tipo}\n` + text.value;
+        actualizarLive();
+      }
+
+      function cambiarGol(campo, val) {
+        if (!partidoIniciado) return alert("⚠️ Inicia el tiempo primero.");
+        const equipo =
+          campo === "goles_almendros"
+            ? "ALMENDROS"
+            : document.getElementById("nombre-rival").innerText;
+        if (confirm(`⚽ ¿CONFIRMA EL GOL PARA ${equipo}?`)) {
+          if (campo === "goles_almendros") localG = Math.max(0, localG + val);
+          else rivalG = Math.max(0, rivalG + val);
+          document.getElementById("marcador-local").innerText = localG;
+          document.getElementById("marcador-rival").innerText = rivalG;
+          anadirEvento(`⚽ GOL DE ${equipo}`);
+          actualizarLive();
+        }
+      }
+
+      function anularGol(campo) {
+        const motivo = prompt("Motivo de anulación:");
+        if (motivo) {
+          if (campo === "goles_almendros") localG = Math.max(0, localG - 1);
+          else rivalG = Math.max(0, rivalG - 1);
+          document.getElementById("marcador-local").innerText = localG;
+          document.getElementById("marcador-rival").innerText = rivalG;
+          anadirEvento(`❌ GOL ANULADO: ${motivo.toUpperCase()}`);
+          actualizarLive();
+        }
+      }
+
+      async function actualizarLive() {
+        const status = document.getElementById("status-sync");
+        status.innerHTML =
+          '<span class="text-blue-500 animate-pulse">📡 Actualizando...</span>';
+        const { error } = await _supabase
+          .from("calendario")
+          .update({
+            goles_almendros: localG,
+            goles_rival: rivalG,
+            minuto: document.getElementById("minuto-actual").value,
+            incidencias: document.getElementById("incidencias").value,
+            estado: "EN JUEGO",
+          })
+          .eq("id", parseInt(partidoId));
+        if (!error) {
+          status.innerHTML =
+            '<div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div> Sincronizado';
+        } else {
+          status.innerHTML = '<span class="text-red-500">❌ Error</span>';
+        }
+      }
+
+      init();
+    </script>
+  </body>
+</html>

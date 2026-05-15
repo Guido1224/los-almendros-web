@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Noticia | CD Los Almendros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      /* --- ESTILO DE PRENSA PROFESIONAL (BARÇA STYLE) --- */
+
+      /* La primera letra del primer párrafo será gigante (Capitular) */
+      #cuerpo-noticia p:first-of-type::first-letter {
+        font-size: 4.5rem;
+        font-weight: 900;
+        float: left;
+        line-height: 0.8;
+        margin-right: 0.7rem;
+        margin-top: 0.5rem;
+        color: #004d26; /* Verde del club */
+        text-transform: uppercase;
+        font-family: "Public Sans", sans-serif;
+      }
+
+      /* Estilo para los subtítulos (H2) que pongas en el editor */
+      #cuerpo-noticia h2 {
+        font-size: 1.8rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        font-style: italic;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        color: #004d26;
+        border-left: 5px solid #eab308; /* Línea amarilla al lado */
+        padding-left: 1rem;
+      }
+
+      /* Estilo para las imágenes que metas DENTRO del contenido */
+      #cuerpo-noticia img {
+        border-radius: 1.5rem;
+        margin: 2.5rem auto;
+        display: block;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        max-width: 100%;
+      }
+
+      /* Citas o bloques de texto resaltados */
+      #cuerpo-noticia blockquote {
+        font-size: 1.4rem;
+        font-style: italic;
+        font-weight: 700;
+        color: #4b5563;
+        border-left: 4px solid #004d26;
+        padding-left: 1.5rem;
+        margin: 2rem 0;
+      }
+
+      @import url("https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+      body {
+        font-family: "Public Sans", sans-serif;
+      }
+      /* Estilo para que las imágenes dentro del cuerpo de la noticia se vean bien */
+      #cuerpo-noticia img {
+        border-radius: 1.5rem;
+        margin: 2rem 0;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <!-- Fondo gris muy claro para elegancia -->
+
+    <!-- === BARRA DE NAVEGACIÓN (Verde Institucional) === -->
+    <nav
+      class="p-4 md:p-6 bg-[#004d26] flex justify-between items-center text-white border-b-2 border-yellow-500 shadow-xl sticky top-0 z-50"
+    >
+      <a
+        href="todas-las-noticias.html"
+        class="flex items-center gap-3 hover:text-yellow-500 transition-colors"
+      >
+        <i class="fa-solid fa-arrow-left"></i>
+        <span
+          class="font-black italic text-xs md:text-sm tracking-tighter uppercase"
+          >Volver</span
+        >
+      </a>
+      <span class="font-black italic text-xs uppercase hidden md:block"
+        >CD Los Almendros - Oficial</span
+      >
+    </nav>
+
+    <!-- === CONTENIDO DEL ARTÍCULO === -->
+    <main
+      id="noticia-completa"
+      class="max-w-4xl mx-auto bg-white min-h-screen shadow-sm"
+    >
+      <!-- Cabecera de la Noticia -->
+      <div class="p-6 md:p-12 space-y-6">
+        <div
+          class="flex items-center gap-2 text-green-700 text-[10px] font-black uppercase tracking-widest"
+        >
+          <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
+          <span id="etiqueta-noticia">PRIMER EQUIPO</span>
+          <span class="text-gray-400"
+            >• <span id="fecha-noticia">--:--</span></span
+          >
+        </div>
+
+        <h1
+          id="titulo-noticia"
+          class="text-3xl md:text-5xl lg:text-6xl font-black uppercase italic leading-none tracking-tighter text-gray-900"
+        >
+          CARGANDO TITULO...
+        </h1>
+      </div>
+
+      <!-- Imagen Principal con efecto de ancho completo en móvil -->
+      <div class="px-0 md:px-12">
+        <img
+          id="imagen-noticia"
+          src=""
+          alt=""
+          class="w-full h-auto md:rounded-3xl shadow-2xl"
+        />
+      </div>
+
+      <!-- CUERPO DE LA NOTICIA -->
+      <div
+        id="cuerpo-noticia"
+        class="p-6 md:p-12 prose prose-slate max-w-none text-gray-700 leading-relaxed text-base md:text-lg italic font-medium"
+      >
+        <!-- El cuerpo del artículo se inyecta vía JS -->
+      </div>
+
+      <!-- Footer del artículo -->
+      <footer class="p-12 border-t border-gray-100 mt-10">
+        <p
+          class="text-xs font-bold text-gray-400 uppercase tracking-widest text-center"
+        >
+          © 2026 CD Los Almendros - Todos los derechos reservados
+        </p>
+      </footer>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      function calcularTiempoRelativo(fecha) {
+        if (!fecha) return "--";
+        const ahora = new Date();
+        const luego = new Date(fecha);
+        const difSegundos = Math.floor((ahora - luego) / 1000);
+        if (difSegundos < 60) return "HACE UN MOMENTO";
+        const difMinutos = Math.floor(difSegundos / 60);
+        if (difMinutos < 60) return `HACE ${difMinutos} MIN`;
+        const difHoras = Math.floor(difMinutos / 60);
+        if (difHoras < 24) return `HACE ${difHoras} H`;
+        const difDias = Math.floor(difHoras / 24);
+        return `HACE ${difDias} DÍAS`;
+      }
+
+      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      async function fetchSingleNews() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const noticiaId = urlParams.get("id");
+
+        if (!noticiaId) {
+          document.getElementById("titulo-noticia").innerText =
+            "ERROR: NOTICIA NO ENCONTRADA";
+          return;
+        }
+
+        const { data: noticia, error } = await _supabase
+          .from("noticias")
+          .select("*")
+          .eq("id", noticiaId)
+          .single();
+
+        if (error) {
+          document.getElementById("titulo-noticia").innerText =
+            "ERROR DE CONEXIÓN";
+          return;
+        }
+
+        if (noticia) {
+          document.getElementById("imagen-noticia").src =
+            noticia.imagen_principal_url;
+          document.getElementById("titulo-noticia").innerText = noticia.titulo;
+          document.getElementById("etiqueta-noticia").innerText =
+            noticia.etiqueta.toUpperCase();
+          document.getElementById("fecha-noticia").innerText =
+            calcularTiempoRelativo(noticia.creado_en);
+          document.getElementById("cuerpo-noticia").innerHTML = noticia.cuerpo;
+        }
+      }
+
+      fetchSingleNews();
+    </script>
+  </body>
+</html>

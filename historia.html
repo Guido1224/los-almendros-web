@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Historia | CD Los Almendros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;700;900&display=swap");
+      body {
+        font-family: "Public Sans", sans-serif;
+      }
+      .active-tab {
+        border-bottom: 4px solid #004d26;
+        color: #004d26;
+      }
+      .bg-almendros {
+        background-color: #004d26;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+  <body class="bg-white text-gray-900 overflow-x-hidden">
+    <header
+      class="bg-[#004d26] py-3 px-6 text-white flex justify-between items-center shadow-md sticky top-0 z-[60]"
+    >
+      <a
+        href="index.html"
+        class="flex items-center gap-3 hover:text-yellow-500 transition-colors"
+      >
+        <i class="fa-solid fa-arrow-left text-xs"></i>
+        <span
+          class="font-black italic text-[10px] md:text-xs tracking-tighter uppercase"
+          >Inicio</span
+        >
+      </a>
+      <span
+        class="font-black italic text-[10px] md:text-xs tracking-tighter uppercase"
+        >CD Los Almendros</span
+      >
+    </header>
+
+    <section class="bg-white container mx-auto px-6 pt-16 pb-4">
+      <h1
+        class="text-5xl md:text-8xl font-black italic uppercase tracking-tighter text-[#004d26] leading-[0.85]"
+      >
+        Historia
+      </h1>
+      <p
+        class="text-gray-400 font-bold uppercase text-[9px] md:text-[11px] tracking-[0.3em] mt-4 ml-1 italic"
+      >
+        RIBERALTA , BENI | Temporada 2026
+      </p>
+      <div class="h-1.5 w-full bg-[#004d26] mt-8 rounded-full"></div>
+    </section>
+
+    <nav class="bg-white border-b sticky top-[48px] z-50 shadow-sm">
+      <div
+        class="container mx-auto flex overflow-x-auto no-scrollbar whitespace-nowrap justify-start md:justify-center"
+      >
+        <button
+          onclick="cambiarCategoria('Decada', this)"
+          class="tab-btn active-tab px-6 md:px-10 py-5 text-[10px] md:text-xs font-black uppercase tracking-widest transition shrink-0"
+        >
+          Década a Década
+        </button>
+        <button
+          onclick="cambiarCategoria('Presidente', this)"
+          class="tab-btn px-6 md:px-10 py-5 text-[10px] md:text-xs font-black uppercase tracking-widest text-gray-300 hover:text-almendros transition shrink-0"
+        >
+          Presidentes
+        </button>
+        <button
+          onclick="cambiarCategoria('Jugador Historico', this)"
+          class="tab-btn px-6 md:px-10 py-5 text-[10px] md:text-xs font-black uppercase tracking-widest text-gray-300 hover:text-almendros transition shrink-0"
+        >
+          Jugadores Históricos
+        </button>
+        <button
+          onclick="cambiarCategoria('Entrenador', this)"
+          class="tab-btn px-6 md:px-10 py-5 text-[10px] md:text-xs font-black uppercase tracking-widest text-gray-300 hover:text-almendros transition shrink-0"
+        >
+          Entrenadores
+        </button>
+      </div>
+    </nav>
+
+    <main class="container mx-auto px-6 py-12">
+      <div
+        id="grid-historia"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10"
+      ></div>
+    </main>
+
+    <div
+      id="modal-historia"
+      class="fixed inset-0 bg-black/95 z-[100] hidden overflow-y-auto p-4 backdrop-blur-md"
+    >
+      <div
+        class="max-w-4xl mx-auto bg-white rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden shadow-2xl mt-4 md:mt-10 mb-10 border border-white/10"
+      >
+        <div id="modal-banner" class="h-72 md:h-[450px] bg-gray-200 relative">
+          <img id="m-img" src="" class="w-full h-full object-cover" />
+          <button
+            onclick="cerrarModal()"
+            class="absolute top-6 right-6 w-12 h-12 bg-black/40 hover:bg-red-500 text-white rounded-full transition flex items-center justify-center backdrop-blur-md"
+          >
+            <i class="fa-solid fa-xmark text-xl"></i>
+          </button>
+        </div>
+        <div class="p-10 md:p-20">
+          <p
+            id="m-periodo"
+            class="text-almendros font-black uppercase tracking-[0.4em] text-xs md:text-sm mb-4"
+          ></p>
+          <h2
+            id="m-titulo"
+            class="text-4xl md:text-7xl font-black uppercase italic tracking-tighter text-gray-900 mb-8 leading-[0.9]"
+          ></h2>
+          <div
+            id="m-contenido"
+            class="text-gray-600 leading-relaxed text-lg md:text-xl text-justify prose prose-green max-w-none"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
+      const SUPABASE_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
+      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      let datosMemoria = [];
+
+      async function cargarHistoria(categoria = "Decada") {
+        const grid = document.getElementById("grid-historia");
+        grid.innerHTML =
+          '<div class="col-span-full text-center py-20 text-gray-400 font-bold italic animate-pulse">Abriendo el baúl de los recuerdos...</div>';
+
+        const { data, error } = await _supabase
+          .from("historia")
+          .select("*")
+          .eq("categoria", categoria)
+          .order("orden", { ascending: true });
+
+        if (error) {
+          grid.innerHTML =
+            '<div class="col-span-full text-center text-red-500 font-bold">Error de conexión.</div>';
+          return;
+        }
+
+        datosMemoria = data;
+
+        if (data.length === 0) {
+          grid.innerHTML =
+            '<div class="col-span-full text-center py-20 text-gray-400 font-bold">Aún no hay registros en esta categoría.</div>';
+          return;
+        }
+
+        grid.innerHTML = data
+          .map(
+            (h) => `
+          <div onclick="abrirDetalle(${h.id})" class="group cursor-pointer">
+            <div class="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-xl transition-all duration-500 group-hover:shadow-2xl group-hover:-translate-y-2">
+              <img src="${h.imagen_portada}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-80"></div>
+              <div class="absolute bottom-0 left-0 p-8 w-full">
+                <p class="text-yellow-500 font-black text-[10px] uppercase tracking-widest mb-1">${h.periodo}</p>
+                <h3 class="text-2xl font-black uppercase italic tracking-tighter leading-none text-white">${h.titulo}</h3>
+              </div>
+            </div>
+          </div>
+        `,
+          )
+          .join("");
+      }
+
+      function abrirDetalle(id) {
+        const h = datosMemoria.find((x) => x.id === id);
+        document.getElementById("m-img").src = h.imagen_portada;
+        document.getElementById("m-periodo").innerText = h.periodo;
+        document.getElementById("m-titulo").innerText = h.titulo;
+        document.getElementById("m-contenido").innerHTML = h.contenido;
+        document.getElementById("modal-historia").classList.remove("hidden");
+        document.body.style.overflow = "hidden";
+      }
+
+      function cerrarModal() {
+        document.getElementById("modal-historia").classList.add("hidden");
+        document.body.style.overflow = "auto";
+      }
+
+      function cambiarCategoria(cat, btn) {
+        document.querySelectorAll(".tab-btn").forEach((b) => {
+          b.classList.remove("active-tab");
+          b.classList.add("text-gray-300");
+        });
+        btn.classList.add("active-tab");
+        btn.classList.remove("text-gray-300");
+        cargarHistoria(cat);
+      }
+
+      cargarHistoria();
+    </script>
+  </body>
+</html>

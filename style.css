@@ -1,0 +1,65 @@
+/* style.css */
+.bg-verde-almendros {
+  background-color: #006633;
+}
+.text-verde-almendros {
+  color: #006633;
+}
+.bg-gris-suave {
+  background-color: #f4f4f4;
+}
+.border-verde {
+  border-color: #006633;
+}
+
+/* BOTÓN CON BALÓN REAL */
+.btn-balon {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* balón */
+.btn-balon::before {
+  content: "⚽";
+  position: absolute;
+  font-size: 40px;
+  opacity: 0;
+  left: -50px;
+  top: 50%;
+  transform: translateY(-50%) rotate(0deg);
+  transition: all 0.5s ease;
+}
+
+/* animación al pasar el mouse */
+.btn-balon:hover::before {
+  opacity: 0.3;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(360deg);
+}
+
+/* texto encima */
+.btn-balon {
+  color: #006633;
+}
+
+.btn-balon:hover {
+  color: rgb(0, 0, 0);
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(2);
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
