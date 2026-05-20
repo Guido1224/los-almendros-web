@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Registro de Socio | CD Los Almendros</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   </head>
   <body
     class="bg-[#0b0e14] text-white flex items-center justify-center min-h-screen p-6"
@@ -90,16 +89,14 @@
       </form>
     </div>
 
-    <script>
-      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
-      const SUPABASE_KEY =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
-      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
 
+    <script>
       const btnFinalizar = document.getElementById("btnFinalizar");
       const registroForm = document.getElementById("registroForm");
 
-      // 1. Verificamos sesión al cargar
+      // 1. Verificamos sesión al cargar (Usando el _supabase universal)
       async function checkAuth() {
         const {
           data: { session },

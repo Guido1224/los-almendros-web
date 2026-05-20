@@ -19,12 +19,7 @@ const authCheck = async () => {
           window.location.href = "registro-datos.html";
           return;
         }
-      }
-
-      // --- ESCENARIO B: ADMINISTRADOR ---
-      // --- ESCENARIO B: ADMINISTRADOR (MODIFICADO) ---
-      // --- ESCENARIO B: ADMINISTRADOR (RESPONSIVO) ---
-      else if (profile.rol === "admin") {
+      } else if (profile.rol === "admin") {
         const nombre = profile.nombre || "Admin";
         authSection.innerHTML = `
       <div class="relative group">
@@ -39,7 +34,7 @@ const authCheck = async () => {
           </div>
           
           <div class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-2xl py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[200] border-t-4 border-yellow-500">
-              <a href="admin.html" class="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 font-black italic uppercase">IR AL PANEL</a>
+              <a href="admin/admin.html" class="block px-4 py-2 text-sm text-green-700 hover:bg-green-50 font-black italic uppercase">IR AL PANEL</a>
               <hr class="my-1 border-gray-100">
               <button onclick="cerrarSesion()" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 font-black uppercase">Cerrar Sesión</button>
           </div>

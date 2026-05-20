@@ -104,16 +104,8 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+    <script src="js/supabase-client.js"></script>
     <script>
-      // 1. CONFIGURACIÓN MAESTRA (¡Ahora sí con la llave correcta!)
-      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
-      const SUPABASE_KEY =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
-
-      // Inicializamos el cliente
-      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
       // 2. Lógica de Social Login (Google / Facebook)
       async function loginSocial(provider) {
         console.log("🚀 Iniciando conexión con:", provider);

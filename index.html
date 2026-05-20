@@ -692,6 +692,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
     <script>
       function calcularTiempoRelativo(fecha) {
         if (!fecha) return "--";
@@ -706,12 +707,6 @@
         const difDias = Math.floor(difHoras / 24);
         return `HACE ${difDias} DÍAS`;
       }
-      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
-      const SUPABASE_KEY =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
-      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-      const LOGO_ALMENDROS =
-        "https://oiqxotvntoohugsrutwu.supabase.co/storage/v1/object/public/escudos/logo-almendros.png";
 
       // ALGORITMO GUERREROS ALEATORIOS
       function barajarArray(array) {
@@ -1086,7 +1081,7 @@
         document.body.style.overflow = "auto";
       });
     </script>
-    <script src="auth-check.js"></script>
+    <script src="js/auth-check.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
       AOS.init({ duration: 1000 });

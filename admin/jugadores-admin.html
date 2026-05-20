@@ -37,11 +37,11 @@
       >
         <i class="fa-solid fa-arrow-left mr-2"></i> Volver al Panel
       </a>
-      <h1
-        class="font-black italic uppercase tracking-widest text-xs md:text-sm text-white"
+      <div
+        class="font-black italic text-sm tracking-tighter uppercase text-white"
       >
-        Departamento de Fichajes
-      </h1>
+        CD LOS ALMENDROS
+      </div>
     </nav>
 
     <main
@@ -235,12 +235,8 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-client.js"></script>
     <script>
-      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
-      const SUPABASE_KEY =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
-      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
       const rolesJugador = [
         "Portero",
         "Defensa",

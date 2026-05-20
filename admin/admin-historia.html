@@ -10,7 +10,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+    <script src="../js/supabase-client.js"></script>
     <link
       href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
       rel="stylesheet"
@@ -40,36 +40,40 @@
     </style>
   </head>
   <body class="bg-gray-100 text-gray-900">
-    <header
-      class="bg-[#004d26] py-4 text-center text-white border-b-4 border-yellow-500 shadow-xl relative"
+    <nav
+      class="bg-[#004d26] py-3 px-4 md:px-8 flex justify-between items-center sticky top-0 z-50 shadow-xl border-b-4 border-yellow-500"
     >
       <a
         href="admin.html"
-        class="absolute left-6 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase tracking-widest text-white/60 hover:text-white transition flex items-center gap-2"
+        class="text-[10px] font-black uppercase text-white/70 hover:text-white transition"
       >
-        <i class="fa-solid fa-chevron-left text-[8px]"></i> Panel Admin
+        <i class="fa-solid fa-arrow-left mr-2"></i> Volver al Panel
       </a>
-      <div class="inline-block">
-        <h1
-          class="text-xl md:text-2xl font-black italic uppercase tracking-tighter leading-none"
-        >
-          Módulo de Historia
-        </h1>
-        <p
-          class="text-yellow-500 font-bold uppercase text-[7px] tracking-[0.3em]"
-        >
-          Gestión de Relatos y Personajes
-        </p>
-      </div>
+
       <button
         onclick="abrirModalCrear()"
-        class="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-black uppercase tracking-widest text-[#004d26] bg-yellow-500 hover:bg-yellow-400 px-4 py-1.5 rounded-full transition-all flex items-center gap-2 shadow-lg"
+        class="text-[10px] font-black uppercase tracking-widest text-[#004d26] bg-yellow-500 hover:bg-yellow-400 px-4 py-1.5 rounded-full transition-all flex items-center gap-2 shadow-lg active:scale-95"
       >
         <i class="fa-solid fa-plus"></i> Nuevo Hito
       </button>
-    </header>
+    </nav>
 
     <main class="container mx-auto max-w-6xl px-4 py-10">
+      <header class="mb-10">
+        <span
+          class="text-[#004d26] font-black text-[10px] uppercase tracking-[0.4em] italic block mb-1"
+          >Gestión de Relatos y Personajes</span
+        >
+        <h2
+          class="text-4xl font-black uppercase italic tracking-tighter text-gray-800"
+        >
+          Módulo de Historia
+        </h2>
+        <p class="text-gray-500 text-xs font-bold uppercase mt-2">
+          Administra los hitos históricos, expresidentes y leyendas que forjaron
+          la identidad del club.
+        </p>
+      </header>
       <div
         class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4"
       >
@@ -253,11 +257,6 @@
     </div>
 
     <script>
-      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
-      const SUPABASE_KEY =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
-      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
       let historiaData = [];
       let quill;
 
@@ -270,6 +269,7 @@
               ["bold", "italic", "underline"],
               [{ list: "ordered" }, { list: "bullet" }],
               ["link", "clean"],
+              ["link", "image", "clean"],
             ],
           },
         });

@@ -13,7 +13,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+    <script src="../js/supabase-client.js"></script>
     <link
       href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
       rel="stylesheet"
@@ -96,14 +96,14 @@
     >
       <a
         href="admin.html"
-        class="text-[10px] font-black uppercase tracking-widest text-white/70 hover:text-white transition flex items-center gap-2"
+        class="text-[10px] font-black uppercase text-white/70 hover:text-white transition"
       >
-        <i class="fa-solid fa-arrow-left"></i> Volver al Panel
+        <i class="fa-solid fa-arrow-left mr-2"></i> Volver al Panel
       </a>
       <div
-        class="font-black italic text-sm tracking-tighter uppercase text-yellow-500"
+        class="font-black italic text-sm tracking-tighter uppercase text-white"
       >
-        Mando Presidencial CDLA
+        CD LOS ALMENDROS
       </div>
     </nav>
 
@@ -237,11 +237,6 @@
     </main>
 
     <script>
-      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
-      const SUPABASE_KEY =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
-      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
       const quill = new Quill("#editor-container", {
         theme: "snow",
         placeholder: "Comienza a escribir la noticia...",

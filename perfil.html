@@ -9,7 +9,6 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
       .active-section {
         display: block !important;
@@ -298,34 +297,26 @@
       </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+
     <script>
-      const SUPABASE_URL = "https://oiqxotvntoohugsrutwu.supabase.co";
-      const SUPABASE_KEY =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9pcXhvdHZudG9vaHVnc3J1dHd1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNTA0OTMsImV4cCI6MjA5MTcyNjQ5M30.5GF32foP17OtbSFsjVX3T_yPaHm7sZPVbZUcBWT9C0I";
-      const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-      // LÓGICA DE INTERCAMBIO DE SECCIONES (CORREGIDA)
+      // LÓGICA DE INTERCAMBIO DE SECCIONES
       function switchSection(id) {
-        // 1. Ocultamos la vista del escudo (default)
         document.getElementById("default-view").style.display = "none";
-
-        // 2. Buscamos todas las secciones de contenido
         const sections = document.querySelectorAll(
           "#main-content > div:not(#default-view)",
         );
 
         sections.forEach((s) => {
-          s.style.display = "none"; // Forzamos el ocultado
-          s.classList.remove("active-section"); // ¡CLAVE! Quitamos el !important del anterior
+          s.style.display = "none";
+          s.classList.remove("active-section");
         });
 
-        // 3. Mostramos solo la que pediste
         const target = document.getElementById("section-" + id);
         if (target) {
           target.style.display = "block";
           target.classList.add("active-section");
-
-          // 4. Si es móvil, hacemos scroll suave para que no se pierda
           if (window.innerWidth < 1024) {
             target.scrollIntoView({ behavior: "smooth" });
           }
@@ -333,7 +324,6 @@
       }
 
       function closeSections() {
-        // Limpiamos todo y volvemos al escudo inicial
         const sections = document.querySelectorAll(
           "#main-content > div:not(#default-view)",
         );
@@ -341,12 +331,10 @@
           s.style.display = "none";
           s.classList.remove("active-section");
         });
-
-        // Volvemos a mostrar la vista con el escudo
-        const defaultView = document.getElementById("default-view");
-        defaultView.style.display = "flex";
+        document.getElementById("default-view").style.display = "flex";
       }
 
+      // Carga de datos dinámicos usando el conector universal _supabase
       async function cargarDatos() {
         const {
           data: { session },
@@ -374,13 +362,14 @@
             profile.pais || "Bolivia";
           document.getElementById("edit-genero").value =
             profile.sexo || "Masculino";
-          if (profile.fecha_nacimiento)
+          if (profile.fecha_nacimiento) {
             document.getElementById("edit-fecha").value =
               profile.fecha_nacimiento;
+          }
         }
       }
 
-      // INTEGRACIÓN DEL GUARDADO PROFESIONAL
+      // Procesamiento del formulario de actualización
       document
         .getElementById("profile-form")
         .addEventListener("submit", async (e) => {
@@ -401,11 +390,10 @@
             fecha_nacimiento: document.getElementById("edit-fecha").value,
           };
 
-          const { data, error } = await _supabase
+          const { error } = await _supabase
             .from("usuarios")
             .update(nuevosDatos)
-            .eq("id", session.user.id)
-            .select();
+            .eq("id", session.user.id);
 
           if (error) {
             alert("No se pudo guardar: " + error.message);
@@ -433,6 +421,7 @@
         window.location.href = "index.html";
       }
 
+      // Ejecución inicial al cargar la página
       cargarDatos();
     </script>
   </body>
