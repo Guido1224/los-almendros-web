@@ -10,6 +10,14 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <style>
+      /* === CANDADO RESPONSIVE (Evita que la pantalla se mueva de lado) === */
+      html,
+      body {
+        max-width: 100vw;
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+      }
       @import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;700;900&display=swap");
       body {
         font-family: "Public Sans", sans-serif;
@@ -21,6 +29,9 @@
       .bg-almendros {
         background-color: #004d26;
       }
+      .text-almendros {
+        color: #004d26;
+      }
       .no-scrollbar::-webkit-scrollbar {
         display: none;
       }
@@ -28,108 +39,134 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
+      /* Ajuste para que las imágenes dentro del texto del modal no rompan el celular */
+      #m-contenido img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 1rem;
+        margin: 1.5rem 0;
+      }
     </style>
   </head>
-  <body class="bg-white text-gray-900 overflow-x-hidden">
-    <header
-      class="bg-[#004d26] py-3 px-6 text-white flex justify-between items-center shadow-md sticky top-0 z-[60]"
+  <body class="bg-gray-50 text-gray-900 overflow-x-hidden">
+    <nav
+      class="bg-[#004d26] text-white sticky top-0 z-[100] shadow-2xl border-b border-yellow-500/20"
     >
-      <a
-        href="index.html"
-        class="flex items-center gap-3 hover:text-yellow-500 transition-colors"
+      <div
+        class="container mx-auto px-4 md:px-6 py-3 flex justify-between items-center"
       >
-        <i class="fa-solid fa-arrow-left text-xs"></i>
-        <span
-          class="font-black italic text-[10px] md:text-xs tracking-tighter uppercase"
-          >Inicio</span
+        <a
+          href="index.html"
+          class="flex items-center gap-2 md:gap-3 hover:text-yellow-500 transition-colors shrink-0"
         >
-      </a>
-      <span
-        class="font-black italic text-[10px] md:text-xs tracking-tighter uppercase"
-        >CD Los Almendros</span
-      >
-    </header>
+          <i class="fa-solid fa-arrow-left"></i>
+          <span
+            class="font-black italic text-xs md:text-sm tracking-tighter uppercase"
+            >Inicio</span
+          >
+        </a>
+        <h1
+          class="text-sm md:text-xl font-black tracking-tighter uppercase italic text-right truncate ml-4"
+        >
+          CD LOS ALMENDROS
+        </h1>
+      </div>
+    </nav>
 
-    <section class="bg-white container mx-auto px-6 pt-16 pb-4">
+    <section
+      class="bg-white container mx-auto px-4 md:px-6 pt-12 md:pt-16 pb-4"
+    >
       <h1
         class="text-5xl md:text-8xl font-black italic uppercase tracking-tighter text-[#004d26] leading-[0.85]"
       >
         Historia
       </h1>
       <p
-        class="text-gray-400 font-bold uppercase text-[9px] md:text-[11px] tracking-[0.3em] mt-4 ml-1 italic"
+        class="text-gray-400 font-bold uppercase text-[9px] md:text-[11px] tracking-[0.3em] mt-3 md:mt-4 ml-1 italic"
       >
-        RIBERALTA , BENI | Temporada 2026
+        RIBERALTA, BENI | Temporada 2026
       </p>
-      <div class="h-1.5 w-full bg-[#004d26] mt-8 rounded-full"></div>
+      <div class="h-1.5 w-full bg-[#004d26] mt-6 md:mt-8 rounded-full"></div>
     </section>
 
-    <nav class="bg-white border-b sticky top-[48px] z-50 shadow-sm">
+    <nav
+      class="bg-white border-b sticky top-[48px] md:top-[52px] z-50 shadow-sm"
+    >
       <div
-        class="container mx-auto flex overflow-x-auto no-scrollbar whitespace-nowrap justify-start md:justify-center"
+        class="container mx-auto flex overflow-x-auto no-scrollbar whitespace-nowrap justify-start md:justify-center px-2 md:px-0"
       >
         <button
           onclick="cambiarCategoria('Decada', this)"
-          class="tab-btn active-tab px-6 md:px-10 py-5 text-[10px] md:text-xs font-black uppercase tracking-widest transition shrink-0"
+          class="tab-btn active-tab px-4 md:px-10 py-4 md:py-5 text-[10px] md:text-xs font-black uppercase tracking-widest transition shrink-0"
         >
           Década a Década
         </button>
         <button
           onclick="cambiarCategoria('Presidente', this)"
-          class="tab-btn px-6 md:px-10 py-5 text-[10px] md:text-xs font-black uppercase tracking-widest text-gray-300 hover:text-almendros transition shrink-0"
+          class="tab-btn px-4 md:px-10 py-4 md:py-5 text-[10px] md:text-xs font-black uppercase tracking-widest text-gray-400 hover:text-almendros transition shrink-0"
         >
           Presidentes
         </button>
         <button
           onclick="cambiarCategoria('Jugador Historico', this)"
-          class="tab-btn px-6 md:px-10 py-5 text-[10px] md:text-xs font-black uppercase tracking-widest text-gray-300 hover:text-almendros transition shrink-0"
+          class="tab-btn px-4 md:px-10 py-4 md:py-5 text-[10px] md:text-xs font-black uppercase tracking-widest text-gray-400 hover:text-almendros transition shrink-0"
         >
           Jugadores Históricos
         </button>
         <button
           onclick="cambiarCategoria('Entrenador', this)"
-          class="tab-btn px-6 md:px-10 py-5 text-[10px] md:text-xs font-black uppercase tracking-widest text-gray-300 hover:text-almendros transition shrink-0"
+          class="tab-btn px-4 md:px-10 py-4 md:py-5 text-[10px] md:text-xs font-black uppercase tracking-widest text-gray-400 hover:text-almendros transition shrink-0"
         >
           Entrenadores
         </button>
       </div>
     </nav>
 
-    <main class="container mx-auto px-6 py-12">
+    <main class="container mx-auto px-4 md:px-6 py-8 md:py-12">
       <div
         id="grid-historia"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10"
       ></div>
     </main>
 
     <div
       id="modal-historia"
-      class="fixed inset-0 bg-black/95 z-[100] hidden overflow-y-auto p-4 backdrop-blur-md"
+      class="fixed inset-0 bg-black/95 z-[200] hidden overflow-y-auto p-0 md:p-4 backdrop-blur-md"
     >
       <div
-        class="max-w-4xl mx-auto bg-white rounded-[2.5rem] md:rounded-[3.5rem] overflow-hidden shadow-2xl mt-4 md:mt-10 mb-10 border border-white/10"
+        class="max-w-4xl mx-auto bg-white min-h-screen md:min-h-0 md:rounded-[3.5rem] overflow-hidden shadow-2xl md:mt-10 md:mb-10 border-0 md:border border-white/10 relative"
       >
-        <div id="modal-banner" class="h-72 md:h-[450px] bg-gray-200 relative">
+        <button
+          onclick="cerrarModal()"
+          class="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 md:w-12 md:h-12 bg-black/60 hover:bg-red-500 text-white rounded-full transition flex items-center justify-center backdrop-blur-md z-10 shadow-lg"
+        >
+          <i class="fa-solid fa-xmark text-lg md:text-xl"></i>
+        </button>
+
+        <div
+          id="modal-banner"
+          class="h-64 sm:h-72 md:h-[450px] bg-gray-200 relative w-full"
+        >
           <img id="m-img" src="" class="w-full h-full object-cover" />
-          <button
-            onclick="cerrarModal()"
-            class="absolute top-6 right-6 w-12 h-12 bg-black/40 hover:bg-red-500 text-white rounded-full transition flex items-center justify-center backdrop-blur-md"
-          >
-            <i class="fa-solid fa-xmark text-xl"></i>
-          </button>
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent md:hidden"
+          ></div>
         </div>
-        <div class="p-10 md:p-20">
+
+        <div class="p-6 md:p-16 lg:p-20">
           <p
             id="m-periodo"
-            class="text-almendros font-black uppercase tracking-[0.4em] text-xs md:text-sm mb-4"
+            class="text-almendros font-black uppercase tracking-[0.3em] md:tracking-[0.4em] text-[10px] md:text-sm mb-3 md:mb-4"
           ></p>
+
           <h2
             id="m-titulo"
-            class="text-4xl md:text-7xl font-black uppercase italic tracking-tighter text-gray-900 mb-8 leading-[0.9]"
+            class="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-black uppercase italic tracking-tighter text-gray-900 mb-6 md:mb-8 leading-[0.95] md:leading-[0.9] break-words"
           ></h2>
+
           <div
             id="m-contenido"
-            class="text-gray-600 leading-relaxed text-lg md:text-xl text-justify prose prose-green max-w-none"
+            class="text-gray-700 leading-relaxed text-base md:text-lg lg:text-xl text-justify prose prose-green max-w-none break-words"
           ></div>
         </div>
       </div>
@@ -169,12 +206,12 @@
           .map(
             (h) => `
           <div onclick="abrirDetalle(${h.id})" class="group cursor-pointer">
-            <div class="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-xl transition-all duration-500 group-hover:shadow-2xl group-hover:-translate-y-2">
+            <div class="relative aspect-[4/5] overflow-hidden rounded-3xl shadow-lg md:shadow-xl transition-all duration-500 group-hover:shadow-2xl group-hover:-translate-y-2">
               <img src="${h.imagen_portada}" class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
-              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-80"></div>
-              <div class="absolute bottom-0 left-0 p-8 w-full">
-                <p class="text-yellow-500 font-black text-[10px] uppercase tracking-widest mb-1">${h.periodo}</p>
-                <h3 class="text-2xl font-black uppercase italic tracking-tighter leading-none text-white">${h.titulo}</h3>
+              <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-90"></div>
+              <div class="absolute bottom-0 left-0 p-6 md:p-8 w-full">
+                <p class="text-yellow-500 font-black text-[9px] md:text-[10px] uppercase tracking-widest mb-1">${h.periodo}</p>
+                <h3 class="text-xl md:text-2xl font-black uppercase italic tracking-tighter leading-none text-white">${h.titulo}</h3>
               </div>
             </div>
           </div>
@@ -201,10 +238,10 @@
       function cambiarCategoria(cat, btn) {
         document.querySelectorAll(".tab-btn").forEach((b) => {
           b.classList.remove("active-tab");
-          b.classList.add("text-gray-300");
+          b.classList.add("text-gray-400");
         });
         btn.classList.add("active-tab");
-        btn.classList.remove("text-gray-300");
+        btn.classList.remove("text-gray-400");
         cargarHistoria(cat);
       }
 

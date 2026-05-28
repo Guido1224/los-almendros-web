@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Permisos | Mando Presidencial</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;700;900&display=swap");
+      body {
+        font-family: "Public Sans", sans-serif;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+    </style>
+  </head>
+  <body
+    id="cuerpo-protegido"
+    class="bg-gray-100 text-gray-900 opacity-0 transition-opacity duration-500"
+  >
+    <nav
+      class="bg-[#004d26] py-3 px-4 md:px-8 flex justify-between items-center sticky top-0 z-50 shadow-xl border-b-4 border-yellow-500"
+    >
+      <a
+        href="admin.html"
+        class="text-[10px] font-black uppercase text-white/70 hover:text-white transition"
+      >
+        <i class="fa-solid fa-arrow-left mr-2"></i> Volver al Panel
+      </a>
+      <button
+        onclick="abrirModalAsignar()"
+        class="text-[10px] font-black uppercase tracking-widest text-[#004d26] bg-yellow-500 hover:bg-yellow-400 px-4 py-1.5 rounded-full transition-all flex items-center gap-2 shadow-lg active:scale-95"
+      >
+        <i class="fa-solid fa-user-plus"></i> Asignar Rol
+      </button>
+    </nav>
+
+    <main class="container mx-auto max-w-5xl px-4 py-10">
+      <header class="mb-10">
+        <span
+          class="text-[#004d26] font-black text-[10px] uppercase tracking-[0.4em] italic block mb-1"
+          >Seguridad e Infraestructura</span
+        >
+        <h2
+          class="text-4xl font-black uppercase italic tracking-tighter text-gray-800"
+        >
+          Control de Accesos
+        </h2>
+        <p class="text-gray-500 text-xs font-bold uppercase mt-2">
+          Administra los rangos del personal de la plataforma, añade
+          colaboradores o transfiere credenciales maestras.
+        </p>
+      </header>
+
+      <div
+        class="bg-[#0b0e14] text-white p-6 rounded-[2rem] shadow-xl mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border border-white/5"
+      >
+        <div>
+          <span
+            class="text-yellow-500 font-black text-[9px] uppercase tracking-widest block mb-1"
+            >Super Administrador Actual</span
+          >
+          <h3
+            class="text-xl font-black italic uppercase text-gray-100 tracking-tight"
+          >
+            gonzalesguido123@gmail.com
+          </h3>
+        </div>
+        <div
+          class="bg-yellow-500/10 text-yellow-500 text-[9px] font-black uppercase px-3 py-1.5 rounded-xl border border-yellow-500/20 tracking-wider"
+        >
+          <i class="fa-solid fa-crown mr-1"></i> Cuenta Propietaria
+        </div>
+      </div>
+
+      <div
+        class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-100"
+      >
+        <div class="overflow-x-auto no-scrollbar">
+          <table class="w-full text-left">
+            <thead>
+              <tr
+                class="bg-gray-50 border-b border-gray-100 text-[10px] font-black uppercase text-gray-400 tracking-widest"
+              >
+                <th class="px-6 md:px-8 py-5">Usuario / Correo</th>
+                <th class="px-6 md:px-8 py-5">Rango Asignado</th>
+                <th class="px-6 md:px-8 py-5 text-center">Acciones</th>
+              </tr>
+            </thead>
+            <tbody
+              id="tabla-usuarios-body"
+              class="divide-y divide-gray-50 text-sm"
+            ></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <div
+      id="modal-rol"
+      class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] hidden flex items-center justify-center p-4"
+    >
+      <div
+        class="bg-white w-full max-w-md rounded-[2.5rem] overflow-hidden shadow-2xl flex flex-col"
+      >
+        <div
+          class="bg-[#004d26] p-5 text-white flex justify-between items-center border-b-4 border-yellow-500"
+        >
+          <h3
+            id="titulo-modal"
+            class="font-black uppercase italic tracking-tighter text-sm"
+          >
+            Asignar Rol a Usuario
+          </h3>
+          <button
+            onclick="cerrarModal()"
+            class="w-8 h-8 rounded-full bg-white/10 hover:bg-red-500 transition-colors flex items-center justify-center"
+          >
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <form id="form-rol" class="p-6 space-y-5">
+          <div>
+            <label
+              class="text-[9px] font-black uppercase text-gray-400 block mb-1"
+              >Correo Electrónico</label
+            >
+            <input
+              type="email"
+              id="input-correo"
+              placeholder="hincha@gmail.com"
+              class="w-full border-b-2 border-gray-200 focus:border-[#004d26] outline-none py-2 text-sm font-bold text-gray-800"
+              required
+            />
+          </div>
+          <div>
+            <label
+              class="text-[9px] font-black uppercase text-gray-400 block mb-1"
+              >Rango a Otorgar</label
+            >
+            <select
+              id="select-rol"
+              class="w-full border-b-2 border-gray-200 focus:border-[#004d26] outline-none py-2 text-sm font-black uppercase"
+            >
+              <option value="admin">Administrador Regular</option>
+              <option value="editor">Editor de Prensa</option>
+              <option value="socio">Quitar Permisos (Socio Normal)</option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            id="btn-guardar-rol"
+            class="w-full bg-[#004d26] text-white font-black uppercase py-4 rounded-full shadow-xl hover:bg-green-800 transition-all text-[11px] tracking-widest"
+          >
+            Confirmar Credenciales
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-client.js"></script>
+    <script src="../js/auth-guard.js"></script>
+    <script>
+      let usuarioSeleccionadoId = null;
+
+      // 1. Cargar SOLO al equipo de trabajo (Super Admin, Admin, Editor)
+      async function cargarUsuarios() {
+        const tbody = document.getElementById("tabla-usuarios-body");
+        tbody.innerHTML =
+          '<tr><td colspan="3" class="text-center py-10 font-bold text-gray-400">Cargando personal...</td></tr>';
+
+        // MAGIA: Filtramos para que NO traiga a los que tienen rol 'socio' o están vacíos
+        const { data: usuarios, error } = await _supabase
+          .from("usuarios")
+          .select("*")
+          .in("rol", ["super_admin", "admin", "editor"])
+          .order("rol", { ascending: true });
+
+        if (error)
+          return (tbody.innerHTML = `<tr><td colspan="3" class="text-center py-10 text-red-500 font-bold">Error: ${error.message}</td></tr>`);
+
+        let html = "";
+        usuarios.forEach((u) => {
+          let badgeRol = "";
+          let esSuperAdmin =
+            u.email === "gonzalesguido123@gmail.com" || u.rol === "super_admin";
+
+          if (esSuperAdmin)
+            badgeRol = `<span class="text-xs font-black uppercase bg-green-50 text-[#004d26] px-2.5 py-1 rounded-lg">Super Admin</span>`;
+          else if (u.rol === "admin")
+            badgeRol = `<span class="text-xs font-black uppercase bg-yellow-50 text-yellow-700 px-2.5 py-1 rounded-lg">Administrador</span>`;
+          else if (u.rol === "editor")
+            badgeRol = `<span class="text-xs font-black uppercase bg-blue-50 text-blue-600 px-2.5 py-1 rounded-lg">Editor</span>`;
+
+          html += `
+            <tr class="hover:bg-gray-50/80 transition-colors">
+              <td class="px-6 md:px-8 py-5 font-bold text-gray-800">
+                ${u.nombre ? u.nombre : "Usuario Nuevo"} <br>
+                <span class="text-[10px] text-gray-400 font-normal">${u.email}</span>
+              </td>
+              <td class="px-6 md:px-8 py-5">${badgeRol}</td>
+              <td class="px-6 md:px-8 py-5 text-center">
+                ${
+                  esSuperAdmin
+                    ? `<span class="text-gray-300 text-[10px] italic font-bold uppercase"><i class="fa-solid fa-shield-halved"></i> Protegido</span>`
+                    : `<button onclick="abrirModalModificar('${u.id}', '${u.email}', '${u.rol}')" class="text-[9px] font-black uppercase bg-gray-900 text-white hover:bg-yellow-500 hover:text-green-900 px-4 py-2 rounded-full transition-all mx-auto flex items-center gap-2 w-fit"><i class="fa-solid fa-pen"></i> Editar</button>`
+                }
+              </td>
+            </tr>
+          `;
+        });
+        tbody.innerHTML = html;
+      }
+
+      // 2. Abrir Modal para ASIGNAR A ALGUIEN NUEVO
+      function abrirModalAsignar() {
+        usuarioSeleccionadoId = null; // null significa que vamos a buscar por correo
+        document.getElementById("titulo-modal").innerText =
+          "Buscar y Asignar Rol";
+        document.getElementById("input-correo").value = "";
+        document.getElementById("input-correo").readOnly = false;
+        document
+          .getElementById("input-correo")
+          .classList.remove("bg-gray-100", "text-gray-500");
+        document.getElementById("select-rol").value = "admin";
+        document.getElementById("modal-rol").classList.remove("hidden");
+      }
+
+      // 3. Abrir Modal para MODIFICAR A ALGUIEN DE LA TABLA
+      function abrirModalModificar(id, email, rolActual) {
+        usuarioSeleccionadoId = id; // Si hay ID, sabemos que solo vamos a actualizar
+        document.getElementById("titulo-modal").innerText =
+          "Modificar Rol Actual";
+        document.getElementById("input-correo").value = email;
+        document.getElementById("input-correo").readOnly = true; // Bloqueamos el correo para que no lo borre
+        document
+          .getElementById("input-correo")
+          .classList.add("bg-gray-100", "text-gray-500");
+        document.getElementById("select-rol").value = rolActual;
+        document.getElementById("modal-rol").classList.remove("hidden");
+      }
+
+      function cerrarModal() {
+        document.getElementById("modal-rol").classList.add("hidden");
+      }
+
+      // 4. Lógica de Guardado Inteligente (Buscador + Update)
+      async function guardarNuevoRol(e) {
+        e.preventDefault();
+        const correo = document.getElementById("input-correo").value;
+        const nuevoRol = document.getElementById("select-rol").value;
+        const btnSubmit = document.getElementById("btn-guardar-rol");
+
+        btnSubmit.innerText = "PROCESANDO...";
+        btnSubmit.disabled = true;
+
+        let idAActualizar = usuarioSeleccionadoId;
+
+        // Si es nulo, significa que usamos el botón de "Asignar" y debemos buscar si el correo existe
+        if (!idAActualizar) {
+          const { data: usuarioEncontrado, error: errorBusqueda } =
+            await _supabase
+              .from("usuarios")
+              .select("id")
+              .eq("email", correo)
+              .maybeSingle();
+
+          if (!usuarioEncontrado) {
+            alert(
+              "❌ El correo ingresado no está registrado en el sistema. El usuario debe iniciar sesión al menos una vez para aparecer en la base de datos.",
+            );
+            btnSubmit.innerText = "Confirmar Credenciales";
+            btnSubmit.disabled = false;
+            return;
+          }
+          idAActualizar = usuarioEncontrado.id;
+        }
+
+        // Si ya tenemos el ID, aplicamos el nuevo rol
+        const { error } = await _supabase
+          .from("usuarios")
+          .update({ rol: nuevoRol })
+          .eq("id", idAActualizar);
+
+        if (error) {
+          alert("Error de seguridad: " + error.message);
+        } else {
+          cerrarModal();
+          cargarUsuarios(); // Recargamos para que aparezca (o desaparezca si lo pasaste a socio)
+        }
+
+        btnSubmit.innerText = "Confirmar Credenciales";
+        btnSubmit.disabled = false;
+      }
+
+      document
+        .getElementById("form-rol")
+        .addEventListener("submit", guardarNuevoRol);
+      cargarUsuarios();
+    </script>
+  </body>
+</html>

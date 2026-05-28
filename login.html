@@ -16,6 +16,10 @@
       .text-almendros {
         color: #006633;
       }
+      /* Oculta las flechas de los input type="number" si usáramos, aunque usamos text con maxlength */
+      input[type="text"] {
+        letter-spacing: 0.5em;
+      }
     </style>
   </head>
   <body class="bg-[#0b0e14] h-screen flex overflow-hidden">
@@ -33,91 +37,140 @@
     <div
       class="w-full lg:w-2/5 flex flex-col justify-center px-8 md:px-16 lg:px-20 bg-[#0b0e14] text-white"
     >
-      <div class="mb-10 text-center lg:text-left">
-        <div
-          class="w-16 h-16 bg-white rounded-full mx-auto lg:mx-0 mb-6 flex items-center justify-center font-black text-2xl text-almendros shadow-xl"
-        >
-          AL
+      <div id="pantalla-correo" class="block">
+        <div class="mb-10 text-center">
+          <img
+            src="https://oiqxotvntoohugsrutwu.supabase.co/storage/v1/object/public/escudos/logo-almendros.png?v=2"
+            class="w-20 h-20 object-contain mx-auto mb-6"
+            alt="Escudo CD Los Almendros"
+          />
+          <h2 class="text-3xl font-black uppercase italic tracking-tighter">
+            CD LOS ALMENDROS
+          </h2>
+          <p class="text-gray-400 mt-2 text-sm">
+            Ingresa tu correo para acceder o crear tu cuenta del club.
+          </p>
         </div>
-        <h2 class="text-3xl font-black uppercase italic tracking-tighter">
-          CD LOS ALMENDROS
-        </h2>
-        <p class="text-gray-400 mt-2 text-sm">
-          Ingresa tu correo para acceder o crear tu cuenta del club.
+
+        <form id="loginForm" class="space-y-4">
+          <div>
+            <input
+              type="email"
+              id="userEmail"
+              required
+              class="w-full p-4 bg-gray-800 border border-gray-700 rounded-lg focus:border-white outline-none transition text-white"
+              placeholder="Dirección de correo electrónico*"
+            />
+          </div>
+
+          <button
+            type="submit"
+            id="btnAceptar"
+            class="w-full bg-white text-black font-black py-4 rounded-lg hover:bg-gray-200 transition-all uppercase tracking-widest text-sm"
+          >
+            Aceptar y Continuar
+          </button>
+        </form>
+
+        <div class="relative flex py-8 items-center">
+          <div class="flex-grow border-t border-gray-700"></div>
+          <span
+            class="flex-shrink mx-4 text-gray-500 font-bold text-xs uppercase"
+            >O</span
+          >
+          <div class="flex-grow border-t border-gray-700"></div>
+        </div>
+
+        <div class="space-y-3">
+          <button
+            onclick="loginSocial('google')"
+            class="w-full flex items-center justify-center space-x-3 p-4 bg-white text-black rounded-lg font-bold hover:bg-gray-200 transition"
+          >
+            <img
+              src="https://www.svgrepo.com/show/475656/google-color.svg"
+              class="w-5"
+              alt="Google"
+            />
+            <span>Continuar con Google</span>
+          </button>
+
+          <button
+            onclick="loginSocial('facebook')"
+            class="w-full flex items-center justify-center space-x-3 p-4 bg-[#1877F2] text-white rounded-lg font-bold hover:bg-[#166fe5] transition shadow-lg"
+          >
+            <i class="fa-brands fa-facebook text-xl"></i>
+            <span>Continuar con Facebook</span>
+          </button>
+        </div>
+
+        <p class="mt-8 text-[10px] text-gray-500 text-center leading-relaxed">
+          Este sitio está protegido por GRAF y se aplican las políticas de
+          seguridad de Supabase.
         </p>
       </div>
 
-      <form id="loginForm" class="space-y-4">
-        <div>
-          <input
-            type="email"
-            id="userEmail"
-            required
-            class="w-full p-4 bg-gray-800 border border-gray-700 rounded-lg focus:border-white outline-none transition text-white"
-            placeholder="Dirección de correo electrónico*"
-          />
+      <div id="pantalla-codigo" class="hidden">
+        <div class="mb-10 text-center">
+          <div
+            class="w-16 h-16 bg-white rounded-full mx-auto mb-6 flex items-center justify-center text-2xl text-almendros shadow-xl"
+          >
+            <i class="fa-solid fa-envelope-open-text"></i>
+          </div>
+          <h2 class="text-3xl font-black uppercase italic tracking-tighter">
+            VERIFICA TU CORREO
+          </h2>
+          <p class="text-gray-400 mt-2 text-sm leading-relaxed">
+            Te hemos enviado un código seguro de 6 dígitos a <br />
+            <span id="correo-enviado" class="font-bold text-white"></span>
+          </p>
         </div>
 
-        <button
-          type="submit"
-          id="btnAceptar"
-          class="w-full bg-white text-black font-black py-4 rounded-lg hover:bg-gray-200 transition-all uppercase tracking-widest text-sm"
-        >
-          Aceptar y Continuar
-        </button>
-      </form>
+        <form id="codigoForm" class="space-y-4">
+          <div>
+            <input
+              type="text"
+              id="otpCode"
+              maxlength="8"
+              required
+              class="w-full p-4 bg-gray-800 border border-gray-700 rounded-lg focus:border-yellow-500 outline-none transition text-white text-center text-4xl font-black uppercase"
+              placeholder="--------"
+            />
+          </div>
 
-      <div class="relative flex py-8 items-center">
-        <div class="flex-grow border-t border-gray-700"></div>
-        <span class="flex-shrink mx-4 text-gray-500 font-bold text-xs uppercase"
-          >O</span
-        >
-        <div class="flex-grow border-t border-gray-700"></div>
+          <button
+            type="submit"
+            id="btnVerificar"
+            class="w-full bg-yellow-500 text-green-900 font-black py-4 rounded-lg hover:bg-yellow-400 transition-all uppercase tracking-widest text-sm shadow-xl"
+          >
+            Iniciar Sesión
+          </button>
+
+          <button
+            type="button"
+            onclick="volverAlCorreo()"
+            class="w-full text-xs font-bold text-gray-400 hover:text-white mt-4 underline transition-colors"
+          >
+            Usar otra dirección de correo
+          </button>
+        </form>
       </div>
-
-      <div class="space-y-3">
-        <button
-          onclick="loginSocial('google')"
-          class="w-full flex items-center justify-center space-x-3 p-4 bg-white text-black rounded-lg font-bold hover:bg-gray-200 transition"
-        >
-          <img
-            src="https://www.svgrepo.com/show/475656/google-color.svg"
-            class="w-5"
-            alt="Google"
-          />
-          <span>Continuar con Google</span>
-        </button>
-
-        <button
-          onclick="loginSocial('facebook')"
-          class="w-full flex items-center justify-center space-x-3 p-4 bg-[#1877F2] text-white rounded-lg font-bold hover:bg-[#166fe5] transition shadow-lg"
-        >
-          <i class="fa-brands fa-facebook text-xl"></i>
-          <span>Continuar con Facebook</span>
-        </button>
-      </div>
-
-      <p class="mt-8 text-[10px] text-gray-500 text-center leading-relaxed">
-        Este sitio está protegido por GRAF y se aplican las políticas de
-        seguridad de Supabase.
-      </p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-client.js"></script>
     <script>
-      // 2. Lógica de Social Login (Google / Facebook)
+      let correoActual = "";
+
+      // 1. Lógica de Social Login (Google / Facebook)
       async function loginSocial(provider) {
         console.log("🚀 Iniciando conexión con:", provider);
-
         const { error } = await _supabase.auth.signInWithOAuth({
           provider: provider,
           options: {
             queryParams: {
-              prompt: "select_account", // Esto obliga a Google a preguntarte qué cuenta usar
+              prompt: "select_account",
               access_type: "offline",
             },
-            // IMPORTANTE: Asegúrate de que esta URL sea la correcta de tu index
             redirectTo: window.location.origin + "/index.html",
           },
         });
@@ -128,7 +181,7 @@
         }
       }
 
-      // 3. Lógica de Magic Link (Email)
+      // 2. Lógica para Enviar el Código (Pantalla 1)
       document
         .getElementById("loginForm")
         .addEventListener("submit", async (e) => {
@@ -137,24 +190,87 @@
           const btn = document.getElementById("btnAceptar");
 
           btn.disabled = true;
-          btn.innerText = "ENVIANDO ENLACE...";
+          btn.innerText = "ENVIANDO CÓDIGO...";
 
+          // signInWithOtp envía el correo con el código de 6 dígitos
           const { error } = await _supabase.auth.signInWithOtp({
             email: email,
-            options: {
-              emailRedirectTo: window.location.origin + "/index.html",
-            },
           });
 
           if (error) {
-            alert("Error: " + error.message);
+            // Si el error es por pedir muchos códigos seguidos
+            if (
+              error.message.includes("For security purposes") ||
+              error.status === 429
+            ) {
+              alert(
+                "⏱️ Has solicitado varios códigos muy rápido. Por favor, espera un minuto antes de intentar de nuevo.",
+              );
+            } else {
+              // Cualquier otro error
+              alert("❌ Error: " + error.message);
+            }
+
             btn.disabled = false;
             btn.innerText = "Aceptar y Continuar";
           } else {
-            alert("¡Enlace enviado! Revisa tu correo electrónico para entrar.");
-            btn.innerText = "REVISA TU CORREO";
+            // Guardamos el correo y cambiamos de pantalla
+            correoActual = email;
+            document.getElementById("correo-enviado").innerText = email;
+            document.getElementById("pantalla-correo").classList.add("hidden");
+            document
+              .getElementById("pantalla-codigo")
+              .classList.remove("hidden");
+
+            // Restauramos el botón por si regresan
+            btn.disabled = false;
+            btn.innerText = "Aceptar y Continuar";
+
+            // Enfocamos automáticamente el input del código
+            document.getElementById("otpCode").focus();
           }
         });
+
+      // 3. Lógica para Verificar el Código (Pantalla 2)
+      document
+        .getElementById("codigoForm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const codigo = document.getElementById("otpCode").value;
+          const btn = document.getElementById("btnVerificar");
+
+          if (codigo.length !== 8) {
+            return alert("El código debe ser de exactamente 8 dígitos.");
+          }
+
+          btn.disabled = true;
+          btn.innerText = "VERIFICANDO...";
+
+          // Supabase valida que el código corresponda al correo
+          const { data, error } = await _supabase.auth.verifyOtp({
+            email: correoActual,
+            token: codigo,
+            type: "email",
+          });
+
+          if (error) {
+            alert(
+              "El código es incorrecto o ha expirado. Por favor, revisa tu correo.",
+            );
+            btn.disabled = false;
+            btn.innerText = "INICIAR SESIÓN";
+          } else {
+            // Si es correcto, Supabase ya creó la sesión. Vamos al Index.
+            window.location.href = "index.html";
+          }
+        });
+
+      // 4. Volver a la pantalla de correo
+      function volverAlCorreo() {
+        document.getElementById("pantalla-codigo").classList.add("hidden");
+        document.getElementById("pantalla-correo").classList.remove("hidden");
+        document.getElementById("otpCode").value = ""; // Limpiamos el código ingresado
+      }
     </script>
   </body>
 </html>

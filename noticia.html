@@ -10,16 +10,21 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
     <style>
-      /* --- ESTILO DE PRENSA PROFESIONAL (BARÇA STYLE) --- */
+      @import url("https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap");
+      body {
+        font-family: "Public Sans", sans-serif;
+      }
 
-      /* La primera letra del primer párrafo será gigante (Capitular) */
+      /* --- ESTILO DE PRENSA PROFESIONAL (BARÇA STYLE) RESPONSIVE --- */
+
+      /* La primera letra del primer párrafo (Capitular) */
       #cuerpo-noticia p:first-of-type::first-letter {
-        font-size: 4.5rem;
+        font-size: 3.5rem; /* Más pequeña en celular */
         font-weight: 900;
         float: left;
         line-height: 0.8;
-        margin-right: 0.7rem;
-        margin-top: 0.5rem;
+        margin-right: 0.5rem;
+        margin-top: 0.3rem;
         color: #004d26; /* Verde del club */
         text-transform: uppercase;
         font-family: "Public Sans", sans-serif;
@@ -27,118 +32,129 @@
 
       /* Estilo para los subtítulos (H2) que pongas en el editor */
       #cuerpo-noticia h2 {
-        font-size: 1.8rem;
+        font-size: 1.4rem; /* Adaptado a móvil */
         font-weight: 900;
         text-transform: uppercase;
         font-style: italic;
-        margin-top: 2.5rem;
+        margin-top: 2rem;
         margin-bottom: 1rem;
         color: #004d26;
-        border-left: 5px solid #eab308; /* Línea amarilla al lado */
-        padding-left: 1rem;
+        border-left: 4px solid #eab308;
+        padding-left: 0.75rem;
+        line-height: 1.2;
       }
 
-      /* Estilo para las imágenes que metas DENTRO del contenido */
+      /* Estilo BLINDADO para las imágenes que metas DENTRO del contenido */
       #cuerpo-noticia img {
-        border-radius: 1.5rem;
-        margin: 2.5rem auto;
+        border-radius: 1rem;
+        margin: 1.5rem auto;
         display: block;
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        max-width: 100%;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        max-width: 100% !important; /* Fuerza a que no rompa el celular */
+        height: auto !important; /* Mantiene la proporción */
       }
 
       /* Citas o bloques de texto resaltados */
       #cuerpo-noticia blockquote {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         font-style: italic;
         font-weight: 700;
         color: #4b5563;
         border-left: 4px solid #004d26;
-        padding-left: 1.5rem;
-        margin: 2rem 0;
+        padding-left: 1rem;
+        margin: 1.5rem 0;
       }
 
-      @import url("https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap");
-      body {
-        font-family: "Public Sans", sans-serif;
-      }
-      /* Estilo para que las imágenes dentro del cuerpo de la noticia se vean bien */
-      #cuerpo-noticia img {
-        border-radius: 1.5rem;
-        margin: 2rem 0;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      /* === ADAPTACIONES PARA PANTALLAS GRANDES (PC) === */
+      @media (min-width: 768px) {
+        #cuerpo-noticia p:first-of-type::first-letter {
+          font-size: 4.5rem;
+          margin-right: 0.7rem;
+          margin-top: 0.5rem;
+        }
+        #cuerpo-noticia h2 {
+          font-size: 1.8rem;
+          border-left: 5px solid #eab308;
+          padding-left: 1rem;
+          margin-top: 2.5rem;
+        }
+        #cuerpo-noticia img {
+          border-radius: 1.5rem;
+          margin: 2.5rem auto;
+        }
+        #cuerpo-noticia blockquote {
+          font-size: 1.4rem;
+          padding-left: 1.5rem;
+          margin: 2rem 0;
+        }
       }
     </style>
   </head>
-  <body class="bg-gray-50 text-gray-900">
-    <!-- Fondo gris muy claro para elegancia -->
-
-    <!-- === BARRA DE NAVEGACIÓN (Verde Institucional) === -->
+  <body class="bg-gray-50 text-gray-900 overflow-x-hidden">
     <nav
-      class="p-4 md:p-6 bg-[#004d26] flex justify-between items-center text-white border-b-2 border-yellow-500 shadow-xl sticky top-0 z-50"
+      class="bg-[#004d26] text-white sticky top-0 z-[100] shadow-2xl border-b border-yellow-500/20"
     >
-      <a
-        href="todas-las-noticias.html"
-        class="flex items-center gap-3 hover:text-yellow-500 transition-colors"
+      <div
+        class="container mx-auto px-4 md:px-6 py-3 flex justify-between items-center"
       >
-        <i class="fa-solid fa-arrow-left"></i>
-        <span
-          class="font-black italic text-xs md:text-sm tracking-tighter uppercase"
-          >Volver</span
+        <a
+          href="todas-las-noticias.html"
+          class="flex items-center gap-2 md:gap-3 hover:text-yellow-500 transition-colors shrink-0"
         >
-      </a>
-      <span class="font-black italic text-xs uppercase hidden md:block"
-        >CD Los Almendros - Oficial</span
-      >
+          <i class="fa-solid fa-arrow-left"></i>
+          <span
+            class="font-black italic text-xs md:text-sm tracking-tighter uppercase"
+            >Inicio</span
+          >
+        </a>
+        <h1
+          class="text-sm md:text-xl font-black tracking-tighter uppercase italic text-right truncate ml-4"
+        >
+          CD LOS ALMENDROS
+        </h1>
+      </div>
     </nav>
 
-    <!-- === CONTENIDO DEL ARTÍCULO === -->
     <main
       id="noticia-completa"
       class="max-w-4xl mx-auto bg-white min-h-screen shadow-sm"
     >
-      <!-- Cabecera de la Noticia -->
-      <div class="p-6 md:p-12 space-y-6">
+      <div class="p-6 md:p-12 space-y-4 md:space-y-6">
         <div
-          class="flex items-center gap-2 text-green-700 text-[10px] font-black uppercase tracking-widest"
+          class="flex items-center gap-2 text-green-700 text-[9px] md:text-[10px] font-black uppercase tracking-widest flex-wrap"
         >
           <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
           <span id="etiqueta-noticia">PRIMER EQUIPO</span>
-          <span class="text-gray-400"
+          <span class="text-gray-400 whitespace-nowrap"
             >• <span id="fecha-noticia">--:--</span></span
           >
         </div>
 
         <h1
           id="titulo-noticia"
-          class="text-3xl md:text-5xl lg:text-6xl font-black uppercase italic leading-none tracking-tighter text-gray-900"
+          class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase italic leading-none tracking-tighter text-gray-900 break-words"
         >
           CARGANDO TITULO...
         </h1>
       </div>
 
-      <!-- Imagen Principal con efecto de ancho completo en móvil -->
-      <div class="px-0 md:px-12">
+      <div class="px-0 md:px-12 w-full overflow-hidden">
         <img
           id="imagen-noticia"
           src=""
           alt=""
-          class="w-full h-auto md:rounded-3xl shadow-2xl"
+          class="w-full h-auto object-cover md:rounded-3xl shadow-lg md:shadow-2xl"
         />
       </div>
 
-      <!-- CUERPO DE LA NOTICIA -->
       <div
         id="cuerpo-noticia"
-        class="p-6 md:p-12 prose prose-slate max-w-none text-gray-700 leading-relaxed text-base md:text-lg italic font-medium"
-      >
-        <!-- El cuerpo del artículo se inyecta vía JS -->
-      </div>
+        class="p-6 md:p-12 prose prose-slate max-w-none text-gray-700 leading-relaxed text-base md:text-lg italic font-medium text-justify break-words"
+      ></div>
 
-      <!-- Footer del artículo -->
-      <footer class="p-12 border-t border-gray-100 mt-10">
+      <footer class="p-8 md:p-12 border-t border-gray-100 mt-6 md:mt-10">
         <p
-          class="text-xs font-bold text-gray-400 uppercase tracking-widest text-center"
+          class="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest text-center"
         >
           © 2026 CD Los Almendros - Todos los derechos reservados
         </p>

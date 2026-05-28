@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Identidad y Valores | CD Los Almendros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      /* === ESTILOS PARA LOS PATROCINADORES === */
+      .sponsor-item {
+        filter: brightness(0) invert(1);
+        opacity: 0.7;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        max-height: 55px;
+        width: auto;
+        object-fit: contain;
+      }
+      .sponsor-item:hover {
+        opacity: 1;
+        transform: scale(1.1);
+        filter: none;
+      }
+      img[alt="Acai Life"] {
+        filter: grayscale(1);
+      }
+      img[alt="Acai Life"]:hover {
+        filter: none;
+      }
+      img[alt="Yamaha"]:hover {
+        filter: brightness(0) invert(1)
+          drop-shadow(0 0 8px rgba(255, 255, 255, 0.3));
+      }
+      @import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700;900&display=swap");
+      body {
+        font-family: "Public Sans", sans-serif;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gray-50 text-gray-900 min-h-screen flex flex-col justify-between"
+  >
+    <nav
+      class="bg-[#004d26] text-white sticky top-0 z-[100] shadow-2xl border-b border-yellow-500/20"
+    >
+      <div
+        class="container mx-auto px-6 py-3 flex justify-between items-center"
+      >
+        <!-- 1. VOLVER AL INICIO (IZQUIERDA - ESTILO EXACTO DE TU FOTO) -->
+        <a
+          href="index.html"
+          class="flex items-center gap-3 hover:text-yellow-500 transition-colors"
+        >
+          <i class="fa-solid fa-arrow-left"></i>
+          <span
+            class="font-black italic text-xs md:text-sm tracking-tighter uppercase"
+            >Inicio</span
+          >
+        </a>
+
+        <!-- 2. CD LOS ALMENDROS (DERECHA) -->
+        <h1
+          class="text-base md:text-xl font-black tracking-tighter uppercase italic"
+        >
+          CD LOS ALMENDROS
+        </h1>
+      </div>
+    </nav>
+
+    <main class="container mx-auto max-w-4xl px-4 py-16 flex-grow">
+      <header class="text-center mb-16">
+        <span
+          class="text-[#004d26] font-black text-[10px] uppercase tracking-[0.4em] italic block mb-2"
+          >Filosofía de Grandeza</span
+        >
+        <h1
+          class="text-4xl md:text-5xl font-black uppercase italic tracking-tighter text-gray-900 leading-none"
+        >
+          Nuestra Identidad
+        </h1>
+        <div class="w-20 h-1 bg-yellow-500 mx-auto mt-6 rounded-full"></div>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+        <div
+          class="bg-white p-8 rounded-[2rem] shadow-xl border border-gray-100 transition-transform hover:-translate-y-1 duration-300"
+        >
+          <div
+            class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-[#004d26] mb-6 text-xl shadow-inner"
+          >
+            <i class="fa-solid fa-bullseye"></i>
+          </div>
+          <h3
+            class="text-xl font-black uppercase italic tracking-tighter text-[#004d26] mb-3"
+          >
+            Misión
+          </h3>
+          <p class="text-gray-500 text-sm font-medium leading-relaxed">
+            Promover la práctica deportiva del fútbol con excelencia, forjando
+            el talento de la juventud beniana bajo los valores del esfuerzo, el
+            compañerismo y la superación constante, representando con orgullo y
+            valentía la identidad de Riberalta en cada competición.
+          </p>
+        </div>
+
+        <div
+          class="bg-white p-8 rounded-[2rem] shadow-xl border border-gray-100 transition-transform hover:-translate-y-1 duration-300"
+        >
+          <div
+            class="w-12 h-12 bg-yellow-50 rounded-2xl flex items-center justify-center text-yellow-600 mb-6 text-xl shadow-inner"
+          >
+            <i class="fa-solid fa-eye"></i>
+          </div>
+          <h3
+            class="text-xl font-black uppercase italic tracking-tighter text-gray-900 mb-3"
+          >
+            Visión
+          </h3>
+          <p class="text-gray-500 text-sm font-medium leading-relaxed">
+            Consolidarnos como la institución futbolística líder y modelo del
+            norte boliviano, afianzando nuestro éxito en la máxima categoría
+            local con una proyección firme hacia los torneos nacionales,
+            respaldados por una infraestructura competitiva y el arraigo
+            inquebrantable de una hinchada que impulsa el crecimiento del club.
+          </p>
+        </div>
+      </div>
+
+      <section>
+        <h2
+          class="text-2xl font-black uppercase italic text-center tracking-tighter text-[#004d26] mb-10"
+        >
+          Los Pilares de los Almendros
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div
+            class="bg-gray-900 text-white p-6 rounded-2xl text-center shadow-md border-t-4 border-green-500"
+          >
+            <span class="text-3xl block mb-3 text-green-500 font-black italic"
+              >01</span
+            >
+            <h4 class="font-black uppercase italic tracking-tight text-sm mb-2">
+              Orgullo Beniano
+            </h4>
+            <p class="text-gray-400 text-xs">
+              Defendemos nuestros colores con la bravura y honor de nuestra
+              tierra.
+            </p>
+          </div>
+
+          <div
+            class="bg-gray-900 text-white p-6 rounded-2xl text-center shadow-md border-t-4 border-yellow-500"
+          >
+            <span class="text-3xl block mb-3 text-yellow-500 font-black italic"
+              >02</span
+            >
+            <h4 class="font-black uppercase italic tracking-tight text-sm mb-2">
+              Lealtad Colectiva
+            </h4>
+            <p class="text-gray-400 text-xs">
+              El club y la hinchada caminan juntos; el equipo está por encima de
+              las individualidades.
+            </p>
+          </div>
+
+          <div
+            class="bg-gray-900 text-white p-6 rounded-2xl text-center shadow-md border-t-4 border-red-500"
+          >
+            <span class="text-3xl block mb-3 text-red-500 font-black italic"
+              >03</span
+            >
+            <h4 class="font-black uppercase italic tracking-tight text-sm mb-2">
+              Disciplina Guerrera
+            </h4>
+            <p class="text-gray-400 text-xs">
+              Trabajo incansable, respeto al rival y entrega absoluta hasta el
+              último minuto.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section class="mt-20">
+      <div class="text-center mb-12">
+        <span
+          class="text-[#004d26] font-black text-[10px] uppercase tracking-[0.4em] italic block mb-1"
+          >El Código de los Almendros</span
+        >
+        <h2
+          class="text-3xl font-black uppercase italic tracking-tighter text-gray-950"
+        >
+          Nuestros Valores
+        </h2>
+        <div class="w-12 h-1 bg-yellow-500 mx-auto mt-4 rounded-full"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div
+          class="bg-white p-6 rounded-[2rem] shadow-xl border border-gray-100 flex flex-col justify-between transition-all hover:shadow-green-900/5 duration-300"
+        >
+          <div>
+            <div
+              class="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center text-[#004d26] text-lg shadow-inner mb-5"
+            >
+              <i class="fa-solid fa-scale-balanced"></i>
+            </div>
+            <h4
+              class="font-black uppercase italic tracking-tight text-base text-gray-900 mb-2"
+            >
+              Respeto
+            </h4>
+            <p
+              class="text-gray-500 text-xs font-medium leading-relaxed text-justify"
+            >
+              Es uno de los pilares fundamentales de la vida democrática y de la
+              capacidad de vivir en sociedad. En el deporte es crucial, ya que
+              se crean situaciones de tensión que hay que resolver de manera
+              casi instantánea. Disponer de este valor garantiza las
+              interrelaciones personales cordiales y correctas por encima de
+              cualquier reglamento.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="bg-white p-6 rounded-[2rem] shadow-xl border border-gray-100 flex flex-col justify-between transition-all hover:shadow-green-900/5 duration-300"
+        >
+          <div>
+            <div
+              class="w-12 h-12 bg-yellow-50 rounded-2xl flex items-center justify-center text-yellow-600 text-lg shadow-inner mb-5"
+            >
+              <i class="fa-solid fa-dumbbell"></i>
+            </div>
+            <h4
+              class="font-black uppercase italic tracking-tight text-base text-gray-900 mb-2"
+            >
+              Esfuerzo
+            </h4>
+            <p
+              class="text-gray-500 text-xs font-medium leading-relaxed text-justify"
+            >
+              Un valor esencial que nos permite llegar a lugares impensables y
+              conseguir metas que parecían inalcanzables. Frente a los modelos
+              que abogan por el oportunismo o el triunfo inmediato, la
+              dedicación, la constancia, el rigor, la capacidad de sacrificio y
+              la perseverancia son los vehículos reales del desarrollo y la
+              superación personal.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="bg-white p-6 rounded-[2rem] shadow-xl border border-gray-100 flex flex-col justify-between transition-all hover:shadow-green-900/5 duration-300"
+        >
+          <div>
+            <div
+              class="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center text-red-600 text-lg shadow-inner mb-5"
+            >
+              <i class="fa-solid fa-arrow-trend-up"></i>
+            </div>
+            <h4
+              class="font-black uppercase italic tracking-tight text-base text-gray-900 mb-2"
+            >
+              Ambición
+            </h4>
+            <p
+              class="text-gray-500 text-xs font-medium leading-relaxed text-justify"
+            >
+              La voluntad de conseguir el máximo rendimiento y de hacer las
+              cosas no solo bien, sino tan bien como sea posible para superarse
+              cada día. Este valor pone en marcha un entramado que convoca la
+              excelencia, la paciencia, la disciplina, la responsabilidad y el
+              orden, convirtiéndose en el impulso más seguro para crecer.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="bg-white p-6 rounded-[2rem] shadow-xl border border-gray-100 flex flex-col justify-between transition-all hover:shadow-green-900/5 duration-300 lg:col-span-1"
+        >
+          <div>
+            <div
+              class="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 text-lg shadow-inner mb-5"
+            >
+              <i class="fa-solid fa-people-group"></i>
+            </div>
+            <h4
+              class="font-black uppercase italic tracking-tight text-base text-gray-900 mb-2"
+            >
+              Trabajo en Equipo
+            </h4>
+            <p
+              class="text-gray-500 text-xs font-medium leading-relaxed text-justify"
+            >
+              Implica que el sujeto pasa a formar parte de un grupo y que, como
+              tal, deviene en un elemento activo que actúa sobre el conjunto, a
+              veces en detrimento de la propia individualidad. Saberse parte de
+              un todo aporta beneficios innegables y requiere un aprendizaje
+              continuo que acentúa la cohesión institucional.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="bg-white p-6 rounded-[2rem] shadow-xl border border-gray-100 flex flex-col justify-between transition-all hover:shadow-green-900/5 duration-300"
+        >
+          <div>
+            <div
+              class="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-600 text-lg shadow-inner mb-5"
+            >
+              <i class="fa-solid fa-heart"></i>
+            </div>
+            <h4
+              class="font-black uppercase italic tracking-tight text-base text-gray-900 mb-2"
+            >
+              Humildad
+            </h4>
+            <p
+              class="text-gray-500 text-xs font-medium leading-relaxed text-justify"
+            >
+              Consiste en saber tener claros los valores, a mantenerlos y a
+              defenderlos incluso en situaciones de superioridad clara o de
+              éxito. Evita situarse en un plano de superioridad moral o
+              económica al alcanzar las metas y permite ganarse el respeto del
+              entorno, de los adversarios y de la comunidad manteniendo los pies
+              sobre la tierra.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

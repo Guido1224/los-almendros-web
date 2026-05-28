@@ -11,6 +11,7 @@
     />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-client.js"></script>
+    <script src="../js/auth-guard.js"></script>
     <style>
       body {
         max-width: 100%;
@@ -46,7 +47,10 @@
       }
     </style>
   </head>
-  <body class="bg-gray-100 text-gray-900 min-h-screen">
+  <body
+    id="cuerpo-protegido"
+    class="bg-gray-100 text-gray-900 opacity-0 transition-opacity duration-500"
+  >
     <nav
       class="bg-[#004d26] p-4 flex justify-between items-center sticky top-0 z-50 shadow-xl"
     >

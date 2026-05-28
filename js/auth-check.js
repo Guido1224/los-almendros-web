@@ -1,11 +1,20 @@
-const authCheck = async () => {
+// Variable para evitar ejecuciones dobles rápidas
+let isCheckingAuth = false;
+
+const authCheck = async (sessionParam = null) => {
+  if (isCheckingAuth) return;
+  isCheckingAuth = true;
+
   const loader = document.getElementById("loader-graf");
   const authSection = document.getElementById("auth-section");
 
   try {
-    const {
-      data: { session },
-    } = await _supabase.auth.getSession();
+    // Si no nos pasan una sesión por parámetro (del escuchador), la pedimos
+    let session = sessionParam;
+    if (!session) {
+      const { data } = await _supabase.auth.getSession();
+      session = data.session;
+    }
 
     if (session) {
       const { data: profile } = await _supabase
@@ -40,10 +49,8 @@ const authCheck = async () => {
           </div>
       </div>
   `;
-      }
-
-      // --- ESCENARIO C: SOCIO (RESPONSIVO) ---
-      else {
+      } else {
+        // --- ESCENARIO C: SOCIO (RESPONSIVO) ---
         const nombre = profile.nombre || "Socio";
         authSection.innerHTML = `
       <a href="perfil.html" class="flex items-center space-x-2 sm:space-x-3 group">
@@ -71,13 +78,22 @@ const authCheck = async () => {
       loader.style.opacity = "0";
       setTimeout(() => loader.classList.add("hidden"), 500);
     }
+    isCheckingAuth = false;
   }
 };
 
-// Mantenemos la función cerrarSesion abajo por si la llamas desde perfil.html
 async function cerrarSesion() {
   await _supabase.auth.signOut();
   window.location.href = "index.html";
 }
 
+// 🔥 EL TRUCO MAESTRO: Escuchador en tiempo real
+_supabase.auth.onAuthStateChange((event, session) => {
+  // Cuando Supabase termina de leer el enlace mágico, dispara SIGNED_IN
+  if (event === "SIGNED_IN") {
+    authCheck(session);
+  }
+});
+
+// Llamada inicial por si el usuario ya estaba logueado de antes
 authCheck();

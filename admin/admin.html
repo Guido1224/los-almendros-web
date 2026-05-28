@@ -26,7 +26,10 @@
       }
     </style>
   </head>
-  <body class="bg-gray-100 text-gray-900 overflow-x-hidden">
+  <body
+    id="cuerpo-protegido"
+    class="bg-gray-100 text-gray-900 opacity-0 transition-opacity duration-500"
+  >
     <header
       class="md:hidden bg-[#006633] text-white p-4 flex justify-between items-center shadow-lg sticky top-0 z-[100]"
     >
@@ -67,7 +70,7 @@
 
         <nav class="flex-1 overflow-y-auto p-4 space-y-2 no-scrollbar">
           <a
-            href="index.html"
+            href="../index.html"
             class="flex items-center p-3 text-yellow-400 hover:bg-white/10 rounded-xl transition text-xs font-black uppercase italic tracking-widest gap-3"
           >
             <i class="fa-solid fa-house-chimney text-lg"></i>
@@ -297,6 +300,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-client.js"></script>
+    <script src="../js/auth-guard.js"></script>
     <script>
       // --- LÓGICA DE MENÚ MÓVIL ---
       function toggleMenu() {
@@ -306,32 +310,12 @@
         overlay.classList.toggle("hidden");
       }
 
-      async function protegerRuta() {
-        const {
-          data: { session },
-        } = await _supabase.auth.getSession();
-        if (!session) {
-          window.location.href = "login.html";
-          return;
-        }
-        const { data: profile } = await _supabase
-          .from("usuarios")
-          .select("rol")
-          .eq("id", session.user.id)
-          .maybeSingle();
-        if (!profile || profile.rol !== "admin") {
-          window.location.href = "index.html";
-        }
-      }
-
       document
         .getElementById("btnLogout")
         .addEventListener("click", async () => {
           await _supabase.auth.signOut();
-          window.location.href = "index.html";
+          window.location.href = "../index.html";
         });
-
-      protegerRuta();
     </script>
   </body>
 </html>
