@@ -191,5 +191,83 @@
 
       window.addEventListener("load", cargarMasNoticias);
     </script>
+    <div
+      id="cookie-banner"
+      class="fixed bottom-0 left-0 w-full z-[9999] transform translate-y-full transition-transform duration-700 ease-in-out"
+    >
+      <div
+        class="bg-gray-900 text-white shadow-2xl border-t-4 border-[#004d26]"
+      >
+        <div
+          class="container mx-auto max-w-6xl p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4"
+        >
+          <div class="flex-1 text-center md:text-left">
+            <div
+              class="flex items-center justify-center md:justify-start gap-2 mb-2"
+            >
+              <i class="fa-solid fa-cookie-bite text-yellow-500 text-xl"></i>
+              <h4 class="font-black uppercase italic tracking-tighter text-sm">
+                Privacidad y Cookies
+              </h4>
+            </div>
+            <p class="text-xs text-gray-400 font-medium leading-relaxed">
+              Utilizamos cookies técnicas y `localStorage` para mantener tu
+              sesión segura, guardar tus preferencias y ofrecerte la mejor
+              experiencia como socio.
+              <a href="perfil.html" class="text-yellow-500 hover:underline"
+                >Ver Política completa</a
+              >.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3 w-full md:w-auto shrink-0">
+            <button
+              onclick="rechazarCookies()"
+              class="flex-1 md:flex-none px-4 py-2 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition"
+            >
+              Solo Esenciales
+            </button>
+            <button
+              onclick="aceptarCookies()"
+              class="flex-1 md:flex-none px-6 py-3 bg-[#004d26] text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg hover:bg-green-800 transition transform hover:scale-105"
+            >
+              Aceptar Todas
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Lógica del Banner de Cookies usando LocalStorage
+      document.addEventListener("DOMContentLoaded", () => {
+        const banner = document.getElementById("cookie-banner");
+        const consentimiento = localStorage.getItem("cookiesAccepted");
+
+        // Si no hay registro en localStorage, mostramos el banner deslizándolo hacia arriba
+        if (!consentimiento) {
+          setTimeout(() => {
+            banner.classList.remove("translate-y-full");
+          }, 1000); // Aparece 1 segundo después de cargar la página
+        }
+      });
+
+      function aceptarCookies() {
+        localStorage.setItem("cookiesAccepted", "true");
+        localStorage.setItem("cookiesNivel", "todas"); // Para futuras integraciones de analíticas
+        ocultarBanner();
+      }
+
+      function rechazarCookies() {
+        localStorage.setItem("cookiesAccepted", "true");
+        localStorage.setItem("cookiesNivel", "esenciales"); // Solo guardamos sesión
+        ocultarBanner();
+      }
+
+      function ocultarBanner() {
+        const banner = document.getElementById("cookie-banner");
+        banner.classList.add("translate-y-full");
+      }
+    </script>
   </body>
 </html>

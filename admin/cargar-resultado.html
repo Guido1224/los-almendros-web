@@ -535,7 +535,21 @@
           const { error } = await _supabase.from("partidos").insert([datos]);
           if (!error) {
             alert("✅ ÉXITO");
-            window.location.href = "admin.html";
+            // 1. Limpiar los textos, números y fechas
+            document.getElementById("formResultado").reset();
+
+            // 2. Restaurar la cajita del escudo a su estado original
+            document.getElementById("img-rv").classList.add("hidden");
+            document.getElementById("texto-rv").classList.remove("hidden");
+            document.getElementById("file-name").innerText =
+              "Subir Archivo Manual";
+            document.getElementById("file-name").className =
+              "text-[10px] font-black uppercase text-gray-400 text-center";
+            urlEscudoSeleccionado = null;
+
+            // 3. Reactivar el botón
+            btn.disabled = false;
+            btn.innerText = "Publicar Resultado Oficial";
           } else {
             alert("Error: " + error.message);
             btn.disabled = false;

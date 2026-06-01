@@ -26,62 +26,95 @@
       .no-scrollbar {
         -ms-overflow-style: none;
         scrollbar-width: none;
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
       }
     </style>
   </head>
   <body class="bg-gray-50 text-gray-900 overflow-x-hidden">
-    <header
-      class="bg-[#004d26] py-3 px-4 md:px-8 text-white flex flex-col md:flex-row justify-between items-center shadow-md sticky top-0 z-[60] gap-4 md:gap-0"
+    <div
+      id="menu-flotante"
+      class="fixed top-0 left-0 w-full z-[100] transition-transform duration-500 ease-in-out transform -translate-y-full md:hover:translate-y-0 shadow-2xl"
     >
-      <div
-        class="flex items-center w-full md:w-auto justify-between md:justify-start gap-6"
+      <header
+        class="bg-[#004d26] py-3 px-4 md:px-8 text-white flex flex-col md:flex-row justify-between items-center shadow-md sticky top-0 z-[60] gap-4 md:gap-0"
       >
-        <a
-          href="index.html"
-          class="flex items-center gap-3 hover:text-yellow-500 transition-colors shrink-0"
+        <div
+          class="flex items-center w-full md:w-auto justify-between md:justify-start gap-6"
         >
-          <i class="fa-solid fa-arrow-left text-xs"></i>
-          <span
-            class="font-black italic text-[10px] md:text-xs tracking-tighter uppercase"
-            >Inicio</span
+          <a
+            href="index.html"
+            class="flex items-center gap-3 hover:text-yellow-500 transition-colors shrink-0"
           >
-        </a>
+            <i class="fa-solid fa-arrow-left text-xs"></i>
+            <span
+              class="font-black italic text-[10px] md:text-xs tracking-tighter uppercase"
+              >Inicio</span
+            >
+          </a>
+          <span
+            class="md:hidden font-black italic text-[10px] tracking-tighter uppercase"
+            >CD Los Almendros</span
+          >
+        </div>
+
+        <nav
+          class="flex items-center gap-6 md:gap-10 overflow-x-auto no-scrollbar whitespace-nowrap w-full md:w-auto justify-start md:justify-center px-2 md:px-0"
+        >
+          <a
+            href="jugadores.html"
+            class="font-black italic text-[10px] md:text-xs tracking-widest uppercase text-white/60 hover:text-white transition-all pb-1"
+            >Jugadores</a
+          >
+          <a
+            href="calendario.html"
+            class="font-black italic text-[10px] md:text-xs tracking-widest uppercase text-yellow-500 border-b-2 border-yellow-500 pb-1"
+            >Calendario</a
+          >
+          <a
+            href="resultados.html"
+            class="font-black italic text-[10px] md:text-xs tracking-widest uppercase text-white/60 hover:text-white transition-all pb-1"
+            >Resultados</a
+          >
+          <a
+            href="clasificacion.html"
+            class="font-black italic text-[10px] md:text-xs tracking-widest uppercase text-white/60 hover:text-white transition-all pb-1"
+            >Clasificación</a
+          >
+          <a
+            href="fotos.html"
+            class="font-black italic text-[10px] md:text-xs tracking-widest uppercase text-white/60 hover:text-white transition-all pb-1"
+            >Fotos</a
+          >
+        </nav>
+
         <span
-          class="md:hidden font-black italic text-[10px] tracking-tighter uppercase"
+          class="hidden md:block font-black italic text-[10px] md:text-xs tracking-tighter uppercase shrink-0"
           >CD Los Almendros</span
         >
+      </header>
+      <!-- PESTAÑA INFERIOR (Tirador) -->
+      <div
+        class="absolute left-0 top-full w-full flex justify-center -mt-px cursor-pointer"
+        onclick="toggleMenuCelular()"
+      >
+        <div
+          class="bg-[#004d26] w-16 h-5 rounded-b-xl flex items-center justify-center shadow-lg border-b border-x border-white/10 md:hidden"
+        >
+          <i
+            id="icono-menu"
+            class="fa-solid fa-chevron-down text-white/80 text-[10px] animate-bounce"
+          ></i>
+        </div>
+        <!-- Zona invisible para PC para no perder el hover -->
+        <div class="hidden md:flex w-full h-8 bg-transparent"></div>
       </div>
-
-      <nav
-        class="flex items-center gap-6 md:gap-10 overflow-x-auto no-scrollbar whitespace-nowrap"
-      >
-        <a
-          href="jugadores.html"
-          class="font-black italic text-[10px] md:text-xs tracking-widest uppercase text-white/60 hover:text-white transition-all pb-1"
-          >Jugadores</a
-        >
-        <a
-          href="calendario.html"
-          class="font-black italic text-[10px] md:text-xs tracking-widest uppercase text-yellow-500 border-b-2 border-yellow-500 pb-1"
-          >Calendario</a
-        >
-        <a
-          href="resultados.html"
-          class="font-black italic text-[10px] md:text-xs tracking-widest uppercase text-white/60 hover:text-white transition-all pb-1"
-          >Resultados</a
-        >
-        <a
-          href="clasificacion.html"
-          class="font-black italic text-[10px] md:text-xs tracking-widest uppercase text-white/60 hover:text-white transition-all pb-1"
-          >Clasificación</a
-        >
-      </nav>
-
-      <span
-        class="hidden md:block font-black italic text-[10px] md:text-xs tracking-tighter uppercase shrink-0"
-        >CD Los Almendros</span
-      >
-    </header>
+    </div>
 
     <section class="bg-white container mx-auto px-6 pt-16 pb-4">
       <h1
@@ -187,6 +220,100 @@
       }
 
       cargarCalendario();
+    </script>
+    <div
+      id="cookie-banner"
+      class="fixed bottom-0 left-0 w-full z-[9999] transform translate-y-full transition-transform duration-700 ease-in-out"
+    >
+      <div
+        class="bg-gray-900 text-white shadow-2xl border-t-4 border-[#004d26]"
+      >
+        <div
+          class="container mx-auto max-w-6xl p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4"
+        >
+          <div class="flex-1 text-center md:text-left">
+            <div
+              class="flex items-center justify-center md:justify-start gap-2 mb-2"
+            >
+              <i class="fa-solid fa-cookie-bite text-yellow-500 text-xl"></i>
+              <h4 class="font-black uppercase italic tracking-tighter text-sm">
+                Privacidad y Cookies
+              </h4>
+            </div>
+            <p class="text-xs text-gray-400 font-medium leading-relaxed">
+              Utilizamos cookies técnicas y `localStorage` para mantener tu
+              sesión segura, guardar tus preferencias y ofrecerte la mejor
+              experiencia como socio.
+              <a href="perfil.html" class="text-yellow-500 hover:underline"
+                >Ver Política completa</a
+              >.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3 w-full md:w-auto shrink-0">
+            <button
+              onclick="rechazarCookies()"
+              class="flex-1 md:flex-none px-4 py-2 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition"
+            >
+              Solo Esenciales
+            </button>
+            <button
+              onclick="aceptarCookies()"
+              class="flex-1 md:flex-none px-6 py-3 bg-[#004d26] text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg hover:bg-green-800 transition transform hover:scale-105"
+            >
+              Aceptar Todas
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Lógica del Banner de Cookies usando LocalStorage
+      document.addEventListener("DOMContentLoaded", () => {
+        const banner = document.getElementById("cookie-banner");
+        const consentimiento = localStorage.getItem("cookiesAccepted");
+
+        // Si no hay registro en localStorage, mostramos el banner deslizándolo hacia arriba
+        if (!consentimiento) {
+          setTimeout(() => {
+            banner.classList.remove("translate-y-full");
+          }, 1000); // Aparece 1 segundo después de cargar la página
+        }
+      });
+
+      function aceptarCookies() {
+        localStorage.setItem("cookiesAccepted", "true");
+        localStorage.setItem("cookiesNivel", "todas"); // Para futuras integraciones de analíticas
+        ocultarBanner();
+      }
+
+      function rechazarCookies() {
+        localStorage.setItem("cookiesAccepted", "true");
+        localStorage.setItem("cookiesNivel", "esenciales"); // Solo guardamos sesión
+        ocultarBanner();
+      }
+
+      function ocultarBanner() {
+        const banner = document.getElementById("cookie-banner");
+        banner.classList.add("translate-y-full");
+      }
+      function toggleMenuCelular() {
+        const menu = document.getElementById("menu-flotante");
+        const icono = document.getElementById("icono-menu");
+
+        if (menu.classList.contains("-translate-y-full")) {
+          // Abrir menú
+          menu.classList.remove("-translate-y-full");
+          icono.classList.remove("fa-chevron-down", "animate-bounce");
+          icono.classList.add("fa-chevron-up");
+        } else {
+          // Cerrar menú
+          menu.classList.add("-translate-y-full");
+          icono.classList.remove("fa-chevron-up");
+          icono.classList.add("fa-chevron-down", "animate-bounce");
+        }
+      }
     </script>
   </body>
 </html>

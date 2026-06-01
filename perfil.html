@@ -53,11 +53,36 @@
           class="bg-white rounded-3xl p-8 shadow-sm text-center border border-gray-100"
         >
           <div
-            id="user-initial"
-            class="w-24 h-24 bg-[#004d26] text-white rounded-full mx-auto mb-4 flex items-center justify-center text-3xl font-black border-4 border-gray-50 shadow-lg"
+            class="relative w-24 h-24 mx-auto mb-4 group cursor-pointer"
+            onclick="document.getElementById('foto-input').click()"
           >
-            --
+            <div
+              id="user-avatar-container"
+              class="w-full h-full bg-[#004d26] text-white rounded-full flex items-center justify-center text-3xl font-black border-4 border-gray-50 shadow-lg overflow-hidden relative"
+            >
+              <span id="user-initial">--</span>
+
+              <img
+                id="user-foto"
+                src=""
+                class="hidden absolute inset-0 w-full h-full object-cover"
+              />
+
+              <div
+                class="absolute inset-0 bg-black/60 hidden group-hover:flex flex-col items-center justify-center transition-all"
+              >
+                <i class="fa-solid fa-camera text-white text-xl"></i>
+              </div>
+            </div>
           </div>
+
+          <input
+            type="file"
+            id="foto-input"
+            accept="image/*"
+            class="hidden"
+            onchange="subirFotoPerfil(event)"
+          />
           <h2
             id="display-name"
             class="text-xl font-black uppercase tracking-tighter text-gray-800"
@@ -260,7 +285,7 @@
           class="bg-white rounded-3xl p-8 border border-gray-100"
         >
           <div
-            class="flex justify-between items-center mb-8 border-b pb-4 text-[#004d26]"
+            class="flex justify-between items-center mb-6 border-b pb-4 text-[#004d26]"
           >
             <h3 class="text-xl font-black uppercase italic tracking-tighter">
               Política de Privacidad
@@ -269,10 +294,49 @@
               <i class="fa-solid fa-xmark text-xl"></i>
             </button>
           </div>
-          <p class="text-gray-500 text-sm font-medium">
-            Tus datos personales son utilizados exclusivamente para la gestión
-            de tu carnet de socio.
-          </p>
+          <div
+            class="space-y-4 text-sm text-gray-600 font-medium h-96 overflow-y-auto custom-scrollbar pr-4"
+          >
+            <h4 class="font-black text-gray-800 uppercase text-xs">
+              1. Recopilación y Uso de Datos
+            </h4>
+            <p>
+              Recopilamos tus datos personales (nombre, correo, país, fecha de
+              nacimiento) exclusivamente para la gestión de tu carnet de socio,
+              control de acceso y comunicaciones oficiales del club.
+            </p>
+
+            <h4 class="font-black text-gray-800 uppercase text-xs mt-4">
+              2. Protección y Seguridad
+            </h4>
+            <p>
+              Tus datos están protegidos mediante cifrado y protocolos de
+              seguridad (RLS) en nuestros servidores. No compartimos tu
+              información con terceros sin tu consentimiento expreso.
+            </p>
+
+            <h4 class="font-black text-gray-800 uppercase text-xs mt-4">
+              3. Derechos del Usuario
+            </h4>
+            <p>
+              Tienes derecho a acceder, rectificar o eliminar tu cuenta y datos
+              personales en cualquier momento desde este panel de configuración.
+            </p>
+
+            <div class="bg-gray-50 p-4 rounded-xl border border-gray-200 mt-4">
+              <h4
+                class="font-black text-[#004d26] uppercase text-[10px] tracking-widest mb-2"
+              >
+                Cláusula de Material Audiovisual
+              </h4>
+              <p class="text-xs italic text-gray-500">
+                "El usuario autoriza al Club Deportivo Los Almendros a publicar
+                fotografías y material audiovisual relacionado con actividades
+                deportivas en la plataforma y redes sociales oficiales, salvo
+                solicitud expresa en contrario comunicada a la directiva."
+              </p>
+            </div>
+          </div>
         </div>
 
         <div
@@ -280,19 +344,46 @@
           class="bg-white rounded-3xl p-8 border border-gray-100"
         >
           <div
-            class="flex justify-between items-center mb-8 border-b pb-4 text-[#004d26]"
+            class="flex justify-between items-center mb-6 border-b pb-4 text-[#004d26]"
           >
             <h3 class="text-xl font-black uppercase italic tracking-tighter">
-              Términos Legales
+              Términos y Condiciones
             </h3>
             <button onclick="closeSections()" class="lg:hidden text-gray-400">
               <i class="fa-solid fa-xmark text-xl"></i>
             </button>
           </div>
-          <p class="text-gray-500 text-sm font-medium">
-            Al ser socio, aceptas el reglamento interno del club CD Los
-            Almendros.
-          </p>
+          <div
+            class="space-y-4 text-sm text-gray-600 font-medium h-96 overflow-y-auto custom-scrollbar pr-4"
+          >
+            <h4 class="font-black text-gray-800 uppercase text-xs">
+              1. Reglas de Uso
+            </h4>
+            <p>
+              Al registrarte como socio, te comprometes a usar esta plataforma
+              con respeto y alineado a los valores del CD Los Almendros. Queda
+              prohibido el uso indebido del sistema o la extracción de
+              información de otros socios.
+            </p>
+
+            <h4 class="font-black text-gray-800 uppercase text-xs mt-4">
+              2. Propiedad del Contenido
+            </h4>
+            <p>
+              Todo el contenido visual, escudos, noticias y diseños son
+              propiedad exclusiva del Club. No pueden ser comercializados sin
+              autorización.
+            </p>
+
+            <h4 class="font-black text-gray-800 uppercase text-xs mt-4">
+              3. Suspensión de Cuentas
+            </h4>
+            <p>
+              La directiva se reserva el derecho de suspender o eliminar cuentas
+              que violen el reglamento interno del club o intenten vulnerar la
+              seguridad del sistema.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -334,6 +425,60 @@
         document.getElementById("default-view").style.display = "flex";
       }
 
+      // ==========================================
+      // 📸 MOTOR DE SUBIDA DE AVATARES
+      // ==========================================
+      async function subirFotoPerfil(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const {
+          data: { session },
+        } = await _supabase.auth.getSession();
+        if (!session) return;
+
+        // Mostrar animación de carga en el avatar
+        const initialEl = document.getElementById("user-initial");
+        initialEl.innerHTML =
+          '<i class="fa-solid fa-spinner fa-spin text-xl"></i>';
+        initialEl.classList.remove("hidden");
+        document.getElementById("user-foto").classList.add("hidden");
+
+        // Creamos un nombre único para la foto
+        const fileExt = file.name.split(".").pop();
+        const fileName = `avatar_${session.user.id}_${Math.random()}.${fileExt}`;
+
+        try {
+          // 1. Subir la imagen al bucket 'avatares'
+          const { error: uploadError } = await _supabase.storage
+            .from("avatares")
+            .upload(fileName, file);
+
+          if (uploadError) throw uploadError;
+
+          // 2. Obtener la URL pública de la foto
+          const { data: publicData } = _supabase.storage
+            .from("avatares")
+            .getPublicUrl(fileName);
+
+          const fotoUrl = publicData.publicUrl;
+
+          // 3. Guardar esa URL en la tabla usuarios del socio
+          const { error: updateError } = await _supabase
+            .from("usuarios")
+            .update({ avatar_url: fotoUrl })
+            .eq("id", session.user.id);
+
+          if (updateError) throw updateError;
+
+          // ¡Éxito! Refrescamos la página para ver los cambios
+          window.location.reload();
+        } catch (error) {
+          alert("Hubo un problema al subir tu foto: " + error.message);
+          cargarDatos(); // Restaurar el avatar en caso de error
+        }
+      }
+
       // Carga de datos dinámicos usando el conector universal _supabase
       async function cargarDatos() {
         const {
@@ -352,9 +497,18 @@
         if (profile) {
           document.getElementById("display-name").innerText =
             `${profile.nombre} ${profile.apellido}`;
-          document.getElementById("user-initial").innerText = profile.nombre
-            .charAt(0)
-            .toUpperCase();
+
+          // Lógica inteligente de Avatar
+          if (profile.avatar_url) {
+            document.getElementById("user-foto").src = profile.avatar_url;
+            document.getElementById("user-foto").classList.remove("hidden");
+            document.getElementById("user-initial").classList.add("hidden");
+          } else {
+            document.getElementById("user-initial").innerText = profile.nombre
+              .charAt(0)
+              .toUpperCase();
+          }
+
           document.getElementById("edit-nombre").value = profile.nombre || "";
           document.getElementById("edit-apellido").value =
             profile.apellido || "";
@@ -423,6 +577,84 @@
 
       // Ejecución inicial al cargar la página
       cargarDatos();
+    </script>
+    <div
+      id="cookie-banner"
+      class="fixed bottom-0 left-0 w-full z-[9999] transform translate-y-full transition-transform duration-700 ease-in-out"
+    >
+      <div
+        class="bg-gray-900 text-white shadow-2xl border-t-4 border-[#004d26]"
+      >
+        <div
+          class="container mx-auto max-w-6xl p-4 md:p-6 flex flex-col md:flex-row items-center justify-between gap-4"
+        >
+          <div class="flex-1 text-center md:text-left">
+            <div
+              class="flex items-center justify-center md:justify-start gap-2 mb-2"
+            >
+              <i class="fa-solid fa-cookie-bite text-yellow-500 text-xl"></i>
+              <h4 class="font-black uppercase italic tracking-tighter text-sm">
+                Privacidad y Cookies
+              </h4>
+            </div>
+            <p class="text-xs text-gray-400 font-medium leading-relaxed">
+              Utilizamos cookies técnicas y `localStorage` para mantener tu
+              sesión segura, guardar tus preferencias y ofrecerte la mejor
+              experiencia como socio.
+              <a href="perfil.html" class="text-yellow-500 hover:underline"
+                >Ver Política completa</a
+              >.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3 w-full md:w-auto shrink-0">
+            <button
+              onclick="rechazarCookies()"
+              class="flex-1 md:flex-none px-4 py-2 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-white transition"
+            >
+              Solo Esenciales
+            </button>
+            <button
+              onclick="aceptarCookies()"
+              class="flex-1 md:flex-none px-6 py-3 bg-[#004d26] text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg hover:bg-green-800 transition transform hover:scale-105"
+            >
+              Aceptar Todas
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Lógica del Banner de Cookies usando LocalStorage
+      document.addEventListener("DOMContentLoaded", () => {
+        const banner = document.getElementById("cookie-banner");
+        const consentimiento = localStorage.getItem("cookiesAccepted");
+
+        // Si no hay registro en localStorage, mostramos el banner deslizándolo hacia arriba
+        if (!consentimiento) {
+          setTimeout(() => {
+            banner.classList.remove("translate-y-full");
+          }, 1000); // Aparece 1 segundo después de cargar la página
+        }
+      });
+
+      function aceptarCookies() {
+        localStorage.setItem("cookiesAccepted", "true");
+        localStorage.setItem("cookiesNivel", "todas"); // Para futuras integraciones de analíticas
+        ocultarBanner();
+      }
+
+      function rechazarCookies() {
+        localStorage.setItem("cookiesAccepted", "true");
+        localStorage.setItem("cookiesNivel", "esenciales"); // Solo guardamos sesión
+        ocultarBanner();
+      }
+
+      function ocultarBanner() {
+        const banner = document.getElementById("cookie-banner");
+        banner.classList.add("translate-y-full");
+      }
     </script>
   </body>
 </html>

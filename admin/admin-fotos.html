@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Fotos | Admin CDLA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;700;900&display=swap");
+      body {
+        font-family: "Public Sans", sans-serif;
+      }
+      #upload-overlay {
+        transition: all 0.3s ease;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-900">
+    <div
+      id="upload-overlay"
+      class="fixed inset-0 bg-black/90 z-[9999] hidden flex-col items-center justify-center text-white"
+    >
+      <i
+        class="fa-solid fa-cloud-arrow-up text-6xl text-yellow-500 mb-6 animate-bounce"
+      ></i>
+      <h2 class="text-3xl font-black uppercase italic tracking-tighter mb-2">
+        Subiendo Fotos...
+      </h2>
+      <p
+        id="upload-status"
+        class="text-gray-400 font-bold uppercase tracking-widest text-sm"
+      >
+        Procesando 0 de 0
+      </p>
+      <div class="w-64 h-2 bg-gray-800 rounded-full mt-6 overflow-hidden">
+        <div
+          id="upload-progress"
+          class="h-full bg-green-500 w-0 transition-all duration-300"
+        ></div>
+      </div>
+    </div>
+
+    <div
+      id="modal-editar"
+      class="fixed inset-0 bg-black/80 z-[1000] hidden items-center justify-center p-4 backdrop-blur-sm transition-opacity"
+    >
+      <div
+        class="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl"
+      >
+        <div class="p-6 border-b flex justify-between items-center bg-gray-50">
+          <h3
+            class="font-black text-xl uppercase italic tracking-tighter text-gray-900"
+          >
+            <i class="fa-solid fa-pen-to-square text-yellow-500 mr-2"></i>
+            Editar Álbum
+          </h3>
+          <button
+            onclick="cerrarModalEditar()"
+            class="text-gray-400 hover:text-red-500 text-2xl transition transform hover:scale-110"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="p-6 overflow-y-auto flex-1 bg-gray-50/50">
+          <div
+            class="mb-8 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm"
+          >
+            <label
+              class="block text-[10px] font-black uppercase text-gray-400 mb-2"
+              >Corregir Título de la Galería</label
+            >
+            <div class="flex flex-col md:flex-row gap-4">
+              <input
+                type="text"
+                id="edit-titulo-input"
+                class="flex-1 p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none font-bold focus:border-yellow-500"
+              />
+              <button
+                onclick="guardarNuevoTitulo()"
+                id="btn-guardar-titulo"
+                class="bg-yellow-500 text-gray-900 px-8 py-4 rounded-xl font-black text-xs uppercase hover:bg-yellow-400 transition shadow-md"
+              >
+                Guardar Título
+              </button>
+            </div>
+          </div>
+
+          <h4
+            class="font-black text-sm uppercase tracking-widest text-gray-800 mb-4 border-l-4 border-[#006633] pl-3"
+          >
+            Fotos en este álbum (<span id="edit-count">0</span>)
+          </h4>
+          <p class="text-xs font-bold text-gray-400 mb-6">
+            Pasa el mouse sobre una foto para eliminarla.
+          </p>
+
+          <div
+            id="edit-fotos-grid"
+            class="grid grid-cols-2 md:grid-cols-4 gap-4"
+          ></div>
+        </div>
+      </div>
+    </div>
+
+    <nav
+      class="bg-[#004d26] p-4 flex justify-between items-center sticky top-0 z-50 shadow-lg border-b-2 border-yellow-500"
+    >
+      <a
+        href="admin.html"
+        class="text-[10px] font-black uppercase text-white/70 hover:text-white transition"
+      >
+        <i class="fa-solid fa-arrow-left mr-2"></i> Volver al Panel
+      </a>
+      <div
+        class="font-black italic text-sm tracking-tighter uppercase text-white"
+      >
+        CD LOS ALMENDROS
+      </div>
+    </nav>
+
+    <main class="container mx-auto max-w-5xl p-6 lg:py-12">
+      <div
+        class="flex flex-col lg:flex-row lg:items-end justify-between mb-8 gap-6"
+      >
+        <header>
+          <h2
+            class="text-3xl md:text-5xl font-black text-gray-800 uppercase italic tracking-tighter leading-none"
+          >
+            Galería Oficial
+          </h2>
+          <p
+            class="text-gray-500 font-bold text-[10px] md:text-xs uppercase tracking-widest mt-2"
+          >
+            Administración de contenido multimedia
+          </p>
+        </header>
+
+        <div
+          class="flex bg-gray-200 p-1.5 rounded-xl w-full lg:w-auto shadow-inner"
+        >
+          <button
+            id="btn-tab-crear"
+            onclick="switchTab('crear')"
+            class="flex-1 lg:px-8 py-3 bg-white text-[#006633] rounded-lg font-black text-[10px] md:text-xs uppercase tracking-widest shadow-sm transition"
+          >
+            <i class="fa-solid fa-folder-plus mr-1"></i> Nuevo Álbum
+          </button>
+          <button
+            id="btn-tab-gestionar"
+            onclick="switchTab('gestionar')"
+            class="flex-1 lg:px-8 py-3 text-gray-500 hover:text-gray-800 rounded-lg font-bold text-[10px] md:text-xs uppercase tracking-widest transition"
+          >
+            <i class="fa-solid fa-images mr-1"></i> Gestionar Álbumes
+          </button>
+        </div>
+      </div>
+
+      <section
+        id="seccion-crear"
+        class="block animate-[fadeIn_0.3s_ease-in-out]"
+      >
+        <div
+          class="bg-white p-6 md:p-10 rounded-3xl shadow-xl border-t-4 border-yellow-500 max-w-2xl mx-auto"
+        >
+          <form id="form-album" class="space-y-8">
+            <div>
+              <label
+                class="block text-xs font-black uppercase text-gray-500 mb-3"
+              >
+                1. Título de la Galería
+              </label>
+              <input
+                type="text"
+                id="album-titulo"
+                required
+                placeholder="Ej: Final de Campeonato 2026"
+                class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl outline-none font-bold focus:border-[#006633] text-lg"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-xs font-black uppercase text-gray-500 mb-3"
+              >
+                2. Foto de Portada Principal
+              </label>
+              <div
+                class="border-2 border-dashed border-gray-300 rounded-2xl p-6 bg-gray-50 text-center hover:bg-gray-100 transition"
+              >
+                <input
+                  type="file"
+                  id="album-portada"
+                  accept="image/*"
+                  required
+                  class="w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:bg-[#006633] file:text-white hover:file:bg-green-800 cursor-pointer"
+                />
+              </div>
+            </div>
+            <button
+              type="submit"
+              id="btn-crear-album"
+              class="w-full bg-[#006633] text-white font-black py-5 rounded-xl hover:bg-green-800 transition-all uppercase tracking-widest text-sm shadow-xl"
+            >
+              Guardar y Crear Álbum
+            </button>
+          </form>
+        </div>
+      </section>
+
+      <section
+        id="seccion-gestionar"
+        class="hidden animate-[fadeIn_0.3s_ease-in-out]"
+      >
+        <div
+          id="lista-albumes"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <div class="col-span-full text-center py-10 text-gray-400">
+            <i class="fa-solid fa-circle-notch fa-spin text-3xl"></i>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <input
+      type="file"
+      id="multi-fotos-input"
+      accept="image/*"
+      multiple
+      class="hidden"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-client.js"></script>
+
+    <script>
+      // 1. LÓGICA DE PESTAÑAS (TABS)
+      function switchTab(tab) {
+        const btnCrear = document.getElementById("btn-tab-crear");
+        const btnGestionar = document.getElementById("btn-tab-gestionar");
+        const secCrear = document.getElementById("seccion-crear");
+        const secGestionar = document.getElementById("seccion-gestionar");
+
+        const activeClass =
+          "flex-1 lg:px-8 py-3 bg-white text-[#006633] rounded-lg font-black text-[10px] md:text-xs uppercase tracking-widest shadow-sm transition";
+        const inactiveClass =
+          "flex-1 lg:px-8 py-3 text-gray-500 hover:text-gray-800 rounded-lg font-bold text-[10px] md:text-xs uppercase tracking-widest transition";
+
+        if (tab === "crear") {
+          btnCrear.className = activeClass;
+          btnGestionar.className = inactiveClass;
+          secCrear.classList.remove("hidden");
+          secGestionar.classList.add("hidden");
+        } else {
+          btnGestionar.className = activeClass;
+          btnCrear.className = inactiveClass;
+          secGestionar.classList.remove("hidden");
+          secCrear.classList.add("hidden");
+          // Recargar datos por si hay algo nuevo
+          cargarAlbumes();
+        }
+      }
+
+      // 2. LÓGICA DE BASE DE DATOS SUPABASE
+      let albumActivoParaSubida = null;
+      let albumActivoParaEdicion = null;
+
+      async function cargarAlbumes() {
+        const { data: galerias, error } = await _supabase
+          .from("galerias")
+          .select("*, fotos(count)")
+          .order("creado_en", { ascending: false });
+        if (error) {
+          console.error(error);
+          return;
+        }
+
+        const contenedor = document.getElementById("lista-albumes");
+        if (galerias.length === 0) {
+          contenedor.innerHTML = `<p class="col-span-full text-gray-400 font-bold text-sm text-center bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">No hay álbumes creados aún.</p>`;
+          return;
+        }
+
+        contenedor.innerHTML = galerias
+          .map(
+            (g) => `
+          <div class="bg-white rounded-3xl overflow-hidden shadow-md border border-gray-100 hover:shadow-xl transition group flex flex-col">
+            <div class="relative h-40 w-full bg-gray-200 overflow-hidden">
+              <img src="${g.portada_url}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+              <div class="absolute top-3 right-3 bg-black/80 text-white px-3 py-1.5 rounded-lg text-[10px] font-black backdrop-blur-md shadow-lg border border-white/10">
+                ${g.fotos[0].count} <i class="fa-solid fa-camera ml-1 text-yellow-500"></i>
+              </div>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <h4 class="font-black text-sm uppercase italic leading-tight text-gray-900 line-clamp-2">${g.titulo}</h4>
+              <div class="grid grid-cols-2 gap-2 mt-4">
+                <button onclick="abrirSelectorFotos(${g.id})" class="bg-[#006633] text-white text-[10px] font-black uppercase py-2 rounded-xl hover:bg-green-800 transition shadow-sm">
+                  <i class="fa-solid fa-plus mr-1"></i> Añadir
+                </button>
+                <button onclick="abrirModalEditar(${g.id})" class="bg-yellow-500 text-gray-900 text-[10px] font-black uppercase py-2 rounded-xl hover:bg-yellow-400 transition shadow-sm">
+                  <i class="fa-solid fa-pen mr-1"></i> Editar
+                </button>
+                <button onclick="borrarAlbum(${g.id})" class="col-span-2 bg-red-50 text-red-500 hover:bg-red-500 hover:text-white text-[10px] font-black uppercase py-2 rounded-xl transition border border-red-100">
+                  <i class="fa-solid fa-trash mr-1"></i> Eliminar Álbum
+                </button>
+              </div>
+            </div>
+          </div>
+        `,
+          )
+          .join("");
+      }
+
+      document
+        .getElementById("form-album")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const btn = document.getElementById("btn-crear-album");
+          const titulo = document.getElementById("album-titulo").value;
+          const archivo = document.getElementById("album-portada").files[0];
+
+          btn.innerText = "CREANDO...";
+          btn.disabled = true;
+
+          try {
+            const fileExt = archivo.name.split(".").pop();
+            const fileName = `portada_${Date.now()}.${fileExt}`;
+            await _supabase.storage.from("galerias").upload(fileName, archivo);
+            const { data: publicData } = _supabase.storage
+              .from("galerias")
+              .getPublicUrl(fileName);
+
+            await _supabase
+              .from("galerias")
+              .insert({ titulo: titulo, portada_url: publicData.publicUrl });
+
+            document.getElementById("form-album").reset();
+
+            // Magia: ¡Cambia a la pestaña de Gestionar automáticamente!
+            switchTab("gestionar");
+          } catch (err) {
+            alert("Error: " + err.message);
+          } finally {
+            btn.innerText = "Guardar y Crear Álbum";
+            btn.disabled = false;
+          }
+        });
+
+      async function abrirModalEditar(albumId) {
+        albumActivoParaEdicion = albumId;
+        const modal = document.getElementById("modal-editar");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        const { data: album } = await _supabase
+          .from("galerias")
+          .select("titulo")
+          .eq("id", albumId)
+          .single();
+        document.getElementById("edit-titulo-input").value = album.titulo;
+        cargarFotosEnModal(albumId);
+      }
+
+      function cerrarModalEditar() {
+        const modal = document.getElementById("modal-editar");
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+        albumActivoParaEdicion = null;
+        cargarAlbumes();
+      }
+
+      async function cargarFotosEnModal(albumId) {
+        const grid = document.getElementById("edit-fotos-grid");
+        grid.innerHTML =
+          '<div class="col-span-full text-center py-4"><i class="fa-solid fa-spinner fa-spin text-gray-400"></i></div>';
+        const { data: fotos } = await _supabase
+          .from("fotos")
+          .select("*")
+          .eq("galeria_id", albumId)
+          .order("creado_en", { ascending: false });
+        document.getElementById("edit-count").innerText = fotos.length;
+        if (fotos.length === 0) {
+          grid.innerHTML =
+            '<p class="col-span-full text-gray-400 text-xs font-bold text-center py-4">No hay fotos en este álbum.</p>';
+          return;
+        }
+        grid.innerHTML = fotos
+          .map(
+            (f) => `
+          <div class="relative group rounded-xl overflow-hidden bg-gray-200 aspect-square border border-gray-100 shadow-sm">
+            <img src="${f.url}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-red-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+              <button onclick="eliminarFotoIndividual(${f.id}, '${f.url}')" class="bg-red-600 text-white w-10 h-10 md:w-12 md:h-12 rounded-full shadow-2xl transform hover:scale-110 hover:bg-red-500 transition-all flex items-center justify-center">
+                <i class="fa-solid fa-trash text-sm md:text-lg"></i>
+              </button>
+            </div>
+          </div>
+        `,
+          )
+          .join("");
+      }
+
+      async function eliminarFotoIndividual(fotoId, fotoUrl) {
+        if (!confirm("¿Estás seguro de eliminar esta foto?")) return;
+        await _supabase.from("fotos").delete().eq("id", fotoId);
+        try {
+          const fileName = fotoUrl.split("/").pop();
+          await _supabase.storage.from("galerias").remove([fileName]);
+        } catch (e) {}
+        cargarFotosEnModal(albumActivoParaEdicion);
+      }
+
+      async function guardarNuevoTitulo() {
+        const nuevoTitulo = document.getElementById("edit-titulo-input").value;
+        const btn = document.getElementById("btn-guardar-titulo");
+        btn.innerText = "Guardando...";
+        await _supabase
+          .from("galerias")
+          .update({ titulo: nuevoTitulo })
+          .eq("id", albumActivoParaEdicion);
+        btn.innerText = "¡Guardado!";
+        setTimeout(() => {
+          btn.innerText = "Guardar Título";
+        }, 2000);
+      }
+
+      function abrirSelectorFotos(albumId) {
+        albumActivoParaSubida = albumId;
+        document.getElementById("multi-fotos-input").click();
+      }
+
+      document
+        .getElementById("multi-fotos-input")
+        .addEventListener("change", async (e) => {
+          const archivos = Array.from(e.target.files);
+          if (archivos.length === 0 || !albumActivoParaSubida) return;
+          const overlay = document.getElementById("upload-overlay");
+          const statusText = document.getElementById("upload-status");
+          const progressBar = document.getElementById("upload-progress");
+          overlay.classList.remove("hidden");
+          overlay.classList.add("flex");
+          let subidasExitosas = 0;
+          for (let i = 0; i < archivos.length; i++) {
+            const archivo = archivos[i];
+            statusText.innerText = `Subiendo foto ${i + 1} de ${archivos.length}`;
+            progressBar.style.width = `${(i / archivos.length) * 100}%`;
+            try {
+              const ext = archivo.name.split(".").pop();
+              const nombreSeguro = `gal_${albumActivoParaSubida}_${Date.now()}_${i}.${ext}`;
+              await _supabase.storage
+                .from("galerias")
+                .upload(nombreSeguro, archivo);
+              const { data: urlData } = _supabase.storage
+                .from("galerias")
+                .getPublicUrl(nombreSeguro);
+              await _supabase.from("fotos").insert({
+                galeria_id: albumActivoParaSubida,
+                url: urlData.publicUrl,
+                orden: i,
+              });
+              subidasExitosas++;
+            } catch (error) {}
+          }
+          progressBar.style.width = `100%`;
+          statusText.innerText = `¡${subidasExitosas} fotos subidas con éxito!`;
+          setTimeout(() => {
+            overlay.classList.remove("flex");
+            overlay.classList.add("hidden");
+            document.getElementById("multi-fotos-input").value = "";
+            cargarAlbumes();
+          }, 1500);
+        });
+
+      async function borrarAlbum(id) {
+        if (
+          confirm(
+            "ATENCIÓN: ¿Seguro que quieres borrar este álbum y TODAS sus fotos?",
+          )
+        ) {
+          await _supabase.from("galerias").delete().eq("id", id);
+          cargarAlbumes();
+        }
+      }
+
+      // Cargar lista al inicio
+      cargarAlbumes();
+    </script>
+  </body>
+</html>

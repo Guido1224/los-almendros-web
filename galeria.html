@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Galería | CD Los Almendros</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      .masonry-grid {
+        column-count: 1;
+        column-gap: 1rem;
+      }
+      @media (min-width: 640px) {
+        .masonry-grid {
+          column-count: 2;
+        }
+      }
+      @media (min-width: 1024px) {
+        .masonry-grid {
+          column-count: 3;
+        }
+      }
+      .masonry-item {
+        break-inside: avoid;
+        margin-bottom: 1rem;
+        cursor: zoom-in;
+      }
+    </style>
+  </head>
+  <!-- FONDO BLANCO PARA LA PÁGINA PRINCIPAL -->
+  <body class="bg-white text-gray-900 font-sans overflow-x-hidden">
+    <!-- HEADER CON DEGRADADO VERDE SUTIL -->
+    <div
+      class="py-12 text-center border-b border-gray-100 relative bg-gradient-to-b from-[#006633]/10 to-white"
+    >
+      <!-- Botón Volver (Ahora en tono gris/verde oscuro) -->
+      <a
+        href="fotos.html"
+        class="absolute left-4 top-4 md:left-10 md:top-12 text-gray-500 hover:text-[#006633] transition font-bold text-xs uppercase tracking-widest flex items-center gap-2"
+      >
+        <i class="fa-solid fa-arrow-left"></i> Volver
+      </a>
+
+      <!-- Título en verde corporativo -->
+      <h1
+        id="album-title"
+        class="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-[#006633] mb-2 px-4"
+      >
+        Cargando Álbum...
+      </h1>
+      <p
+        id="album-meta"
+        class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]"
+      >
+        <i class="fa-solid fa-circle-notch fa-spin"></i>
+      </p>
+    </div>
+
+    <!-- EL GRID ESTILO MASONRY -->
+    <main class="container mx-auto px-4 py-10 max-w-6xl min-h-[50vh]">
+      <div id="photos-container" class="masonry-grid">
+        <!-- Las fotos se inyectarán aquí -->
+      </div>
+    </main>
+
+    <!-- VISOR FULLSCREEN (Se mantiene oscuro para resaltar la foto) -->
+    <div
+      id="lightbox"
+      class="fixed inset-0 z-[9999] bg-[#0b0e14]/98 backdrop-blur-md hidden flex-col justify-between"
+    >
+      <div class="flex justify-end p-6">
+        <button
+          onclick="closeLightbox()"
+          class="text-white hover:text-red-500 text-3xl transition transform hover:scale-110"
+        >
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div
+        class="flex-1 flex items-center justify-between px-2 md:px-10 overflow-hidden relative"
+      >
+        <button
+          onclick="changePhoto(-1)"
+          class="w-10 h-10 md:w-16 md:h-16 bg-black/50 hover:bg-[#006633] text-white rounded-full flex items-center justify-center text-lg md:text-3xl transition z-50"
+        >
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        <div class="w-full h-full flex items-center justify-center p-2 md:p-4">
+          <img
+            id="lightbox-img"
+            src=""
+            class="max-w-full max-h-[80vh] object-contain shadow-[0_0_40px_rgba(0,0,0,0.5)] transition-all duration-300"
+          />
+        </div>
+
+        <button
+          onclick="changePhoto(1)"
+          class="w-10 h-10 md:w-16 md:h-16 bg-black/50 hover:bg-[#006633] text-white rounded-full flex items-center justify-center text-lg md:text-3xl transition z-50"
+        >
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+      <div
+        class="bg-black/90 py-4 px-6 md:px-12 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-white/10"
+      >
+        <div class="flex items-baseline gap-2">
+          <span
+            id="lb-current"
+            class="text-2xl md:text-4xl font-black text-yellow-500 italic"
+            >1</span
+          >
+          <span
+            class="text-xs font-bold text-gray-400 uppercase tracking-widest"
+            >de <span id="lb-total">0</span></span
+          >
+        </div>
+
+        <div class="hidden md:block text-center flex-1">
+          <p
+            id="lb-album-name"
+            class="text-sm font-black uppercase tracking-widest text-gray-300"
+          >
+            CD LOS ALMENDROS
+          </p>
+        </div>
+
+        <div class="flex items-center gap-6">
+          <button
+            onclick="downloadCurrentPhoto()"
+            class="flex items-center gap-2 text-[10px] font-black uppercase text-white hover:text-yellow-500 transition group"
+          >
+            Descargar Imagen
+            <div
+              class="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center group-hover:border-yellow-500"
+            >
+              <i class="fa-solid fa-download"></i>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONEXIÓN A SUPABASE Y LÓGICA -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <!-- AJUSTA ESTA RUTA SI ES NECESARIO -->
+
+    <script>
+      let fotosArray = [];
+      let currentIndex = 0;
+      let totalFotos = 0;
+      let tituloAlbumGlobal = "CDLA";
+
+      async function initGaleria() {
+        const params = new URLSearchParams(window.location.search);
+        const albumId = params.get("id");
+
+        if (!albumId) {
+          window.location.href = "fotos.html";
+          return;
+        }
+
+        const { data: album, error: errAlbum } = await _supabase
+          .from("galerias")
+          .select("*")
+          .eq("id", albumId)
+          .single();
+
+        if (errAlbum || !album) {
+          document.getElementById("album-title").innerText =
+            "Álbum no encontrado";
+          document.getElementById("album-meta").innerText = "";
+          return;
+        }
+
+        tituloAlbumGlobal = album.titulo;
+        document.getElementById("album-title").innerText = album.titulo;
+        document.getElementById("lb-album-name").innerText = album.titulo;
+        const fecha = new Date(album.creado_en).toLocaleDateString("es-ES", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+
+        const { data: fotos, error: errFotos } = await _supabase
+          .from("fotos")
+          .select("*")
+          .eq("galeria_id", albumId)
+          .order("orden", { ascending: true });
+
+        totalFotos = fotos ? fotos.length : 0;
+        document.getElementById("album-meta").innerHTML =
+          `<i class="fa-regular fa-calendar mr-1"></i> ${fecha} <span class="mx-2 text-gray-300">•</span> ${totalFotos} Imágenes`;
+
+        if (totalFotos === 0) {
+          document.getElementById("photos-container").innerHTML =
+            '<p class="text-center text-gray-400 font-bold mt-10">No hay fotos en este álbum todavía.</p>';
+          return;
+        }
+
+        fotosArray = fotos.map((f) => f.url);
+
+        // DISEÑO DE LAS TARJETAS DE FOTOS (Fondo gris claro, overlay verde en hover)
+        const grid = document.getElementById("photos-container");
+        grid.innerHTML = fotosArray
+          .map(
+            (url, index) => `
+          <div class="masonry-item relative group overflow-hidden bg-gray-100 rounded-xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-300" onclick="openLightbox(${index})">
+            <img src="${url}" class="w-full h-auto object-cover opacity-95 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+            <div class="absolute inset-0 bg-white/0 group-hover:bg-[#006633]/20 transition flex items-center justify-center backdrop-blur-[1px] opacity-0 group-hover:opacity-100">
+              <div class="w-14 h-14 bg-white/95 text-[#006633] rounded-full flex items-center justify-center transform scale-50 group-hover:scale-100 transition duration-300 shadow-xl">
+                <i class="fa-solid fa-expand text-xl"></i>
+              </div>
+            </div>
+          </div>
+        `,
+          )
+          .join("");
+      }
+
+      function openLightbox(index) {
+        currentIndex = index;
+        actualizarUI();
+        const lb = document.getElementById("lightbox");
+        lb.classList.remove("hidden");
+        lb.classList.add("flex");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeLightbox() {
+        const lb = document.getElementById("lightbox");
+        lb.classList.add("hidden");
+        lb.classList.remove("flex");
+        document.body.style.overflow = "auto";
+      }
+
+      function changePhoto(direction) {
+        currentIndex += direction;
+        if (currentIndex >= totalFotos) currentIndex = 0;
+        if (currentIndex < 0) currentIndex = totalFotos - 1;
+
+        const imgEl = document.getElementById("lightbox-img");
+        imgEl.style.opacity = 0;
+        setTimeout(() => {
+          actualizarUI();
+          imgEl.style.opacity = 1;
+        }, 150);
+      }
+
+      function actualizarUI() {
+        document.getElementById("lightbox-img").src = fotosArray[currentIndex];
+        document.getElementById("lb-current").innerText = currentIndex + 1;
+        document.getElementById("lb-total").innerText = totalFotos;
+      }
+
+      async function downloadCurrentPhoto() {
+        try {
+          const url = fotosArray[currentIndex];
+          const response = await fetch(url);
+          const blob = await response.blob();
+          const blobUrl = window.URL.createObjectURL(blob);
+
+          const a = document.createElement("a");
+          a.style.display = "none";
+          a.href = blobUrl;
+          a.download = `${tituloAlbumGlobal.replace(/\s+/g, "_")}_Foto_${currentIndex + 1}.jpg`;
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(blobUrl);
+          document.body.removeChild(a);
+        } catch (error) {
+          window.open(fotosArray[currentIndex], "_blank");
+        }
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (document.getElementById("lightbox").classList.contains("hidden"))
+          return;
+        if (e.key === "ArrowRight") changePhoto(1);
+        if (e.key === "ArrowLeft") changePhoto(-1);
+        if (e.key === "Escape") closeLightbox();
+      });
+
+      initGaleria();
+    </script>
+  </body>
+</html>
